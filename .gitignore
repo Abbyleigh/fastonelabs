@@ -5,3 +5,14 @@ __pycache__/
 node_modules/
 dist/
 .DS_Store
+.venv*/
+backend/.venv*/
+.env
+.env.*
+*.log
+logs/
+.idea/
+backups/
+backend/.*-cache/
+backend/.news-cache.json
+.pytest_cache/
