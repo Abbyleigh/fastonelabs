@@ -1,3 +1,8 @@
+import SiteShell,{useWorkspace} from './SiteShell';
+import DriverShowcase from './DriverShowcase';
+import CinematicHome,{RaceEntryTransition} from './CinematicHome';
+import {readScreen,screenUrl} from './navigation';
+import type {Screen} from './navigation';
 import {ReplaySource,advanceReplayClock} from './race/raceSources';
 import type {Channels} from './race/raceSources';
 import type {CarState} from './race/unifiedRaceState';
@@ -397,7 +402,9 @@ function formatRaceDate(value: string) {
 }
 function RaceBrowser({ onCircuit, onGarage, onReplay, onRace, onDrivers, onStrategy, onPlanRace, onForecast }: { onCircuit:(year:number,round:number,name:string)=>void; onGarage:(year:number,round:number)=>void; onForecast:(year:number,round:number,name:string)=>void; onPlanRace:(race:RaceContext)=>void; onStrategy: () => void; onReplay: (year:number,round:number,name:string) => void; onRace: (year: number, round: number) => void; onDrivers: () => void }) {
   const currentYear = new Date().getFullYear();
-  const [year, setYear] = useState(currentYear);
+  const workspace=useWorkspace();
+  const year=workspace.year;
+  const setYear=workspace.selectYear;
   const [races, setRaces] = useState<CalendarRace[]>([]);
   const [selectedKey, setSelectedKey] = useState<number | null>(null);
   const [busy, setBusy] = useState(true);
@@ -425,6 +432,7 @@ function RaceBrowser({ onCircuit, onGarage, onReplay, onRace, onDrivers, onStrat
     return () => controller.abort();
   }, [year]);
 
+  useEffect(()=>{const match=races.find(r=>r.round===workspace.selected?.round);if(match)setSelectedKey(match.meeting_key);},[races,workspace.selected?.round]);
   const selected = races.find(r => r.meeting_key === selectedKey) ?? null;
   const nextRace = races.find(r => r.status === 'upcoming') ?? null;
   const visible = races.filter(r => statusFilter === 'all' || r.status === statusFilter);
@@ -475,7 +483,7 @@ function RaceBrowser({ onCircuit, onGarage, onReplay, onRace, onDrivers, onStrat
             <div className="eyebrow">{year} GRAND PRIX CALENDAR · {visible.length} EVENTS</div>
             <div style={{ display: 'grid', gap: 8, marginTop: 14, maxHeight: 590, overflowY: 'auto' }}>
               {visible.map((race, i) => (
-                <button key={race.meeting_key} onClick={() => setSelectedKey(race.meeting_key)}
+                <button key={race.meeting_key} onClick={() => {setSelectedKey(race.meeting_key);workspace.selectRound(race.round);}}
                   style={{ cursor: 'pointer', textAlign: 'left', padding: 13, borderRadius: 9,
                     border: race.meeting_key === selectedKey ? '1px solid #e63850' : '1px solid #303d50',
                     background: race.meeting_key === selectedKey ? '#2e2533' : '#1b2635', color: '#fff' }}>
@@ -602,9 +610,9 @@ function CircuitPreviewPage({year,round,name,onBack,onPlan}:{year:number;round:n
 }
 function PreviewCamera({low}:{low:boolean}){const {camera}=useThree();useEffect(()=>{camera.position.set(...(low?[55,16,55]:[0,125,135]) as [number,number,number]);camera.lookAt(0,0,0);},[camera,low]);return null;}
 
-function RaceGarage({year,round,onBack,onDriver}:{year:number;round:number;onBack:()=>void;onDriver:(id:string)=>void}) {
+function RaceGarage({year,round,initialDriver,onBack,onDriver}:{year:number;round:number;initialDriver?:string;onBack:()=>void;onDriver:(id:string)=>void}) {
  const {data,loading,error}=useRemote<RaceDetail>(`/api/archive/race/${year}/${round}`);
- const [driverId,setDriverId]=useState('');
+ const [driverId,setDriverId]=useState(initialDriver||'');
  const [filter,setFilter]=useState('');
  const selected=data?.results.find(row=>row.driver.id===driverId)||data?.results[0];
  const count=data?.results.filter(row=>matchGarageCar(row.driver.id,row.constructor,year)).length||0;
@@ -691,14 +699,22 @@ function DriverProfilePage({ id, onBack, onRace }: { id: string; onBack: () => v
   </ContentShell>;
 }
 
-type Screen = {type:'circuit';year:number;round:number;name:string} | {type:'garage';year:number;round:number} | {type:'forecast';year:number;round:number;name:string} | { type: 'strategy'; race?:RaceContext } | { type: 'calendar' } | { type: 'replay';year:number;round:number;name:string } | { type: 'drivers' } | { type: 'race'; year: number; round: number } | { type: 'driver'; id: string };
 function App() {
-  const [screen, setScreen] = useState<Screen>({ type: 'calendar' });
+  const [screen, updateScreen] = useState<Screen>(()=>readScreen(window.location.hash));
+  const [entryTarget,setEntryTarget]=useState<Screen|null>(null);
+  const [effects,setEffects]=useState(()=>localStorage.getItem('ri-effects')!=='off');
+  const entered=useRef(false);
+  const setScreen=(next:Screen)=>{updateScreen(next);if(window.location.hash!==screenUrl(next))window.location.hash=screenUrl(next);};
+  useEffect(()=>{const change=()=>{if(window.location.hash!=='#page-content')updateScreen(readScreen(window.location.hash));};window.addEventListener('hashchange',change);return()=>window.removeEventListener('hashchange',change);},[]);
   const [previous, setPrevious] = useState<Screen>({ type: 'calendar' });
-  const open = (next: Screen) => { setPrevious(screen); setScreen(next); };
+  const open = (next: Screen) => { setPrevious(screen);if(screen.type==='home'&&['calendar','replay','race','circuit'].includes(next.type)&&effects&&!entered.current&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){entered.current=true;setEntryTarget(next);}else setScreen(next); };
+  const finishEntry=()=>{if(entryTarget)setScreen(entryTarget);setEntryTarget(null);};
   const back = () => setScreen(previous.type === screen.type ? { type: 'calendar' } : previous);
+  function renderScreen(){
+  if(screen.type==='home')return <><CinematicHome onNavigate={open} effects={effects} onEffects={value=>{setEffects(value);localStorage.setItem('ri-effects',value?'on':'off');}}/><DriverShowcase onNavigate={open}/></>;
+  if(screen.type==='news')return <main className="newsroom-page"><div className="edition-label">PADDOCK / NEWS & RADIO</div><h1>THE LATEST LAP.</h1><NewsDesk/></main>;
   if (screen.type === 'circuit') return <CircuitPreviewPage key={`${screen.year}/${screen.round}`} year={screen.year} round={screen.round} name={screen.name} onBack={()=>setScreen({type:'calendar'})} onPlan={race=>open({type:'strategy',race})}/>;
-  if (screen.type === 'garage') return <RaceGarage key={`${screen.year}/${screen.round}`} year={screen.year} round={screen.round} onBack={()=>setScreen({type:'calendar'})} onDriver={id=>open({type:'driver',id})}/>;
+  if (screen.type === 'garage') return <RaceGarage key={`${screen.year}/${screen.round}/${screen.driver}`} initialDriver={screen.driver} year={screen.year} round={screen.round} onBack={()=>setScreen({type:'calendar'})} onDriver={id=>open({type:'driver',id})}/>;
   if (screen.type === 'forecast') return <ForecastPage year={screen.year} round={screen.round} name={screen.name} onBack={()=>setScreen({type:'calendar'})} onDriver={id=>open({type:'driver',id})}/>;
   if (screen.type === 'strategy') return <StrategyWorkbench race={screen.race} onBack={() => setScreen({ type: 'calendar' })}/>;
   if (screen.type === 'replay') return <HistoricalReplay key={`${screen.year}-${screen.round}`} year={screen.year} round={screen.round} eventName={screen.name} onBack={() => setScreen({ type: 'calendar' })}/>;
@@ -706,5 +722,7 @@ function App() {
   if (screen.type === 'drivers') return <DriverDirectoryPage onBack={back} onDriver={id => open({ type: 'driver', id })}/>;
   if (screen.type === 'driver') return <DriverProfilePage id={screen.id} onBack={back} onRace={(year, round) => open({ type: 'race', year, round })}/>;
   return <RaceBrowser onCircuit={(year,round,name)=>open({type:'circuit',year,round,name})} onGarage={(year,round)=>open({type:'garage',year,round})} onForecast={(year,round,name)=>open({type:'forecast',year,round,name})} onPlanRace={race=>open({type:'strategy',race})} onStrategy={() => open({ type: 'strategy' })} onReplay={(year,round,name)=>open({type:'replay',year,round,name})} onRace={(year, round) => open({ type: 'race', year, round })} onDrivers={() => open({ type: 'drivers' })}/>;
+  }
+  return <SiteShell screen={screen} onNavigate={open} blocked={!!entryTarget}><div inert={!!entryTarget}>{renderScreen()}</div>{entryTarget&&<RaceEntryTransition onDone={finishEntry}/>}</SiteShell>;
 }
 createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);

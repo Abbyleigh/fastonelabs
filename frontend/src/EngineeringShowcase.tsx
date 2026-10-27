@@ -258,7 +258,7 @@ function Wireframe({enabled}:{enabled:boolean}) {
  return null;
 }
 // Preserve the downloaded car's hierarchy, UVs and original livery.
-function ArchiveCar({path}:{path:string}) {
+export function ArchiveCar({path}:{path:string}) {
  const {scene}=useGLTF(path);
  const fitted=useMemo(()=>{
   const object=scene.clone(true);object.updateMatrixWorld(true);

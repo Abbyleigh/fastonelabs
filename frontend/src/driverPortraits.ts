@@ -1,0 +1,69 @@
+export type Portrait={path:string;name:string;title:string;author:string;license:string;licenseUrl:string;source:string;date:string;modifications:string};
+export const portraits:Record<string,Portrait>={
+  "leclerc": {
+    "path": "/images/showcase/leclerc.jpg",
+    "name": "Charles Leclerc",
+    "title": "Charles Leclerc at the 2026 Cannes Film Festival (cropped).jpg",
+    "author": "Gabriel Hutchinson",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Charles_Leclerc_at_the_2026_Cannes_Film_Festival_(cropped).jpg",
+    "date": "2026-05-13 16:42:25",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "alonso": {
+    "path": "/images/showcase/alonso.jpg",
+    "name": "Fernando Alonso",
+    "title": "Alonso-68 (24710447098).jpg",
+    "author": "United Autosports",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Alonso-68_(24710447098).jpg",
+    "date": "2017-11-21 13:42",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "antonelli": {
+    "path": "/images/showcase/antonelli.jpg",
+    "name": "Kimi Antonelli",
+    "title": "2026-08-23 Motorsport, Formel 1, Gro\u00dfer Preis der Niederlande 2026 STP 3010.jpg",
+    "author": "Steffen Pr\u00f6\u00dfdorf",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:2026-08-23_Motorsport,_Formel_1,_Gro%C3%9Fer_Preis_der_Niederlande_2026_STP_3010.jpg",
+    "date": "2026-08-23",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "norris": {
+    "path": "/images/showcase/norris.jpg",
+    "name": "Lando Norris",
+    "title": "2024-08-25 Motorsport, Formel 1, Gro\u00dfer Preis der Niederlande 2024 STP 3968 by Stepro (cropped2).jpg",
+    "author": "Original:  Steffen Pr\u00f6\u00dfdorf; Derivative work:  Mb2437",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:2024-08-25_Motorsport,_Formel_1,_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_3968_by_Stepro_(cropped2).jpg",
+    "date": "2024-08-25",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "hamilton": {
+    "path": "/images/showcase/hamilton.jpg",
+    "name": "Lewis Hamilton",
+    "title": "Prime Minister Keir Starmer meets Sir Lewis Hamilton (54566928382) (cropped).jpg",
+    "author": "Picture by Lauren Hurley / No 10 Downing Street",
+    "license": "OGL 3",
+    "licenseUrl": "http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3",
+    "source": "https://commons.wikimedia.org/wiki/File:Prime_Minister_Keir_Starmer_meets_Sir_Lewis_Hamilton_(54566928382)_(cropped).jpg",
+    "date": "2025-06-04",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "max_verstappen": {
+    "path": "/images/showcase/max_verstappen.jpg",
+    "name": "Max Verstappen",
+    "title": "2024-08-25 Motorsport, Formel 1, Gro\u00dfer Preis der Niederlande 2024 STP 3973 by Stepro (medium crop).jpg",
+    "author": "Steffen Pr\u00f6\u00dfdorf",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:2024-08-25_Motorsport,_Formel_1,_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_3973_by_Stepro_(medium_crop).jpg",
+    "date": "2024-08-25",
+    "modifications": "Resized for web display; framing varies with viewport."
+  }
+};
