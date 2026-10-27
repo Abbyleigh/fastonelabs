@@ -46,3 +46,9 @@ Higgsfield was attempted for a concept in the earlier layout task, but generatio
 - A loading-indicator cleanup error found in the first browser pass was fixed by keeping its DOM outside the 3D portal. Final-bundle navigation and rendering produced no console errors in the tested path.
 - Proof images: `cinematic-home-desktop.jpg`, `cinematic-engineering-desktop.jpg`, `cinematic-home-phone.jpg`, `cinematic-home-tablet.jpg`, `driver-showcase-phone.jpg` in the task's outputs directory.
 - Final `tools/check_project.py`: all 90 tests, race-contract verification, TypeScript and production build passed. `git diff --check` passed.
+
+## Component-orientation refinement
+
+Corrected launch yaw so the model's negative-Z nose points along positive-X travel (left to right on screen). Verified the nose-first side view midway through the animation.
+
+Replaced individual material-surface pivots with common assembly pivots. Each wheel's tyre and rim now turn together; wing surfaces stay together. Homepage separation adds restrained assembly tilts to show depth. New Solo selected component and Rotate selected component controls support inspection, with a closer camera target and zoom. Existing garage assembly geometry and reassembly remain intact; no imaginary internal components were introduced. Full 90-test project check and subsequent production build pass; browser inspection and final console checks pass. Checkpoint before this refinement: `5e60562`.
