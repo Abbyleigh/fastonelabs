@@ -1,0 +1,170 @@
+{
+  "prototype": {
+    "schemaVersion": 1,
+    "circuitId": "Mexico City GP 2026",
+    "totalLaps": 71,
+    "trackLengthM": 4304,
+    "timestampS": 0.2,
+    "status": "running",
+    "drivers": [
+      {
+        "id": "CONTRACT_A",
+        "grid": 1,
+        "lap": 0,
+        "lapDistanceM": 0.1,
+        "lateralOffsetM": -0.9199999999999999,
+        "velocityMps": 1,
+        "desiredVelocityMps": 73,
+        "tyre": {
+          "compound": "medium",
+          "ageLaps": 0.000023234200743494427,
+          "wear": 2.7334353815875796e-7
+        },
+        "energy": {
+          "fraction": 0.8001,
+          "aero": "corner",
+          "boost": false,
+          "overtakeEligible": false,
+          "overtakeActive": false
+        },
+        "pitStatus": "track",
+        "position": 1,
+        "gapToLeaderS": 0,
+        "finishedAtS": null
+      },
+      {
+        "id": "CONTRACT_B",
+        "grid": 2,
+        "lap": 0,
+        "lapDistanceM": 0.1,
+        "lateralOffsetM": 0.9199999999999999,
+        "velocityMps": 1,
+        "desiredVelocityMps": 72.87,
+        "tyre": {
+          "compound": "medium",
+          "ageLaps": 0.000023234200743494427,
+          "wear": 2.7334353815875796e-7
+        },
+        "energy": {
+          "fraction": 0.8001,
+          "aero": "corner",
+          "boost": false,
+          "overtakeEligible": false,
+          "overtakeActive": false
+        },
+        "pitStatus": "track",
+        "position": 2,
+        "gapToLeaderS": 0,
+        "finishedAtS": null
+      }
+    ]
+  },
+  "expected": {
+    "schemaVersion": 1,
+    "sourceKind": "simulated",
+    "raceId": "simulation:Mexico City GP 2026",
+    "sessionId": "prototype:Mexico City GP 2026",
+    "event": "Mexico City GP 2026",
+    "timestampS": 0.2,
+    "timestampUtc": null,
+    "windowStartS": 0,
+    "trackLengthM": 4304,
+    "totalLaps": 71,
+    "status": "running",
+    "cars": [
+      {
+        "id": "CONTRACT_A",
+        "driverNumber": null,
+        "code": "CONTRACT_A",
+        "name": "CONTRACT_A",
+        "color": "#8A9CB5",
+        "position": 1,
+        "classificationQuality": "estimated",
+        "classificationAgeS": 0,
+        "pose": null,
+        "lap": 0,
+        "trackDistanceM": 0.1,
+        "lateralOffsetM": -0.9199999999999999,
+        "gapToLeaderS": 0,
+        "gapLabel": null,
+        "telemetry": {
+          "speedMps": 1,
+          "rpm": null,
+          "gear": null,
+          "throttlePercent": null,
+          "brakePressed": null,
+          "legacyDrsCode": null,
+          "sampleAgeS": 0
+        },
+        "tyre": {
+          "compound": "medium",
+          "ageLaps": 0.000023234200743494427,
+          "wearFraction": 2.7334353815875796e-7,
+          "quality": "estimated"
+        },
+        "pitPhase": "track",
+        "energy": {
+          "fraction": 0.8001,
+          "aero": "corner",
+          "boost": false,
+          "overtakeEligible": false,
+          "overtakeActive": false,
+          "quality": "estimated"
+        }
+      },
+      {
+        "id": "CONTRACT_B",
+        "driverNumber": null,
+        "code": "CONTRACT_B",
+        "name": "CONTRACT_B",
+        "color": "#8A9CB5",
+        "position": 2,
+        "classificationQuality": "estimated",
+        "classificationAgeS": 0,
+        "pose": null,
+        "lap": 0,
+        "trackDistanceM": 0.1,
+        "lateralOffsetM": 0.9199999999999999,
+        "gapToLeaderS": 0,
+        "gapLabel": null,
+        "telemetry": {
+          "speedMps": 1,
+          "rpm": null,
+          "gear": null,
+          "throttlePercent": null,
+          "brakePressed": null,
+          "legacyDrsCode": null,
+          "sampleAgeS": 0
+        },
+        "tyre": {
+          "compound": "medium",
+          "ageLaps": 0.000023234200743494427,
+          "wearFraction": 2.7334353815875796e-7,
+          "quality": "estimated"
+        },
+        "pitPhase": "track",
+        "energy": {
+          "fraction": 0.8001,
+          "aero": "corner",
+          "boost": false,
+          "overtakeEligible": false,
+          "overtakeActive": false,
+          "quality": "estimated"
+        }
+      }
+    ],
+    "flags": null,
+    "events": null,
+    "provenance": {
+      "provider": "prototype",
+      "adapterVersion": "race-state-v1",
+      "coordinateUnits": "metres",
+      "maxInterpolationGapS": 0,
+      "elevationVerified": false,
+      "limitations": [
+        "Kinematic prototype checkpoint; not a recorded race or calibrated vehicle physics.",
+        "Energy, tyres, classification and gaps are illustrative simulation estimates."
+      ]
+    }
+  }
+}

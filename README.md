@@ -35,3 +35,19 @@ Open http://127.0.0.1:5173. Downloading a race for the first time can be slow.
 
 ## Next milestones
 Synchronised multiple-car positions, real time slider, telemetry panels, tyre strategies, ML predictions.
+
+## Race Intelligence gates
+
+The current preservation audit and ordered implementation plan are in
+[docs/RACE-INTELLIGENCE-PLAN.md](docs/RACE-INTELLIGENCE-PLAN.md).
+Completed Gate 0/1 details and evidence are in
+[docs/GATES-0-1-RESULTS.md](docs/GATES-0-1-RESULTS.md).
+
+Run checks using the existing backend environment:
+
+```sh
+backend/.venv312/bin/python tools/check_project.py
+```
+
+Development test dependencies are in `backend/requirements-dev.txt`.
+The installed FastF1 version is preserved at 3.9.0; OpenF1/Jolpica remain the active data sources.

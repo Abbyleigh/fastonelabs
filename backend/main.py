@@ -40,8 +40,14 @@ app.add_middleware(
 
 
 @app.get("/api/health")
-def health():
-    return {"status": "ok", "provider": "OpenF1"}
+def health(details: bool = False):
+    if not details:
+        return {"status": "ok", "provider": "OpenF1"}
+    from importlib.metadata import version
+    return {"status":"ok","provider":"OpenF1","raceStateSchemaVersion":1,
+            "sources":{"recorded":"OpenF1","archive":"Jolpica","simulation":"prototype adapter; not connected as a playable race"},
+            "fastf1":{"version":version("fastf1"),"importerConnected":False},
+            "liveTelemetryConnected":False}
 
 
 
@@ -620,3 +626,41 @@ def archive_driver(driver_id: str, media: bool = False):
 def f1_news():
     from news import load_news
     return load_news()
+
+
+def read_race_state(year,round_num,start,time,driver=None):
+    import math
+    if not all(math.isfinite(t) for t in (start,time)) or start<0 or not 0<=time<=60:
+        raise HTTPException(400,detail="Choose finite times within a recorded window.")
+    if not 2023<=year<=datetime.now(timezone.utc).year or not 1<=round_num<=30:
+        raise HTTPException(400,detail='Choose a supported recorded season and round.')
+    from race_state import load_state
+    from race_replay import Unavailable
+    try:
+        return load_state(fetch_openf1,jolpica,year,round_num,start,time,driver)
+    except Unavailable as error:
+        raise HTTPException(404,detail=str(error)) from error
+    except ValueError as error:
+        raise HTTPException(400,detail=str(error)) from error
+    except Exception as error:
+        logger.exception('Race state unavailable')
+        raise HTTPException(503,detail='Recorded state is temporarily unavailable.') from error
+
+
+@app.get('/api/race-state/schema')
+def race_state_schema():
+    from race_state import UnifiedRaceState
+    return UnifiedRaceState.model_json_schema(mode='serialization')
+
+
+@app.get('/api/race-state')
+def race_state_snapshot(year:int,round:int,start:float=0,time:float=0,driver:int|None=None):
+    return read_race_state(year,round,start,time,driver)
+
+
+@app.get('/api/race-state/verify')
+def race_state_verify(year:int,round:int,start:float=0,time:float=0,driver:int|None=None):
+    from race_state import verify,fingerprint
+    state=read_race_state(year,round,start,time,driver)
+    second=read_race_state(year,round,start,time,driver)
+    return {**verify(state),'repeatSeekIdentical':fingerprint(state)==fingerprint(second)}

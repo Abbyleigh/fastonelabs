@@ -1,0 +1,623 @@
+{
+  "$defs": {
+    "CarState": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "driverNumber": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Drivernumber"
+        },
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "color": {
+          "title": "Color",
+          "type": "string"
+        },
+        "position": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Position"
+        },
+        "classificationQuality": {
+          "enum": [
+            "recorded",
+            "estimated",
+            "missing"
+          ],
+          "title": "Classificationquality",
+          "type": "string"
+        },
+        "classificationAgeS": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Classificationages"
+        },
+        "pose": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Pose"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lap": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Lap"
+        },
+        "trackDistanceM": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Trackdistancem"
+        },
+        "lateralOffsetM": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Lateraloffsetm"
+        },
+        "gapToLeaderS": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gaptoleaders"
+        },
+        "gapLabel": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gaplabel"
+        },
+        "telemetry": {
+          "$ref": "#/$defs/Telemetry"
+        },
+        "tyre": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Tyre"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pitPhase": {
+          "enum": [
+            "unknown",
+            "track",
+            "entry",
+            "box",
+            "exit"
+          ],
+          "title": "Pitphase",
+          "type": "string"
+        },
+        "energy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Energy"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "driverNumber",
+        "code",
+        "name",
+        "color",
+        "position",
+        "classificationQuality",
+        "classificationAgeS",
+        "pose",
+        "lap",
+        "trackDistanceM",
+        "lateralOffsetM",
+        "gapToLeaderS",
+        "gapLabel",
+        "telemetry",
+        "tyre",
+        "pitPhase",
+        "energy"
+      ],
+      "title": "CarState",
+      "type": "object"
+    },
+    "Energy": {
+      "additionalProperties": false,
+      "properties": {
+        "fraction": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Fraction",
+          "type": "number"
+        },
+        "aero": {
+          "title": "Aero",
+          "type": "string"
+        },
+        "boost": {
+          "title": "Boost",
+          "type": "boolean"
+        },
+        "overtakeEligible": {
+          "title": "Overtakeeligible",
+          "type": "boolean"
+        },
+        "overtakeActive": {
+          "title": "Overtakeactive",
+          "type": "boolean"
+        },
+        "quality": {
+          "const": "estimated",
+          "default": "estimated",
+          "title": "Quality",
+          "type": "string"
+        }
+      },
+      "required": [
+        "fraction",
+        "aero",
+        "boost",
+        "overtakeEligible",
+        "overtakeActive",
+        "quality"
+      ],
+      "title": "Energy",
+      "type": "object"
+    },
+    "Pose": {
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "title": "Y",
+          "type": "number"
+        },
+        "z": {
+          "title": "Z",
+          "type": "number"
+        },
+        "headingRad": {
+          "title": "Headingrad",
+          "type": "number"
+        },
+        "quality": {
+          "enum": [
+            "sampled",
+            "interpolated",
+            "estimated"
+          ],
+          "title": "Quality",
+          "type": "string"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "z",
+        "headingRad",
+        "quality"
+      ],
+      "title": "Pose",
+      "type": "object"
+    },
+    "Provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "provider": {
+          "enum": [
+            "OpenF1",
+            "FastF1",
+            "prototype"
+          ],
+          "title": "Provider",
+          "type": "string"
+        },
+        "adapterVersion": {
+          "const": "race-state-v1",
+          "default": "race-state-v1",
+          "title": "Adapterversion",
+          "type": "string"
+        },
+        "coordinateUnits": {
+          "enum": [
+            "provider_units",
+            "metres"
+          ],
+          "title": "Coordinateunits",
+          "type": "string"
+        },
+        "maxInterpolationGapS": {
+          "minimum": 0,
+          "title": "Maxinterpolationgaps",
+          "type": "number"
+        },
+        "elevationVerified": {
+          "default": false,
+          "title": "Elevationverified",
+          "type": "boolean"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Limitations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "provider",
+        "adapterVersion",
+        "coordinateUnits",
+        "maxInterpolationGapS",
+        "elevationVerified",
+        "limitations"
+      ],
+      "title": "Provenance",
+      "type": "object"
+    },
+    "Telemetry": {
+      "additionalProperties": false,
+      "properties": {
+        "speedMps": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Speedmps"
+        },
+        "rpm": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rpm"
+        },
+        "gear": {
+          "anyOf": [
+            {
+              "maximum": 8,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gear"
+        },
+        "throttlePercent": {
+          "anyOf": [
+            {
+              "maximum": 100,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Throttlepercent"
+        },
+        "brakePressed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Brakepressed"
+        },
+        "legacyDrsCode": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacydrscode"
+        },
+        "sampleAgeS": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sampleages"
+        }
+      },
+      "required": [
+        "speedMps",
+        "rpm",
+        "gear",
+        "throttlePercent",
+        "brakePressed",
+        "legacyDrsCode",
+        "sampleAgeS"
+      ],
+      "title": "Telemetry",
+      "type": "object"
+    },
+    "Tyre": {
+      "additionalProperties": false,
+      "properties": {
+        "compound": {
+          "title": "Compound",
+          "type": "string"
+        },
+        "ageLaps": {
+          "minimum": 0,
+          "title": "Agelaps",
+          "type": "number"
+        },
+        "wearFraction": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Wearfraction"
+        },
+        "quality": {
+          "enum": [
+            "recorded",
+            "estimated"
+          ],
+          "title": "Quality",
+          "type": "string"
+        }
+      },
+      "required": [
+        "compound",
+        "ageLaps",
+        "wearFraction",
+        "quality"
+      ],
+      "title": "Tyre",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1,
+      "default": 1,
+      "title": "Schemaversion",
+      "type": "integer"
+    },
+    "sourceKind": {
+      "enum": [
+        "recorded",
+        "simulated"
+      ],
+      "title": "Sourcekind",
+      "type": "string"
+    },
+    "raceId": {
+      "title": "Raceid",
+      "type": "string"
+    },
+    "sessionId": {
+      "title": "Sessionid",
+      "type": "string"
+    },
+    "event": {
+      "title": "Event",
+      "type": "string"
+    },
+    "timestampS": {
+      "minimum": 0,
+      "title": "Timestamps",
+      "type": "number"
+    },
+    "timestampUtc": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Timestamputc"
+    },
+    "windowStartS": {
+      "minimum": 0,
+      "title": "Windowstarts",
+      "type": "number"
+    },
+    "trackLengthM": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Tracklengthm"
+    },
+    "totalLaps": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Totallaps"
+    },
+    "status": {
+      "enum": [
+        "recorded",
+        "running",
+        "finished"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "cars": {
+      "items": {
+        "$ref": "#/$defs/CarState"
+      },
+      "title": "Cars",
+      "type": "array"
+    },
+    "flags": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Flags"
+    },
+    "events": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Events"
+    },
+    "provenance": {
+      "$ref": "#/$defs/Provenance"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "sourceKind",
+    "raceId",
+    "sessionId",
+    "event",
+    "timestampS",
+    "timestampUtc",
+    "windowStartS",
+    "trackLengthM",
+    "totalLaps",
+    "status",
+    "cars",
+    "flags",
+    "events",
+    "provenance"
+  ],
+  "title": "UnifiedRaceState",
+  "type": "object"
+}

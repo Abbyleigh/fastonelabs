@@ -1,3 +1,7 @@
+import {ReplaySource,advanceReplayClock} from './race/raceSources';
+import type {Channels} from './race/raceSources';
+import type {CarState} from './race/unifiedRaceState';
+import RaceStateStatus from './race/RaceStateStatus';
 import NewsDesk from './NewsDesk';
 import PitWall from './PitWall';
 import CircuitWorld from './CircuitWorld';
@@ -37,6 +41,7 @@ type ReplayDriver = {
   sample_count: number;
 };
 type ReplayResponse = {
+  round: number;
   track: TrackResponse;
   total_duration: number;
   window_start: number;
@@ -66,25 +71,10 @@ function scenePosition(x: number, y: number, coordinates: XY[], height = .4) {
   return new THREE.Vector3((x - cx) * scale, height, -(y - cy) * scale);
 }
 
-// All drivers use the same absolute replay clock. We do not extrapolate outside
-// available timestamps or bridge telemetry gaps greater than two seconds.
-function replayPoseAt(driver: ReplayDriver, time: number, coordinates: XY[]) {
-  const samples = driver.samples;
-  if (samples.length < 2 || time < samples[0].time || time > samples[samples.length - 1].time) return null;
-  let low = 0, high = samples.length - 1;
-  while (low < high) {
-    const mid = Math.floor((low + high) / 2);
-    if (samples[mid].time < time) low = mid + 1;
-    else high = mid;
-  }
-  const i = Math.max(0, Math.min(low - 1, samples.length - 2));
-  const a = samples[i], b = samples[i + 1];
-  const span = b.time - a.time;
-  if (span <= 0 || span > 2) return null;
-  const f = THREE.MathUtils.clamp((time - a.time) / span, 0, 1);
-  const pos = scenePosition(THREE.MathUtils.lerp(a.x, b.x, f), THREE.MathUtils.lerp(a.y, b.y, f), coordinates);
-  const direction = scenePosition(b.x, b.y, coordinates).sub(scenePosition(a.x, a.y, coordinates));
-  return { position: pos, rotationY: Math.atan2(direction.x, direction.z) };
+// View-space transformation only; provider sampling lives in ReplaySource.
+function replayPoseAt(car: CarState | undefined, coordinates: XY[]) {
+  if (!car?.pose) return null;
+  return {position: scenePosition(car.pose.x,car.pose.y,coordinates),rotationY:car.pose.headingRad};
 }
 
 /** A stylised, lightweight F1-inspired model. All car parts are local to the replay pose. */
@@ -141,21 +131,17 @@ function F1CarModel({ color, code }: { color: string; code: string }) {
   );
 }
 
-function ReplayCar({ driver, coordinates, replayTime }: {
-  driver: ReplayDriver; coordinates: XY[]; replayTime: number;
-}) {
-  const pose = useMemo(() => replayPoseAt(driver, replayTime, coordinates), [driver, coordinates, replayTime]);
+function ReplayCar({ car, coordinates }: {car:CarState;coordinates:XY[]}) {
+  const pose = useMemo(() => replayPoseAt(car,coordinates),[car,coordinates]);
   if (!pose) return null;
   return (
     <group position={pose.position} rotation={[0, pose.rotationY, 0]}>
-      <F1CarModel color={driver.color} code={driver.code} />
+      <F1CarModel color={car.color} code={car.code} />
     </group>
   );
 }
 
-function RaceCamera({ driver, coordinates, replayTime }: {
-  driver: ReplayDriver | null; coordinates: XY[]; replayTime: number;
-}) {
+function RaceCamera({ driver, coordinates }: {driver:CarState|null;coordinates:XY[]}) {
   const { camera } = useThree();
   const controls = useRef<React.ComponentRef<typeof OrbitControls>>(null);
   const wasFollowing = useRef(false);
@@ -173,7 +159,7 @@ function RaceCamera({ driver, coordinates, replayTime }: {
       return;
     }
     wasFollowing.current = true;
-    const pose = replayPoseAt(driver, replayTime, coordinates);
+    const pose = replayPoseAt(driver,coordinates);
     if (!pose) return;
     const damping = 1 - Math.exp(-4 * Math.min(delta, 0.1));
     const destination = pose.position.clone().add(new THREE.Vector3(0, 18, 28));
@@ -204,6 +190,7 @@ function formatTime(seconds: number) {
 function HistoricalReplay({ onBack,year,round,eventName }: { onBack: () => void;year:number;round:number;eventName:string }) {
   const [data, setData] = useState<TrackResponse | null>(null);
   const [replay, setReplay] = useState<ReplayResponse | null>(null);
+  const [channels,setChannels]=useState<Channels>({});
   const [error, setError] = useState('');
   const [replayError, setReplayError] = useState('');
   const [windowOffset,setWindowOffset]=useState(0);
@@ -215,11 +202,13 @@ function HistoricalReplay({ onBack,year,round,eventName }: { onBack: () => void;
   const [playing, setPlaying] = useState(true);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const replayDuration = replay?.duration ?? 0;
-  const selectedDriver = replay?.drivers.find(d => d.driver_number === followDriver) ?? null;
+  const source=useMemo(()=>replay?new ReplaySource(replay,channels):null,[replay,channels]);
+  const raceState=useMemo(()=>source?.frameAt(replayTime)??null,[source,replayTime]);
+  const selectedDriver = raceState?.cars.find(d=>d.driverNumber===followDriver)??null;
 
   useEffect(() => {
     const controller=new AbortController();
-    setLoading(true);setError('');setReplayError('');setReplay(null);setReplayTime(0);
+    setLoading(true);setError('');setReplayError('');setReplay(null);setReplayTime(0);setChannels({});
     fetch(`/api/replay/multi?year=${year}&round=${round}&start=${windowOffset}`,{signal:controller.signal})
       .then(async response=>{const result=await response.json().catch(()=>({detail:response.status===404?'No recorded telemetry is available for this event yet. Race results and strategy planning remain available.':'Replay data could not be loaded. The provider may be temporarily unavailable; try again shortly.'}));if(!response.ok)throw Error(result.detail||'Replay unavailable');return result as ReplayResponse;})
       .then(result=>{if(controller.signal.aborted)return;setReplay(result);setData(result.track);setSessionDuration(result.total_duration);setReplayError(result.notice||'');if(!result.drivers.length)setPlaying(false);})
@@ -233,9 +222,9 @@ function HistoricalReplay({ onBack,year,round,eventName }: { onBack: () => void;
     let frame = 0;
     let previous = performance.now();
     const tick = (now: number) => {
-      const elapsed = Math.min((now - previous) / 1000, 0.1);
+      const elapsed = (now - previous) / 1000;
       previous = now;
-      setReplayTime(current => (current + elapsed * playbackSpeed) % replayDuration);
+      setReplayTime(current => advanceReplayClock(current,elapsed,playbackSpeed,replayDuration));
       frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
@@ -271,6 +260,7 @@ function HistoricalReplay({ onBack,year,round,eventName }: { onBack: () => void;
           <div style={{display:'flex',gap:10,flexWrap:'wrap'}}><button style={controlButton} disabled={loading||windowOffset<=0} onClick={()=>setWindowOffset(t=>Math.max(0,t-60))}>← Previous minute</button><button style={controlButton} disabled={loading||windowOffset+60>=sessionDuration} onClick={()=>setWindowOffset(t=>t+60)}>Next minute →</button><label style={{fontSize:13,color:'#c5d4e8'}}>Jump to minute <select aria-label="Jump to recorded minute" style={controlButton} value={windowOffset} disabled={loading} onChange={event=>setWindowOffset(Number(event.target.value))}>{Array.from({length:Math.ceil(sessionDuration/60)},(_,i)=>i*60).map(offset=><option key={offset} value={offset}>{formatTime(offset)}–{formatTime(Math.min(offset+60,sessionDuration))}</option>)}</select></label></div>
         </section>}
         {replay && <button style={{...controlButton,marginBottom:16}} onClick={()=>document.getElementById('recorded-pitwall')?.scrollIntoView({behavior:'smooth',block:'start'})}>Open recorded pit wall ↓</button>}
+        {raceState&&replay&&<RaceStateStatus key={`state/${year}/${round}/${windowOffset}`} frame={raceState} year={year} round={round} time={replayTime} driver={followDriver??replay.drivers[0]?.driver_number}/>}
         <div className="layout">
           <section className="panel track-panel">
             <div className="panel-head">
@@ -286,11 +276,10 @@ function HistoricalReplay({ onBack,year,round,eventName }: { onBack: () => void;
                   <ambientLight intensity={1} />
                   <directionalLight position={[45, 90, 30]} intensity={2} />
                   <CircuitWorld coordinates={data.coordinates} />
-                  {replay?.drivers.map(driver => (
-                    <ReplayCar key={driver.driver_number} driver={driver}
-                      coordinates={data.coordinates} replayTime={replayTime} />
+                  {raceState?.cars.map(car => (
+                    <ReplayCar key={car.id} car={car} coordinates={data.coordinates} />
                   ))}
-                  <RaceCamera driver={selectedDriver} coordinates={data.coordinates} replayTime={replayTime} />
+                  <RaceCamera driver={selectedDriver} coordinates={data.coordinates} />
                 </Canvas>
               </div>
             )}
@@ -349,7 +338,7 @@ function HistoricalReplay({ onBack,year,round,eventName }: { onBack: () => void;
                   <span>DRIVER</span><span>TELEMETRY</span>
                 </div>
                 {replay.drivers.map(driver => {
-                  const active = data ? replayPoseAt(driver, replayTime, data.coordinates) !== null : false;
+                  const active = data ? replayPoseAt(raceState?.cars.find(c=>c.driverNumber===driver.driver_number),data.coordinates) !== null : false;
                   return (
                     <button key={driver.driver_number} onClick={() => setFollowDriver(driver.driver_number)}
                       style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '12px 8px',
@@ -377,7 +366,7 @@ function HistoricalReplay({ onBack,year,round,eventName }: { onBack: () => void;
               Position samples are approximate; lateral racing lines and real track elevation are not reconstructed. Road width, lighting and stylised car models are illustrative; the driver list is tracking status, not official race order.</div>
           </aside>
         </div>
-        {replay && data && <PitWall key={`${year}/${round}/${windowOffset}`} year={year} round={round} offset={windowOffset} time={replayTime} drivers={replay.drivers} coordinates={data.coordinates} selected={followDriver} onSelect={setFollowDriver} duration={replayDuration} playing={playing} onTime={setReplayTime} onToggle={()=>setPlaying(p=>!p)} />}
+        {replay && data && raceState && <PitWall frame={raceState} onChannels={setChannels} key={`pitwall/${year}/${round}/${windowOffset}`} year={year} round={round} offset={windowOffset} time={replayTime} drivers={replay.drivers} coordinates={data.coordinates} selected={followDriver} onSelect={setFollowDriver} duration={replayDuration} playing={playing} onTime={setReplayTime} onToggle={()=>setPlaying(p=>!p)} />}
       </main>
     </div>
   );

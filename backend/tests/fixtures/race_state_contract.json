@@ -1,0 +1,200 @@
+{
+  "replay": {
+    "year": 2024,
+    "round": 12,
+    "session_key": 9558,
+    "event": "Synthetic contract fixture \u2014 not historical evidence",
+    "window_start": 60,
+    "window_start_utc": "2024-07-07T14:04:12.540Z",
+    "duration": 60,
+    "drivers": [
+      {
+        "driver_number": 44,
+        "code": "HAM",
+        "name": "Driver 44",
+        "color": "#00FFFF",
+        "samples": [
+          {
+            "time": 0,
+            "x": 10,
+            "y": 20,
+            "z": 0
+          },
+          {
+            "time": 1,
+            "x": 12,
+            "y": 24,
+            "z": 0
+          },
+          {
+            "time": 9,
+            "x": 50,
+            "y": 60,
+            "z": 0
+          }
+        ]
+      },
+      {
+        "driver_number": 1,
+        "code": "VER",
+        "name": "Driver 1",
+        "color": "#2222FF",
+        "samples": [
+          {
+            "time": 0,
+            "x": 14,
+            "y": 22,
+            "z": 0
+          },
+          {
+            "time": 1,
+            "x": 16,
+            "y": 26,
+            "z": 0
+          }
+        ]
+      }
+    ]
+  },
+  "channels": {
+    "position": [
+      {
+        "time": 0,
+        "driver_number": 44,
+        "position": 2
+      },
+      {
+        "time": 0,
+        "driver_number": 1,
+        "position": 1
+      },
+      {
+        "time": 1,
+        "driver_number": 44,
+        "position": 1
+      }
+    ],
+    "intervals": [
+      {
+        "time": 0,
+        "driver_number": 44,
+        "gap_to_leader": 1.5
+      }
+    ],
+    "car_data": [
+      {
+        "time": 0,
+        "driver_number": 44,
+        "speed": 180,
+        "rpm": 11000,
+        "n_gear": 7,
+        "throttle": 50,
+        "brake": 0,
+        "drs": 0
+      },
+      {
+        "time": 1,
+        "driver_number": 1,
+        "speed": 200
+      }
+    ]
+  },
+  "time": 0.5,
+  "expected": {
+    "schemaVersion": 1,
+    "sourceKind": "recorded",
+    "raceId": "2024:12",
+    "sessionId": "OpenF1:9558",
+    "event": "Synthetic contract fixture \u2014 not historical evidence",
+    "timestampS": 60.5,
+    "timestampUtc": "2024-07-07T14:04:13.040Z",
+    "windowStartS": 60.0,
+    "trackLengthM": null,
+    "totalLaps": null,
+    "status": "recorded",
+    "cars": [
+      {
+        "id": "1",
+        "driverNumber": 1,
+        "code": "VER",
+        "name": "Driver 1",
+        "color": "#2222FF",
+        "position": 1,
+        "classificationQuality": "recorded",
+        "classificationAgeS": 0.5,
+        "pose": {
+          "x": 15.0,
+          "y": 24.0,
+          "z": 0.0,
+          "headingRad": 2.677945044588987,
+          "quality": "interpolated"
+        },
+        "lap": null,
+        "trackDistanceM": null,
+        "lateralOffsetM": null,
+        "gapToLeaderS": null,
+        "gapLabel": null,
+        "telemetry": {
+          "speedMps": null,
+          "rpm": null,
+          "gear": null,
+          "throttlePercent": null,
+          "brakePressed": null,
+          "legacyDrsCode": null,
+          "sampleAgeS": null
+        },
+        "tyre": null,
+        "pitPhase": "unknown",
+        "energy": null
+      },
+      {
+        "id": "44",
+        "driverNumber": 44,
+        "code": "HAM",
+        "name": "Driver 44",
+        "color": "#00FFFF",
+        "position": 2,
+        "classificationQuality": "recorded",
+        "classificationAgeS": 0.5,
+        "pose": {
+          "x": 11.0,
+          "y": 22.0,
+          "z": 0.0,
+          "headingRad": 2.677945044588987,
+          "quality": "interpolated"
+        },
+        "lap": null,
+        "trackDistanceM": null,
+        "lateralOffsetM": null,
+        "gapToLeaderS": 1.5,
+        "gapLabel": null,
+        "telemetry": {
+          "speedMps": 50.0,
+          "rpm": 11000.0,
+          "gear": 7,
+          "throttlePercent": 50.0,
+          "brakePressed": false,
+          "legacyDrsCode": 0,
+          "sampleAgeS": 0.5
+        },
+        "tyre": null,
+        "pitPhase": "unknown",
+        "energy": null
+      }
+    ],
+    "flags": null,
+    "events": null,
+    "provenance": {
+      "provider": "OpenF1",
+      "adapterVersion": "race-state-v1",
+      "coordinateUnits": "provider_units",
+      "maxInterpolationGapS": 2.0,
+      "elevationVerified": false,
+      "limitations": [
+        "OpenF1 coordinates are provider units, not verified metres or road elevation.",
+        "Linear interpolation only within two seconds; missing positions remain null.",
+        "Classification is the last reported update; tyre, pit and energy state are unknown unless supplied."
+      ]
+    }
+  }
+}
