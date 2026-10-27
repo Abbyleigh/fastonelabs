@@ -1,3 +1,4 @@
+import DriverCareers from './DriverCareers';
 import SiteShell,{useWorkspace} from './SiteShell';
 import DriverShowcase from './DriverShowcase';
 import CinematicHome,{RaceEntryTransition} from './CinematicHome';
@@ -679,7 +680,7 @@ function DriverProfilePage({ id, onBack, onRace }: { id: string; onBack: () => v
   return <ContentShell title={data?.driver.name || 'Driver profile'} caption="DRIVER CAREER · STATISTICS" onBack={onBack}>
     {loading && <div className="message">Loading career statistics…</div>}
     {error && <div className="message error">{error}</div>}
-    {data && <><DriverMedia id={id} name={data.driver.name}/><section style={{ ...panelStyle, marginBottom: 18 }}>
+    {data && <><a className="career-profile-link" href={screenUrl({type:'careers',id})}>Explore the full career, achievements & milestones ↗</a><DriverMedia id={id} name={data.driver.name}/><section style={{ ...panelStyle, marginBottom: 18 }}>
       <div className="eyebrow">{data.driver.nationality || 'Nationality unavailable'} · Born {data.driver.birth_date || 'Not recorded'}</div>
       <h2 style={{ margin: '12px 0' }}>{data.driver.name} {data.driver.code ? `(${data.driver.code})` : ''}</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(135px, 1fr))', gap: 12 }}>
@@ -712,6 +713,7 @@ function App() {
   const back = () => setScreen(previous.type === screen.type ? { type: 'calendar' } : previous);
   function renderScreen(){
   if(screen.type==='home')return <><CinematicHome onNavigate={open} effects={effects} onEffects={value=>{setEffects(value);localStorage.setItem('ri-effects',value?'on':'off');}}/><DriverShowcase onNavigate={open}/></>;
+  if(screen.type==='careers')return <DriverCareers initialId={screen.id} onNavigate={open}/>;
   if(screen.type==='news')return <main className="newsroom-page"><div className="edition-label">PADDOCK / NEWS & RADIO</div><h1>THE LATEST LAP.</h1><NewsDesk/></main>;
   if (screen.type === 'circuit') return <CircuitPreviewPage key={`${screen.year}/${screen.round}`} year={screen.year} round={screen.round} name={screen.name} onBack={()=>setScreen({type:'calendar'})} onPlan={race=>open({type:'strategy',race})}/>;
   if (screen.type === 'garage') return <RaceGarage key={`${screen.year}/${screen.round}/${screen.driver}`} initialDriver={screen.driver} year={screen.year} round={screen.round} onBack={()=>setScreen({type:'calendar'})} onDriver={id=>open({type:'driver',id})}/>;

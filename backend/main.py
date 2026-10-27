@@ -590,7 +590,7 @@ def valid_driver_id(value):
 
 
 @app.get("/api/archive/driver/{driver_id}")
-def archive_driver(driver_id: str, media: bool = False):
+def archive_driver(driver_id: str, media: bool = False, career: bool = False):
     valid_driver_id(driver_id)
     profile = jolpica(f"drivers/{driver_id}", {"limit": 1}, cache_seconds=604800)
     found = profile.get("DriverTable", {}).get("Drivers", [])
@@ -599,6 +599,9 @@ def archive_driver(driver_id: str, media: bool = False):
     if media:
         from driver_media import find_media
         return find_media(driver_id, driver_summary(found[0])['name'])
+    if career:
+        from careers import load_career
+        return {"driver": driver_summary(found[0]), **load_career(jolpica, driver_id)}
     result_info = jolpica(f"drivers/{driver_id}/results", {"limit": 1}, cache_seconds=86400)
     wins_info = jolpica(f"drivers/{driver_id}/results/1", {"limit": 1}, cache_seconds=86400)
     # Qualifying position 1 is pole; historical qualifying records are incomplete.
