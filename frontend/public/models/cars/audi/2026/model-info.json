@@ -1,0 +1,17 @@
+{
+  "id": "audi-2026",
+  "name": "Audi R26",
+  "team": "Audi",
+  "season": 2026,
+  "drivers": [
+    "hulkenberg",
+    "bortoleto"
+  ],
+  "path": "/models/cars/audi/2026/car.glb",
+  "source": "https://sketchfab.com/3d-models/32bf228264b047669b100b0f1b8769ac",
+  "author": "Dave Love SketchFab",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "note": "Creator-labelled exterior representation, not official CAD. Original livery retained; painted number may differ. Fitted and oriented for this viewer. No engineering components inferred from unnamed meshes.",
+  "engineeringNote": "Connected-surface and material inspection groups added for the original exterior. Original GLB, triangles, UVs and textures retained. Groups are approximate; not manufacturer part boundaries. Floor and internals may remain grouped or unmodelled."
+}

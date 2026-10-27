@@ -1,0 +1,17 @@
+{
+  "id": "red-bull-2026",
+  "name": "Red Bull RB22",
+  "team": "Red Bull",
+  "season": 2026,
+  "drivers": [
+    "max_verstappen",
+    "hadjar"
+  ],
+  "path": "/models/cars/red-bull/2026/car.glb",
+  "source": "https://sketchfab.com/3d-models/0a3d24a58e0549d591a5a48c22eec383",
+  "author": "Dave Love SketchFab",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "note": "Creator-labelled exterior representation, not official CAD. Original livery retained; painted number may differ. Fitted and oriented for this viewer. No engineering components inferred from unnamed meshes.",
+  "engineeringNote": "Connected-surface and material inspection groups added for the original exterior. Original GLB, triangles, UVs and textures retained. Groups are approximate; not manufacturer part boundaries. Floor and internals may remain grouped or unmodelled."
+}

@@ -1,0 +1,17 @@
+{
+  "id": "mclaren-2026",
+  "name": "McLaren MCL40",
+  "team": "McLaren",
+  "season": 2026,
+  "drivers": [
+    "norris",
+    "piastri"
+  ],
+  "path": "/models/cars/mclaren/2026/car.glb",
+  "source": "https://sketchfab.com/3d-models/96214ad5624f42a0861f77008f8d29e7",
+  "author": "Dave Love SketchFab",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "note": "Creator-labelled exterior representation, not official CAD. Original livery retained; painted number may differ. Fitted and oriented for this viewer. No engineering components inferred from unnamed meshes.",
+  "engineeringNote": "Connected-surface and material inspection groups added for the original exterior. Original GLB, triangles, UVs and textures retained. Groups are approximate; not manufacturer part boundaries. Floor and internals may remain grouped or unmodelled."
+}

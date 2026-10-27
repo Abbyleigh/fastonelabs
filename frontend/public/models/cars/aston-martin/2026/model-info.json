@@ -1,0 +1,17 @@
+{
+  "id": "aston-martin-2026",
+  "name": "Aston Martin AMR26",
+  "team": "Aston Martin",
+  "season": 2026,
+  "drivers": [
+    "alonso",
+    "stroll"
+  ],
+  "path": "/models/cars/aston-martin/2026/car.glb",
+  "source": "https://sketchfab.com/3d-models/a50d1c7bc086455c9412470d93fc3fc7",
+  "author": "Dave Love SketchFab",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "note": "Creator-labelled exterior representation, not official CAD. Original livery retained; painted number may differ. Fitted and oriented for this viewer. No engineering components inferred from unnamed meshes.",
+  "engineeringNote": "Connected-surface and material inspection groups added for the original exterior. Original GLB, triangles, UVs and textures retained. Groups are approximate; not manufacturer part boundaries. Floor and internals may remain grouped or unmodelled."
+}

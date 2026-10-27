@@ -1,0 +1,17 @@
+{
+  "id": "haas-2026",
+  "name": "Haas VF-26",
+  "team": "Haas F1 Team",
+  "season": 2026,
+  "drivers": [
+    "ocon",
+    "bearman"
+  ],
+  "path": "/models/cars/haas/2026/car.glb",
+  "source": "https://sketchfab.com/3d-models/1f41e03886724bc6acd16c92402989bc",
+  "author": "Dave Love SketchFab",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "note": "Creator-labelled exterior representation, not official CAD. Original livery retained; painted number may differ. Fitted and oriented for this viewer. No engineering components inferred from unnamed meshes.",
+  "engineeringNote": "Connected-surface and material inspection groups added for the original exterior. Original GLB, triangles, UVs and textures retained. Groups are approximate; not manufacturer part boundaries. Floor and internals may remain grouped or unmodelled."
+}

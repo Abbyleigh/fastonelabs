@@ -1,0 +1,15 @@
+{
+  "name": "Ferrari SF-26",
+  "team": "Ferrari",
+  "season": 2026,
+  "drivers": [
+    "hamilton",
+    "leclerc"
+  ],
+  "author": "Dave Love SketchFab",
+  "source": "https://sketchfab.com/3d-models/e5ca6cecdc42449283f4bed27360f2a7",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "note": "Creator-labelled exterior representation. Not official CAD. Original livery and painted number retained; fitted and oriented for viewer. No separated engineering functions inferred.",
+  "engineeringNote": "Connected-surface and material inspection groups added for the original exterior. Original GLB, triangles, UVs and textures retained. Groups are approximate; not manufacturer part boundaries. Floor and internals may remain grouped or unmodelled."
+}

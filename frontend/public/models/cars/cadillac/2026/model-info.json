@@ -1,0 +1,17 @@
+{
+  "id": "cadillac-2026",
+  "name": "Cadillac MAC-26",
+  "team": "Cadillac F1 Team",
+  "season": 2026,
+  "drivers": [
+    "perez",
+    "bottas"
+  ],
+  "path": "/models/cars/cadillac/2026/car.glb",
+  "source": "https://sketchfab.com/3d-models/95bcd37aa7c649779efc33b90b6c023e",
+  "author": "Dave Love SketchFab",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "note": "Creator-labelled exterior representation, not official CAD. Original livery retained; painted number may differ. Fitted and oriented for this viewer. No engineering components inferred from unnamed meshes.",
+  "engineeringNote": "Connected-surface and material inspection groups added for the original exterior. Original GLB, triangles, UVs and textures retained. Groups are approximate; not manufacturer part boundaries. Floor and internals may remain grouped or unmodelled."
+}

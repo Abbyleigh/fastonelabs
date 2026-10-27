@@ -1,0 +1,531 @@
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { createRoot } from 'react-dom/client';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Grid, OrbitControls } from '@react-three/drei';
+import * as THREE from 'three';
+import './style.css';
+import StrategyLab from './StrategyLab';
+
+type Point2D = [number, number];
+type Driver = { id: string; name: string; color: string; duration: number; offset: number };
+type RecordedSample = { time: number; progress: number; speed?: number; throttle?: number; brake?: number };
+type ReplayFile = { format: 'f1-strategy-lab-replay-v1'; circuit: string; duration: number; drivers: { id: string; name: string; color: string; samples: RecordedSample[] }[] };
+// The JSON import is a local, explicit file format, not a direct FastF1 file reader.
+function interpolate(samples: RecordedSample[], time: number): RecordedSample {
+  if (time <= samples[0].time) return samples[0];
+  if (time >= samples[samples.length-1].time) return samples[samples.length-1];
+  let lo=0, hi=samples.length-1;
+  while (hi-lo>1) { const mid=(hi+lo)>>1; if(samples[mid].time<=time) lo=mid; else hi=mid; }
+  const a=samples[lo], b=samples[hi], alpha=(time-a.time)/(b.time-a.time);
+  const blend=(k: 'progress'|'speed'|'throttle'|'brake') => a[k] === undefined || b[k] === undefined ? a[k] : a[k]!+(b[k]!-a[k]!)*alpha;
+  return {time, progress: blend('progress')!, speed:blend('speed'), throttle:blend('throttle'), brake:blend('brake')};
+}
+function validateReplay(value: unknown): ReplayFile {
+  const r=value as ReplayFile;
+  if (!r || r.format!=='f1-strategy-lab-replay-v1' || !Number.isFinite(r.duration) || r.duration<=0 || r.duration>86400 || !Array.isArray(r.drivers) || r.drivers.length<1 || r.drivers.length>24) throw new Error('Invalid replay header or duration');
+  for (const d of r.drivers) {
+    if(typeof d.id!=='string' || typeof d.name!=='string' || typeof d.color!=='string' || !/^#[0-9a-fA-F]{6}$/.test(d.color) || !Array.isArray(d.samples) || d.samples.length<2 || d.samples.length>200000) throw new Error('Invalid driver data');
+    let previous=-1;
+    for (const p of d.samples) {
+      if (!Number.isFinite(p.time) || p.time<=previous || p.time>r.duration || !Number.isFinite(p.progress) || p.progress<0 || p.progress>10000 || ['speed','throttle','brake'].some(k=> (p as any)[k]!==undefined && !Number.isFinite((p as any)[k]))) throw new Error('Invalid or unsorted samples');
+      previous=p.time;
+    }
+  }
+  return r;
+}
+
+
+// Deterministic and explainable toy race model. NOT trained machine learning.
+// Lap pace: base pace, tyre degradation, stop penalty, optional slow laps.
+function lapSeconds(driver:Driver, lap:number, safety:'none'|'lap25'|'lap48', customPit?:number) {
+  const i=DRIVERS.findIndex(d=>d.id===driver.id);
+  const pitLap=customPit ?? 23+(i%4)*3;
+  const age = lap <= pitLap ? lap-1 : lap-pitLap-1;
+  const degradation = (lap <= pitLap ? 0.05 : 0.035)*age + 0.002*age*age;
+  const scStart=safety==='lap25'?26:safety==='lap48'?49:999;
+  return 81.5 + i*0.28 + degradation - 0.027*(lap-1) + (lap===pitLap+1?22:0) + (lap>=scStart && lap<scStart+3?45:0);
+}
+function predictProgress(driver:Driver, seconds:number, safety:'none'|'lap25'|'lap48', customPit?:number) {
+  // Preserve the previously working grid start delay.
+  const gridPosition = DRIVERS.findIndex(d => d.id === driver.id);
+  const startingGap = Math.max(0, gridPosition) * 0.65;
+  let remaining=Math.max(0,seconds-startingGap);
+  for(let lap=1;lap<=71;lap++) {
+    const duration=lapSeconds(driver,lap,safety,customPit);
+    if(remaining<duration) return (lap-1)+remaining/duration;
+    remaining-=duration;
+  }
+  return 71;
+}
+function predictionsFor(drivers:Driver[], safety:'none'|'lap25'|'lap48', selectedDriver?:string, selectedPit?:number) {
+  return drivers.map((d,i)=>({id:d.id,name:d.name,pitLap:d.id===selectedDriver?selectedPit??30:23+(i%4)*3,finish:Array.from({length:71},(_,j)=>lapSeconds(d,j+1,safety,d.id===selectedDriver?selectedPit:undefined)).reduce((a,b)=>a+b,0)})).sort((a,b)=>a.finish-b.finish);
+}
+
+// VISUAL RACECRAFT: independent of the 71-lap race-time model.
+// This is deterministic visual lane positioning, not collision physics.
+function visualRaceProgress(driver: Driver, time: number, safety: 'none'|'lap25'|'lap48', pit?: number): number {
+  const index = DRIVERS.findIndex(d => d.id === driver.id);
+  const predicted = predictProgress(driver, time, safety, pit);
+  // Show a separated starting grid before the race has had time to spread out.
+  // Blend out this *visual* grid displacement within the first 12 seconds.
+  const blend = Math.max(0, 1 - time / 12);
+  return predicted - index * 0.0075 * blend;
+}
+function lateralRaceOffset(
+  driver: Driver,
+  time: number,
+  drivers: Driver[],
+  safety: 'none'|'lap25'|'lap48',
+  selectedId: string,
+  selectedPit: number
+): number {
+  const index = drivers.findIndex(d => d.id === driver.id);
+  // F1-style two-column starting grid: alternating left and right.
+  const side = index % 2 === 0 ? -1 : 1;
+  const initial = Math.max(0, 1 - time / 12);
+  const gridLane = side * 1.25 * initial;
+  const myProgress = visualRaceProgress(driver, time, safety, driver.id === selectedId ? selectedPit : undefined);
+  let closest = Infinity;
+  for (const other of drivers) {
+    if (other.id === driver.id) continue;
+    const theirProgress = visualRaceProgress(other, time, safety, other.id === selectedId ? selectedPit : undefined);
+    // Another car just ahead, including the start/finish wraparound.
+    const distance = ((theirProgress - myProgress) % 1 + 1) % 1;
+    if (distance > 0.0001 && distance < closest) closest = distance;
+  }
+  // Make a passing lane as we close on a car. Return to centreline afterwards.
+  const passing = Math.max(0, Math.min(1, (0.026 - closest) / 0.018));
+  return gridLane + (1 - initial) * side * 1.25 * passing;
+}
+
+type CameraMode = 'isometric' | 'overhead' | 'low' | 'follow';
+const DRIVERS: Driver[] = [
+  {id:'red', name:'RED 01',color:'#ed3047',duration:30,offset:0},
+  {id:'blue',name:'BLU 02',color:'#39a8fa',duration:33,offset:0.12},
+  {id:'green',name:'GRN 03',color:'#35c991',duration:31.4,offset:0.06},
+  {id:'yellow',name:'YEL 04',color:'#f7c848',duration:32.5,offset:0.24},
+  {id:'orange',name:'ORG 05',color:'#ff8b39',duration:30.9,offset:0.33},
+  {id:'purple',name:'PUR 06',color:'#b29aff',duration:34.4,offset:0.43},
+  {id:'white',name:'WHT 07',color:'#f5f6f8',duration:33.8,offset:0.51},
+  {id:'pink',name:'PNK 08',color:'#fc78b7',duration:34.1,offset:0.61},
+  {id:'teal',name:'TEL 09',color:'#59d9df',duration:32.7,offset:0.72},
+  {id:'silver',name:'SLV 10',color:'#aeb9c5',duration:33.3,offset:0.84},
+];
+const maxTime = 180;
+function progressAt(t: number, duration: number, offset: number) {
+  return t / duration + offset;
+}
+function telemetryAt(time: number, duration: number, offset: number) {
+  const phase = (progressAt(time, duration, offset) % 1 + 1) % 1;
+  // Synthetic signals to test chart plumbing; never presented as measured telemetry.
+  const speed = Math.round(175 + 95 * Math.pow(Math.sin(phase * Math.PI * 6), 2));
+  const throttle = Math.round(30 + 70 * Math.pow(Math.sin(phase * Math.PI * 6), 2));
+  const brake = Math.max(0, Math.round((1 - throttle / 100) * 85));
+  return { phase, speed, throttle, brake };
+}
+function formatClock(seconds: number) {
+  const s = Math.floor(seconds);
+  return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+}
+function MiniChart({ seconds, duration, offset, color }: { seconds: number; duration: number; offset: number; color: string }) {
+  const start = Math.max(0, seconds - 40);
+  const samples = Array.from({length:81}, (_,i) => {
+    const t = start + i * (seconds - start) / 80;
+    return telemetryAt(t, duration, offset).speed;
+  });
+  const points = samples.map((v,i) => `${i*4},${92 - (v-160)*0.58}`).join(' ');
+  return <svg className="telemetry-chart" viewBox="0 0 320 105" role="img" aria-label="Simulated speed trend over the previous 40 seconds">
+    {[24,48,72,96].map(y => <line key={y} x1="0" y1={y} x2="320" y2={y} stroke="#313945" strokeWidth="1" />)}
+    <polyline points={points} stroke={color} strokeWidth="2.6" strokeLinejoin="round" strokeLinecap="round" fill="none" />
+  </svg>;
+}
+
+
+// Fictional demonstration circuit. It is NOT Silverstone or measured F1 GPS data.
+// Coordinates are circuit-centreline waypoints in an arbitrary local coordinate system.
+const DEMO_TRACK: Point2D[] = [
+  [-52,-9],[-49,-23],[-39,-34],[-27,-37],[-14,-32],[-2,-25],
+  [8,-27],[15,-38],[28,-40],[43,-34],[51,-22],[53,-7],
+  [47,3],[34,4],[22,8],[23,19],[36,26],[40,37],
+  [30,45],[16,43],[5,35],[-8,27],[-21,31],[-32,42],
+  [-45,37],[-54,25],[-55,10]
+];
+
+// Second layout is also fictional. Neither circuit claims GPS accuracy.
+const DEMO_TRACK_2: Point2D[] = [
+  [-55,-25],[-41,-39],[-18,-41],[4,-31],[23,-41],[47,-29],
+  [52,-9],[37,2],[9,-1],[-8,8],[-3,30],[25,36],
+  [40,48],[15,53],[-11,41],[-30,47],[-53,33],[-44,12],[-57,-5]
+];
+// Autódromo Hermanos Rodríguez centreline from bacinger/f1-circuits (MIT).
+// WGS84 lon/lat projected locally to kilometres east/north. Visual layout is georeferenced;
+// road width, elevation, pit lane and race positions are illustrative.
+const MEXICO_TRACK: Point2D[] = [
+  [-0.45538, 0.47044],
+  [-0.09710, 0.42068],
+  [0.01911, 0.40543],
+  [0.14151, 0.39441],
+  [0.20050, 0.38706],
+  [0.35272, 0.36557],
+  [0.61799, 0.32617],
+  [0.67268, 0.31515],
+  [0.68202, 0.31147],
+  [0.68695, 0.30724],
+  [0.68947, 0.30045],
+  [0.69010, 0.29422],
+  [0.68013, 0.22854],
+  [0.68139, 0.22275],
+  [0.68454, 0.21752],
+  [0.71246, 0.20238],
+  [0.72055, 0.19815],
+  [0.72485, 0.19136],
+  [0.72485, 0.18501],
+  [0.71929, 0.14405],
+  [0.71057, 0.10731],
+  [0.69693, 0.07169],
+  [0.68139, 0.03963],
+  [0.55962, -0.16709],
+  [0.41360, -0.39641],
+  [0.40426, -0.41211],
+  [0.40300, -0.42157],
+  [0.40489, -0.42947],
+  [0.40930, -0.43526],
+  [0.45276, -0.46198],
+  [0.45706, -0.46621],
+  [0.45769, -0.47300],
+  [0.45465, -0.47879],
+  [0.44719, -0.48558],
+  [0.36573, -0.54703],
+  [0.35765, -0.55070],
+  [0.35083, -0.55170],
+  [0.34463, -0.54959],
+  [0.32973, -0.54012],
+  [0.32721, -0.53389],
+  [0.32721, -0.52131],
+  [0.36447, -0.23054],
+  [0.36395, -0.22164],
+  [0.36017, -0.21329],
+  [0.35460, -0.20639],
+  [0.34589, -0.20015],
+  [0.30243, -0.17333],
+  [0.28690, -0.15919],
+  [0.27755, -0.14973],
+  [0.26821, -0.13191],
+  [0.25824, -0.10564],
+  [0.24837, -0.08995],
+  [0.23714, -0.07893],
+  [0.22475, -0.07102],
+  [0.20795, -0.06368],
+  [0.07369, -0.04319],
+  [0.05879, -0.03852],
+  [0.04955, -0.03061],
+  [0.04514, -0.02538],
+  [0.04147, -0.01803],
+  [0.02404, 0.03596],
+  [0.01848, 0.04653],
+  [0.00976, 0.05644],
+  [-0.01197, 0.06957],
+  [-0.11138, 0.12312],
+  [-0.14004, 0.13514],
+  [-0.18161, 0.14516],
+  [-0.51469, 0.19347],
+  [-0.52151, 0.19603],
+  [-0.52519, 0.20026],
+  [-0.52834, 0.20706],
+  [-0.52897, 0.21596],
+  [-0.53453, 0.30157],
+  [-0.54135, 0.36079],
+  [-0.54387, 0.36758],
+  [-0.54881, 0.37237],
+  [-0.55563, 0.37548],
+  [-0.56434, 0.37448],
+  [-0.57369, 0.36602],
+  [-0.58555, 0.34821],
+  [-0.59237, 0.34298],
+  [-0.60046, 0.33986],
+  [-0.60969, 0.34031],
+  [-0.62030, 0.34509],
+  [-0.63268, 0.35088],
+  [-0.64455, 0.35455],
+  [-0.70102, 0.36079],
+  [-0.71036, 0.36391],
+  [-0.71477, 0.36758],
+  [-0.71845, 0.37448],
+  [-0.71908, 0.38127],
+  [-0.71540, 0.39752],
+  [-0.70732, 0.41901],
+  [-0.69672, 0.43693],
+  [-0.68118, 0.45842],
+  [-0.66313, 0.47311],
+  [-0.64014, 0.48469],
+  [-0.61904, 0.49036],
+  [-0.59857, 0.49092],
+  [-0.56875, 0.48725],
+];
+
+const CIRCUITS = { 'Demo Grand Prix': DEMO_TRACK, 'Demo Coastal Loop': DEMO_TRACK_2, 'Mexico City GP 2026': MEXICO_TRACK };
+const MEXICO = 'Mexico City GP 2026';
+
+
+function makeCurve(coordinates: Point2D[]) {
+  const xs = coordinates.map(([x]) => x);
+  const ys = coordinates.map(([, y]) => y);
+  const cx = (Math.min(...xs) + Math.max(...xs)) / 2;
+  const cy = (Math.min(...ys) + Math.max(...ys)) / 2;
+  const scale = 110 / Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys), 1);
+  const points = coordinates.map(([x, y]) => new THREE.Vector3((x - cx) * scale, 0.3, -(y - cy) * scale));
+  return new THREE.CatmullRomCurve3(points, true, 'centripetal');
+}
+
+function Track({ curve }: { curve: THREE.CatmullRomCurve3 }) {
+  const { geometry, leftEdge, rightEdge } = useMemo(() => {
+    const count = 600;
+    const vertices: number[] = [];
+    const triangles: number[] = [];
+    const left: THREE.Vector3[] = [];
+    const right: THREE.Vector3[] = [];
+    for (let i = 0; i < count; i++) {
+      const t = i / count;
+      const p = curve.getPointAt(t);
+      const tangent = curve.getTangentAt(t);
+      const normal = new THREE.Vector3(-tangent.z, 0, tangent.x).normalize();
+      const l = p.clone().addScaledVector(normal, 3.5);
+      const r = p.clone().addScaledVector(normal, -2.0);
+      left.push(l); right.push(r);
+      vertices.push(l.x, l.y, l.z, r.x, r.y, r.z);
+      const next = (i + 1) % count;
+      triangles.push(i * 2, next * 2, i * 2 + 1, i * 2 + 1, next * 2, next * 2 + 1);
+    }
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    geometry.setIndex(triangles);
+    geometry.computeVertexNormals();
+    return {
+      geometry,
+      leftEdge: new THREE.CatmullRomCurve3(left, true),
+      rightEdge: new THREE.CatmullRomCurve3(right, true)
+    };
+  }, [curve]);
+
+  // Release GPU geometry when the track changes or unmounts.
+  useEffect(() => () => geometry.dispose(), [geometry]);
+  const decorations = useMemo(() => {
+    const kerbs: { p: THREE.Vector3; angle: number; color: string }[] = [];
+    const segments = 240;
+    for (let i = 0; i < segments; i++) {
+      const t = i / segments;
+      const pt = curve.getPointAt(t);
+      const tangent = curve.getTangentAt(t);
+      const normal = new THREE.Vector3(-tangent.z, 0, tangent.x).normalize();
+      const angle = Math.atan2(tangent.x, tangent.z);
+      for (const side of [-1, 1]) {
+        const p = pt.clone().addScaledVector(normal, side * 3.78);
+        kerbs.push({ p, angle, color: Math.floor(i / 3) % 2 ? '#f2f2f2' : '#df3444' });
+      }
+    }
+    return kerbs;
+  }, [curve]);
+  const startingPoint = curve.getPointAt(0);
+  return <group>
+    <mesh geometry={geometry} receiveShadow>
+      <meshStandardMaterial color="#373b46" roughness={0.9} side={THREE.DoubleSide} />
+    </mesh>
+    <mesh position={[0, -0.12, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+      <planeGeometry args={[260, 260]} />
+      <meshStandardMaterial color="#13231f" roughness={1} />
+    </mesh>
+    <mesh><tubeGeometry args={[leftEdge, 650, 0.09, 5, true]} /><meshBasicMaterial color="#eeeeee" /></mesh>
+    <mesh><tubeGeometry args={[rightEdge, 650, 0.11, 5, true]} /><meshBasicMaterial color="#eb3b51" /></mesh>
+    {decorations.map((k, i) => <mesh key={i} position={[k.p.x, 0.34, k.p.z]} rotation={[0, k.angle, 0]} receiveShadow>
+      <boxGeometry args={[0.52, 0.10, 0.68]} />
+      <meshStandardMaterial color={k.color} roughness={0.8} />
+    </mesh>)}
+    <mesh><tubeGeometry args={[leftEdge, 650, 0.09, 5, true]} /><meshBasicMaterial color="#e5e7eb" /></mesh>
+    <mesh><tubeGeometry args={[rightEdge, 650, 0.09, 5, true]} /><meshBasicMaterial color="#e5e7eb" /></mesh>
+    <mesh position={[startingPoint.x, 0.32, startingPoint.z]}>
+      <boxGeometry args={[4.0, 0.06, 0.45]} />
+      <meshBasicMaterial color="#ffffff" />
+    </mesh>
+  </group>;
+}
+
+function DemoCar({ curve, elapsed, offset, duration, color, samples, positionAt, lateralAt }:
+  { curve: THREE.CatmullRomCurve3; elapsed: React.RefObject<number>; offset: number; duration: number; color: string; samples?: RecordedSample[]; positionAt?: (t:number)=>number; lateralAt?: (t:number)=>number }) {
+  const root = useRef<THREE.Group>(null);
+  const lateral = useRef(0);
+  useFrame((_, delta) => {
+    if (!root.current) return;
+    const t = positionAt ? ((positionAt(elapsed.current)%1)+1)%1 : samples ? interpolate(samples, elapsed.current).progress % 1 : ((elapsed.current / duration + offset) % 1 + 1) % 1;
+    const p = curve.getPointAt(t);
+    const direction = curve.getTangentAt(t);
+    const normal = new THREE.Vector3(-direction.z, 0, direction.x).normalize();
+    const target = lateralAt ? lateralAt(elapsed.current) : 0;
+    lateral.current += (target - lateral.current) * (1 - Math.exp(-5 * delta));
+    root.current.position.copy(p).addScaledVector(normal, lateral.current);
+    root.current.position.y += 0.45;
+    root.current.rotation.y = Math.atan2(direction.x, direction.z);
+  });
+  return <group ref={root}>
+    {/* Nose points towards +Z, matching the tangent rotation */}
+    <mesh castShadow position={[0, 0.12, 0.45]}><boxGeometry args={[0.48, 0.24, 2.3]}/><meshStandardMaterial color={color} metalness={0.25} roughness={0.35}/></mesh>
+    <mesh castShadow position={[0, 0.15, -0.48]}><boxGeometry args={[0.95, 0.37, 1.25]}/><meshStandardMaterial color={color} metalness={0.25} roughness={0.35}/></mesh>
+    <mesh castShadow position={[0, 0.42, -0.35]}><sphereGeometry args={[0.36, 16, 12]}/><meshStandardMaterial color="#101822"/></mesh>
+    <mesh castShadow position={[0, 0.67, -0.45]}><torusGeometry args={[0.37, 0.07, 7, 18, Math.PI]}/><meshStandardMaterial color="#171c23"/></mesh>
+    <mesh castShadow position={[0, 0.20, 1.53]}><boxGeometry args={[2.15, 0.12, 0.38]}/><meshStandardMaterial color={color}/></mesh>
+    <mesh castShadow position={[0, 0.55, -1.42]}><boxGeometry args={[1.8, 0.12, 0.36]}/><meshStandardMaterial color="#11131a"/></mesh>
+    <mesh castShadow position={[-0.27, 0.2, -0.42]}><boxGeometry args={[0.52, 0.24, 0.9]}/><meshStandardMaterial color={color}/></mesh>
+    <mesh castShadow position={[0.27, 0.2, -0.42]}><boxGeometry args={[0.52, 0.24, 0.9]}/><meshStandardMaterial color={color}/></mesh>
+    {([-0.86, 0.86] as number[]).flatMap(x => [-0.98, 1.03].map(z =>
+      <group key={`${x}-${z}`} position={[x, -0.07, z]}>
+        <mesh castShadow rotation={[0, 0, Math.PI / 2]}><cylinderGeometry args={[0.39, 0.39, 0.3, 20]}/><meshStandardMaterial color="#090b0e" roughness={0.92}/></mesh>
+        <mesh position={[x < 0 ? -0.16 : 0.16, 0, 0]} rotation={[0, 0, Math.PI/2]}><cylinderGeometry args={[0.18, 0.18, 0.012, 16]}/><meshStandardMaterial color="#858b94" metalness={0.6} roughness={0.35}/></mesh>
+      </group>
+    ))}
+  </group>;
+}
+
+function CameraController({ mode, curve, elapsed, selected, samples, positionAt, lateralAt }: {
+  mode: CameraMode; curve: THREE.CatmullRomCurve3; elapsed: React.RefObject<number>; selected: Driver; samples?: RecordedSample[]; positionAt?: (t:number)=>number; lateralAt?: (t:number)=>number;
+}) {
+  const { camera } = useThree();
+  const controls = useRef<React.ComponentRef<typeof OrbitControls>>(null);
+  useEffect(() => {
+    if (mode === 'follow') return;
+    const positions: Record<Exclude<CameraMode, 'follow'>, [number, number, number]> = {
+      isometric: [75, 95, 100], overhead: [0, 155, 0.1], low: [15, 24, 75]
+    };
+    camera.position.set(...positions[mode]);
+    camera.lookAt(0, 0, 0);
+    controls.current?.target.set(0, 0, 0);
+    controls.current?.update();
+  }, [camera, mode]);
+  useFrame((_, delta) => {
+    if (mode !== 'follow') return;
+    const t = positionAt ? ((positionAt(elapsed.current)%1)+1)%1 : samples ? interpolate(samples, elapsed.current).progress % 1 : ((elapsed.current / selected.duration + selected.offset) % 1 + 1) % 1;
+    const p = curve.getPointAt(t);
+    const d = curve.getTangentAt(t);
+    const normal = new THREE.Vector3(-d.z, 0, d.x).normalize();
+    p.addScaledVector(normal, lateralAt ? lateralAt(elapsed.current) : 0);
+    const desired = p.clone().addScaledVector(d, -8).add(new THREE.Vector3(0, 4, 0));
+    camera.position.lerp(desired, 1 - Math.exp(-3 * delta));
+    const target = p.clone().addScaledVector(d, 5);
+    target.y += 0.65;
+    camera.lookAt(target);
+  });
+  return mode === 'follow' ? null : <OrbitControls ref={controls} target={[0, 0, 0]}
+    minDistance={13} maxDistance={250} maxPolarAngle={Math.PI / 2.02} enableDamping />;
+}
+
+function ReplayClock({ elapsed, running, multiplier, duration, onTick }: {
+  elapsed: React.RefObject<number>;
+  running: React.RefObject<boolean>;
+  multiplier: React.RefObject<number>;
+  duration: number;
+  onTick: (seconds: number) => void;
+}) {
+  const lastDisplay = useRef(-1);
+  useFrame((_, delta) => {
+    if (running.current) elapsed.current += Math.min(delta, 0.1) * multiplier.current;
+    if (elapsed.current >= duration) { elapsed.current = duration; running.current = false; }
+    const second = Math.floor(elapsed.current * 5) / 5;
+    if (second !== lastDisplay.current) {
+      lastDisplay.current = second;
+      onTick(second);
+    }
+  });
+  return null;
+}
+
+function App() {
+  const [playing, setPlaying] = useState(true);
+  const [raceMode, setRaceMode] = useState<'prediction'|'replay'>('prediction');
+  const [safety, setSafety] = useState<'none'|'lap25'|'lap48'>('none');
+  const [selectedPit, setSelectedPit] = useState(30);
+  const [speed, setSpeed] = useState(1);
+  const [mode, setMode] = useState<CameraMode>('isometric');
+  const [selected, setSelected] = useState('red');
+  const [circuit, setCircuit] = useState<keyof typeof CIRCUITS>('Demo Grand Prix');
+  const [recording, setRecording] = useState<ReplayFile | null>(null);
+  const [importError, setImportError] = useState('');
+  const [lapTime, setLapTime] = useState(0);
+  const elapsed = useRef(0);
+  const curve = useMemo(() => makeCurve(CIRCUITS[circuit]), [circuit]);
+  const drivers: Driver[] = recording ? recording.drivers.map(d => ({id:d.id,name:d.name,color:d.color,duration:30,offset:0})) : (circuit === MEXICO ? DRIVERS.map((d,i)=>({...d, duration:83 + (i%5)*0.65 + Math.floor(i/5)*0.35, offset: (9-i)*0.0007})) : DRIVERS);
+  const mexico = circuit === MEXICO;
+  const totalTime = recording?.duration ?? (mexico ? 71 * 100 : maxTime);
+  const focus = drivers.find(d=>d.id===selected) ?? drivers[0];
+  function progress(driver:Driver, time:number) { const rec=recording?.drivers.find(d=>d.id===driver.id); return rec ? interpolate(rec.samples,time).progress : mexico ? predictProgress(driver,time,safety,driver.id===focus.id?selectedPit:undefined) : progressAt(time,driver.duration,driver.offset); }
+  function signal(driver:Driver,time:number) { const rec=recording?.drivers.find(d=>d.id===driver.id); if(!rec) return telemetryAt(time,driver.duration,driver.offset); const p=interpolate(rec.samples,time); return {phase:p.progress%1,speed:Math.round(p.speed??0),throttle:Math.round(p.throttle??0),brake:Math.round(p.brake??0)}; }
+  async function importReplay(file:File | undefined) { if(!file) return; try { if(file.size>15_000_000) throw new Error('File exceeds 15 MB'); const data=validateReplay(JSON.parse(await file.text())); setRecording(data); setSelected(data.drivers[0].id); setCircuit((data.circuit in CIRCUITS ? data.circuit : 'Demo Grand Prix') as keyof typeof CIRCUITS); elapsed.current=0;setLapTime(0);setImportError(''); } catch(e){setImportError(e instanceof Error ? e.message : 'Could not import file');} }
+  function switchCircuit(next:keyof typeof CIRCUITS){setCircuit(next);setRecording(null);setSelected('red');setRaceMode('prediction');elapsed.current=0;setLapTime(0);}
+  const playingRef = useRef(playing);
+  const speedRef = useRef(speed);
+  useEffect(() => { playingRef.current = playing; }, [playing]);
+  useEffect(() => { speedRef.current = speed; }, [speed]);
+
+
+  const standings = drivers.map(driver => ({
+    ...driver, completed: progress(driver,lapTime), ...signal(driver,lapTime)
+  })).sort((a,b) => b.completed-a.completed);
+  const leader = standings[0];
+  const focusTelemetry = signal(focus,lapTime);
+  function seek(seconds: number) { elapsed.current = seconds; setLapTime(seconds); }
+  return <div className="app">
+    <header><div className="logo"><span className="logo-mark">F1</span> STRATEGY <span className="muted">LAB</span></div><span className="phase">MEXICO 2026 / PREDICTION + REPLAY</span></header>
+    <main>
+      <div className="intro"><div><div className="eyebrow">INTERACTIVE 3D ENGINE</div><h1>Race circuit <span>prototype</span></h1><p>{mexico ? "Mexico City GP · 71 laps · 4.304 km · race 1 Nov 2026" : "Ten-car simulation, selectable demo layouts, and a JSON replay-import pathway."}</p></div><div className="tag">● {recording ? "IMPORTED REPLAY" : "AI PREDICTION / SYNTHETIC"}</div></div>
+      <div className="layout">
+        <section className="panel track-panel"><div className="panel-head"><div><div className="eyebrow">{circuit.toUpperCase()} · {recording ? "IMPORTED" : mexico ? "MAP-DERIVED TRACK" : "FICTIONAL"}</div><h2>3D race replay</h2></div><span className="small">DRAG TO ORBIT · SCROLL TO ZOOM · VISUAL PASSING DEMO</span></div>
+          <div className="scene"><Canvas shadows camera={{position:[75,95,100], fov:50, near:0.1, far:600}}>
+            <color attach="background" args={['#0d141c']} />
+            <ambientLight intensity={1.25} />
+            <directionalLight position={[35,90,30]} intensity={2.1} castShadow shadow-mapSize={[1024,1024]} />
+            <Grid position={[0,-0.13,0]} args={[230,230]} cellSize={5} cellColor="#2c4740" sectionSize={25} sectionColor="#3e6054" fadeDistance={235}/>
+            <Track curve={curve}/>
+            {drivers.map(d => <DemoCar key={d.id} curve={curve} elapsed={elapsed} offset={d.offset} duration={d.duration} color={d.color} samples={recording?.drivers.find(r=>r.id===d.id)?.samples} positionAt={mexico && !recording ? (t)=>visualRaceProgress(d,t,safety,d.id===focus.id?selectedPit:undefined) : undefined}
+              lateralAt={mexico && !recording ? (t)=>lateralRaceOffset(d,t,drivers,safety,focus.id,selectedPit) : undefined}/>)}
+            <ReplayClock elapsed={elapsed} running={playingRef} multiplier={speedRef} duration={totalTime} onTick={setLapTime} />
+            <CameraController mode={mode} curve={curve} elapsed={elapsed} selected={focus} samples={recording?.drivers.find(r=>r.id===focus.id)?.samples} positionAt={mexico && !recording ? (t)=>visualRaceProgress(focus,t,safety,selectedPit) : undefined}
+              lateralAt={mexico && !recording ? (t)=>lateralRaceOffset(focus,t,drivers,safety,focus.id,selectedPit) : undefined}/>
+          </Canvas></div>
+          <div className="replay-controls">
+            <button onClick={() => setPlaying(v => !v)}>{playing ? '❚❚ Pause' : '▶ Play'}</button>
+            <button onClick={() => { elapsed.current = 0; setLapTime(0); setPlaying(true); }}>↺ Restart</button>
+            <label>Speed <select value={speed} onChange={e => setSpeed(Number(e.target.value))}><option value={0.5}>0.5×</option><option value={1}>1×</option><option value={2}>2×</option><option value={4}>4×</option></select></label>
+            <label>Camera <select value={mode} onChange={e => setMode(e.target.value as CameraMode)}><option value="isometric">Isometric</option><option value="overhead">Overhead</option><option value="low">Trackside</option><option value="follow">Follow car</option></select></label>
+            <label>Driver <select value={focus.id} onChange={e => setSelected(e.target.value)}>{drivers.map(d=><option key={d.id} value={d.id}>{d.name}</option>)}</select></label>
+            <span className="clock">SIM CLOCK: {formatClock(lapTime)}</span>
+          </div>
+          <div className="timeline"><label htmlFor="seek">Replay timeline</label><input id="seek" type="range" min="0" max={totalTime} step="0.2" value={lapTime} onChange={e=>seek(Number(e.target.value))}/><span>{formatClock(lapTime)} / {formatClock(totalTime)}</span></div>
+          <div className="import-tools"><label>Mode <select value={raceMode} onChange={e=>{setRaceMode(e.target.value as 'prediction'|'replay');setPlaying(false);}}><option value="prediction">AI Prediction (baseline)</option><option value="replay">Replay / import</option></select></label><label>Circuit <select value={circuit} onChange={e=>switchCircuit(e.target.value as keyof typeof CIRCUITS)} disabled={!!recording}>{Object.keys(CIRCUITS).map(c=><option key={c}>{c}</option>)}</select></label><label>Import replay JSON <input type="file" accept=".json,application/json" onChange={e=>{setRaceMode('replay');void importReplay(e.target.files?.[0]);e.target.value='';}} /></label>{recording && <button onClick={()=>{setRecording(null);setRaceMode('prediction');setSelected('red');seek(0);}}>Return to demo</button>}{importError && <div className="error">{importError}</div>}</div><div className="foot">{recording ? 'IMPORTED REPLAY MODE' : 'SYNTHETIC SIMULATION'} <strong>{drivers.length} cars</strong> <span>•</span> LOCAL CIRCUIT GEOMETRY</div>
+        </section>
+        <aside className="panel details"><div className="eyebrow">SIMULATED RACE CONTROL</div><h2>Timing tower</h2>
+          <div className="tower-header"><span>POS / DRIVER</span><span>LAP</span><span>GAP*</span></div>
+          {standings.map((driver, i) => <button className={`tower-row ${selected === driver.id ? 'active' : ''}`} key={driver.id} onClick={() => setSelected(driver.id)}>
+            <span className="driver-id"><i style={{background:driver.color}} /> {i + 1} · {driver.name}</span>
+            <span>{Math.min(mexico?71:999,Math.floor(driver.completed) + 1)}</span>
+            <span>{i === 0 ? 'LEADER' : `+${Math.max(0, (leader.completed - driver.completed) * 31).toFixed(1)}s*`}</span>
+          </button>)}
+          <div className="telemetry-head"><div><div className="eyebrow">SELECTED CAR</div><h2>Telemetry</h2></div><span className="live-mark">● DEMO</span></div>
+          <div className="telemetry-values"><div><small>Speed</small><strong>{focusTelemetry.speed}<em> km/h</em></strong></div><div><small>Throttle</small><strong>{focusTelemetry.throttle}<em>%</em></strong></div><div><small>Brake</small><strong>{focusTelemetry.brake}<em>%</em></strong></div></div>
+          <div className="graph-label">SYNTHETIC SPEED TREND</div>
+          {recording ? <p className="small">Imported samples drive the numeric values. Demo waveform hidden for imported files.</p> : <MiniChart seconds={lapTime} duration={focus.duration} offset={focus.offset} color={focus.color}/>}
+          <div className="stat"><span>Lead car</span><b>{leader.name}</b></div><div className="stat"><span>Clock</span><b>{formatClock(lapTime)}</b></div>
+          <div className="note"><strong>Simulation only.</strong> Without an imported file, all driver positions, lap times, and telemetry are synthetic. Imported samples control car progress and selected telemetry; circuit geometry remains fictional. Gaps* remain illustrative estimates, not official F1 timing.</div>
+        </aside>
+      </div>
+      {raceMode==='replay' && !recording && <section className="panel" style={{padding:18,marginTop:12}}><strong>Replay Mode ready:</strong> import a JSON replay with timestamped progress samples above. Until a recording is loaded, the cars on screen remain a synthetic preview. The 2026 event has not taken place yet.</section>}
+      {mexico && raceMode==='prediction' && <section className="panel" style={{padding:22,marginTop:16}}>
+        <div className="eyebrow">2026 MEXICO CITY · 71-LAP WHAT-IF SIMULATOR</div><h2>Prediction mode / safety-car scenarios</h2>
+        <p className="small">This 10-car model is synthetic, not a forecast based on 2026 practice or qualifying data. Safety-car laps slow the field in an illustrative scenario; no real events are implied.</p>
+        <label>Scenario <select value={safety} onChange={e=>{setSafety(e.target.value as typeof safety); seek(0);}} disabled={!!recording}><option value="none">Green flag throughout</option><option value="lap25">Safety car after lap 25 (3 laps)</option><option value="lap48">Safety car after lap 48 (3 laps)</option></select></label>
+        <div className="tower-header" style={{marginTop:15}}><span>PROJECTED FINISH</span><span>TYRE PLAN</span><span>TIME</span></div>
+        {predictionsFor(DRIVERS,safety,focus.id,selectedPit).map((r,i)=><div className="tower-row" key={r.id}><span>{i+1}. {r.name}</span><span>{r.pitLap}: M → H</span><span>{formatClock(r.finish)}</span></div>)}
+        <p className="small">Ordered by simulated finish time, including compound degradation, pit loss and safety-car delay. The pit-lap field is a simple rule, not a trained model. Replay import remains independent of these predictions.</p>
+      </section>}
+      <StrategyLab totalLaps={mexico ? 71 : 35} onPitLapChange={mexico ? setSelectedPit : undefined} />
+    </main>
+  </div>;
+}
+
+createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);

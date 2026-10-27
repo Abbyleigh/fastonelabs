@@ -1,0 +1,721 @@
+import NewsDesk from './NewsDesk';
+import PitWall from './PitWall';
+import CircuitWorld from './CircuitWorld';
+import { matchGarageCar } from './GarageAssets';
+import RaceViewing from './RaceViewing';
+import DriverMedia from './DriverMedia';
+import ForecastPage from './ForecastPage';
+import { parseLapTime } from './strategyModel';
+import type { RaceContext } from './strategyModel';
+import StrategyWorkbench from './StrategyWorkbench';
+import EngineeringShowcase from './EngineeringShowcase';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { createRoot } from 'react-dom/client';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { OrbitControls, Html } from '@react-three/drei';
+import * as THREE from 'three';
+import './style.css';
+
+type XY = [number, number];
+type TrackResponse = {
+  circuit?: string;
+  session_key?: number;
+  year: number;
+  event: string;
+  session: string;
+  fastest_lap_driver: string;
+  sample_count: number;
+  coordinates: XY[];
+};
+type ReplaySample = { time: number; x: number; y: number; z: number };
+type ReplayDriver = {
+  driver_number: number;
+  code: string;
+  name: string;
+  color: string;
+  samples: ReplaySample[];
+  sample_count: number;
+};
+type ReplayResponse = {
+  track: TrackResponse;
+  total_duration: number;
+  window_start: number;
+  window_start_utc: string;
+  notice: string;
+  session_key: number;
+  event: string;
+  year: number;
+  duration: number;
+  drivers: ReplayDriver[];
+};
+
+function getTransform(coordinates: XY[]) {
+  const xs = coordinates.map(p => p[0]);
+  const ys = coordinates.map(p => p[1]);
+  const minX = Math.min(...xs), maxX = Math.max(...xs);
+  const minY = Math.min(...ys), maxY = Math.max(...ys);
+  return {
+    cx: (minX + maxX) / 2,
+    cy: (minY + maxY) / 2,
+    scale: 120 / Math.max(maxX - minX, maxY - minY, 1),
+  };
+}
+
+function scenePosition(x: number, y: number, coordinates: XY[], height = .4) {
+  const { cx, cy, scale } = getTransform(coordinates);
+  return new THREE.Vector3((x - cx) * scale, height, -(y - cy) * scale);
+}
+
+// All drivers use the same absolute replay clock. We do not extrapolate outside
+// available timestamps or bridge telemetry gaps greater than two seconds.
+function replayPoseAt(driver: ReplayDriver, time: number, coordinates: XY[]) {
+  const samples = driver.samples;
+  if (samples.length < 2 || time < samples[0].time || time > samples[samples.length - 1].time) return null;
+  let low = 0, high = samples.length - 1;
+  while (low < high) {
+    const mid = Math.floor((low + high) / 2);
+    if (samples[mid].time < time) low = mid + 1;
+    else high = mid;
+  }
+  const i = Math.max(0, Math.min(low - 1, samples.length - 2));
+  const a = samples[i], b = samples[i + 1];
+  const span = b.time - a.time;
+  if (span <= 0 || span > 2) return null;
+  const f = THREE.MathUtils.clamp((time - a.time) / span, 0, 1);
+  const pos = scenePosition(THREE.MathUtils.lerp(a.x, b.x, f), THREE.MathUtils.lerp(a.y, b.y, f), coordinates);
+  const direction = scenePosition(b.x, b.y, coordinates).sub(scenePosition(a.x, a.y, coordinates));
+  return { position: pos, rotationY: Math.atan2(direction.x, direction.z) };
+}
+
+/** A stylised, lightweight F1-inspired model. All car parts are local to the replay pose. */
+function F1CarModel({ color, code }: { color: string; code: string }) {
+  return (
+    <group>
+      {/* Body, tapered nose and cockpit: forward is local +Z. */}
+      <mesh castShadow receiveShadow position={[0, 0.10, 0]}>
+        <boxGeometry args={[0.78, 0.30, 2.65]} />
+        <meshStandardMaterial color={color} metalness={0.35} roughness={0.4} />
+      </mesh>
+      <mesh castShadow receiveShadow position={[0, 0.10, 1.45]}>
+        <boxGeometry args={[0.34, 0.18, 1.2]} />
+        <meshStandardMaterial color={color} metalness={0.3} roughness={0.45} />
+      </mesh>
+      <mesh castShadow receiveShadow position={[0, 0.38, -0.22]}>
+        <boxGeometry args={[0.60, 0.38, 0.85]} />
+        <meshStandardMaterial color="#141820" roughness={0.35} />
+      </mesh>
+      <mesh castShadow receiveShadow position={[0, 0.53, -0.18]}>
+        <sphereGeometry args={[0.24, 10, 8]} />
+        <meshStandardMaterial color="#f4f6fb" roughness={0.4} />
+      </mesh>
+      {/* Front and rear wings. */}
+      <mesh castShadow receiveShadow position={[0, 0.03, 2.02]}>
+        <boxGeometry args={[1.95, 0.10, 0.34]} />
+        <meshStandardMaterial color="#151922" />
+      </mesh>
+      <mesh castShadow receiveShadow position={[0, 0.40, -1.48]}>
+        <boxGeometry args={[1.65, 0.10, 0.40]} />
+        <meshStandardMaterial color="#151922" />
+      </mesh>
+      <mesh castShadow receiveShadow position={[0, 0.21, -1.48]}>
+        <boxGeometry args={[0.12, 0.4, 0.25]} />
+        <meshStandardMaterial color="#151922" />
+      </mesh>
+      {/* Four tyres. Cylinder axle runs along the local X axis. */}
+      {([-1, 1] as const).flatMap(side =>
+        ([-1.03, 1.13] as const).map(z => (
+          <mesh castShadow receiveShadow key={`${side}:${z}`} position={[side * 0.90, 0.03, z]} rotation={[0, 0, Math.PI / 2]}>
+            <cylinderGeometry args={[0.32, 0.32, 0.25, 12]} />
+            <meshStandardMaterial color="#08090b" roughness={0.95} />
+          </mesh>
+        ))
+      )}
+      <Html position={[0, 1.45, 0]} center distanceFactor={35} style={{ pointerEvents: 'none' }}>
+        <div style={{ background: '#0c1421e8', color: '#fff', border: `1px solid ${color}`,
+          borderRadius: 5, padding: '3px 7px', fontWeight: 800, fontSize: 12,
+          whiteSpace: 'nowrap', boxShadow: '0 2px 10px #0008' }}>
+          <span style={{ color }}>● </span>{code}
+        </div>
+      </Html>
+    </group>
+  );
+}
+
+function ReplayCar({ driver, coordinates, replayTime }: {
+  driver: ReplayDriver; coordinates: XY[]; replayTime: number;
+}) {
+  const pose = useMemo(() => replayPoseAt(driver, replayTime, coordinates), [driver, coordinates, replayTime]);
+  if (!pose) return null;
+  return (
+    <group position={pose.position} rotation={[0, pose.rotationY, 0]}>
+      <F1CarModel color={driver.color} code={driver.code} />
+    </group>
+  );
+}
+
+function RaceCamera({ driver, coordinates, replayTime }: {
+  driver: ReplayDriver | null; coordinates: XY[]; replayTime: number;
+}) {
+  const { camera } = useThree();
+  const controls = useRef<React.ComponentRef<typeof OrbitControls>>(null);
+  const wasFollowing = useRef(false);
+
+  useFrame((_, delta) => {
+    const control = controls.current;
+    if (!control) return;
+    if (!driver) {
+      if (wasFollowing.current) {
+        camera.position.set(0, 145, 155);
+        control.target.set(0, 0, 0);
+        control.update();
+        wasFollowing.current = false;
+      }
+      return;
+    }
+    wasFollowing.current = true;
+    const pose = replayPoseAt(driver, replayTime, coordinates);
+    if (!pose) return;
+    const damping = 1 - Math.exp(-4 * Math.min(delta, 0.1));
+    const destination = pose.position.clone().add(new THREE.Vector3(0, 18, 28));
+    camera.position.lerp(destination, damping);
+    control.target.lerp(pose.position, damping);
+    control.update();
+  });
+
+  return (
+    <OrbitControls
+      ref={controls}
+      makeDefault
+      target={[0, 0, 0]}
+      minDistance={8}
+      maxDistance={300}
+      maxPolarAngle={Math.PI / 2.05}
+      enableDamping
+      enabled={!driver}
+    />
+  );
+}
+
+function formatTime(seconds: number) {
+  const whole = Math.max(0, Math.floor(seconds));
+  return `${String(Math.floor(whole / 60)).padStart(2, '0')}:${String(whole % 60).padStart(2, '0')}`;
+}
+
+function HistoricalReplay({ onBack,year,round,eventName }: { onBack: () => void;year:number;round:number;eventName:string }) {
+  const [data, setData] = useState<TrackResponse | null>(null);
+  const [replay, setReplay] = useState<ReplayResponse | null>(null);
+  const [error, setError] = useState('');
+  const [replayError, setReplayError] = useState('');
+  const [windowOffset,setWindowOffset]=useState(0);
+  const [sessionDuration,setSessionDuration]=useState(0);
+  const [loadRevision,setLoadRevision]=useState(0);
+  const [loading, setLoading] = useState(true);
+  const [followDriver, setFollowDriver] = useState<number | null>(null);
+  const [replayTime, setReplayTime] = useState(0);
+  const [playing, setPlaying] = useState(true);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const replayDuration = replay?.duration ?? 0;
+  const selectedDriver = replay?.drivers.find(d => d.driver_number === followDriver) ?? null;
+
+  useEffect(() => {
+    const controller=new AbortController();
+    setLoading(true);setError('');setReplayError('');setReplay(null);setReplayTime(0);
+    fetch(`/api/replay/multi?year=${year}&round=${round}&start=${windowOffset}`,{signal:controller.signal})
+      .then(async response=>{const result=await response.json().catch(()=>({detail:response.status===404?'No recorded telemetry is available for this event yet. Race results and strategy planning remain available.':'Replay data could not be loaded. The provider may be temporarily unavailable; try again shortly.'}));if(!response.ok)throw Error(result.detail||'Replay unavailable');return result as ReplayResponse;})
+      .then(result=>{if(controller.signal.aborted)return;setReplay(result);setData(result.track);setSessionDuration(result.total_duration);setReplayError(result.notice||'');if(!result.drivers.length)setPlaying(false);})
+      .catch(error=>{if(!controller.signal.aborted)setError(error.message);})
+      .finally(()=>{if(!controller.signal.aborted)setLoading(false);});
+    return()=>controller.abort();
+  },[year,round,windowOffset,loadRevision]);
+
+  useEffect(() => {
+    if (!playing || replayDuration <= 0) return;
+    let frame = 0;
+    let previous = performance.now();
+    const tick = (now: number) => {
+      const elapsed = Math.min((now - previous) / 1000, 0.1);
+      previous = now;
+      setReplayTime(current => (current + elapsed * playbackSpeed) % replayDuration);
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [playing, playbackSpeed, replayDuration]);
+
+  const controlButton: React.CSSProperties = {
+    padding: '8px 12px', borderRadius: 6, background: '#263343', color: '#fff',
+    border: '1px solid #46566c', cursor: 'pointer',
+  };
+
+  return (
+    <div className="app">
+      <header>
+        <div className="logo"><span className="logo-mark">F1</span> STRATEGY <span className="muted">LAB</span></div>
+        <span className="phase">RECORDED RACE TELEMETRY</span>
+      </header>
+      <div style={{ padding: '14px 24px 0' }}>
+        <button onClick={onBack} style={{ background: '#263343', color: '#fff', border: '1px solid #58677c', borderRadius: 8, padding: '10px 14px', cursor: 'pointer' }}>← All races</button>
+      </div>
+      <main>
+        <div className="intro">
+          <div>
+            <div className="eyebrow">INTERACTIVE RACE VISUALISATION</div>
+            <h1>{eventName} <span>{year}</span></h1>
+            <p>Recorded OpenF1 coordinates for the selected race. Load one-minute excerpts and move through its recorded timeline.</p>
+          </div>
+          <div className="tag">● THREE-DIMENSIONAL VIEW</div>
+        </div>
+        <RaceViewing key={`${year}/${round}`} year={year} round={round} name={eventName} />
+        {sessionDuration>0&&<section style={{padding:16,background:'#151d28',border:'1px solid #35465f',borderRadius:10,marginBottom:18}}>
+          <strong>Recorded window: {formatTime(windowOffset)}–{formatTime(Math.min(windowOffset+60,sessionDuration))}</strong><p style={{fontSize:13,color:'#aebed2'}}>Recorded timeline: {formatTime(sessionDuration)}. Each request loads up to 60 seconds for the drivers with available positions. Elapsed time is measured from the earliest recorded first-lap start (or the first usable lap if that timestamp is missing).</p>
+          <div style={{display:'flex',gap:10,flexWrap:'wrap'}}><button style={controlButton} disabled={loading||windowOffset<=0} onClick={()=>setWindowOffset(t=>Math.max(0,t-60))}>← Previous minute</button><button style={controlButton} disabled={loading||windowOffset+60>=sessionDuration} onClick={()=>setWindowOffset(t=>t+60)}>Next minute →</button><label style={{fontSize:13,color:'#c5d4e8'}}>Jump to minute <select aria-label="Jump to recorded minute" style={controlButton} value={windowOffset} disabled={loading} onChange={event=>setWindowOffset(Number(event.target.value))}>{Array.from({length:Math.ceil(sessionDuration/60)},(_,i)=>i*60).map(offset=><option key={offset} value={offset}>{formatTime(offset)}–{formatTime(Math.min(offset+60,sessionDuration))}</option>)}</select></label></div>
+        </section>}
+        {replay && <button style={{...controlButton,marginBottom:16}} onClick={()=>document.getElementById('recorded-pitwall')?.scrollIntoView({behavior:'smooth',block:'start'})}>Open recorded pit wall ↓</button>}
+        <div className="layout">
+          <section className="panel track-panel">
+            <div className="panel-head">
+              <div><div className="eyebrow">{data?.circuit||eventName}</div><h2>3D race replay</h2></div>
+              <span className="small">DRAG TO ORBIT · SCROLL TO ZOOM</span>
+            </div>
+            {loading && <div className="message" role="status">Loading recorded race data… First load may take a minute while the track and positions are retrieved.</div>}
+            {error && <div className="message error"><p>{error}</p><button style={controlButton} onClick={()=>setLoadRevision(n=>n+1)}>Retry this event</button></div>}
+            {data && (
+              <div className="scene" aria-label="Interactive 3D circuit">
+                <Canvas shadows camera={{ position: [0, 145, 155], fov: 50, near: 0.1, far: 1500 }}>
+                  <color attach="background" args={['#0d141c']} />
+                  <ambientLight intensity={1} />
+                  <directionalLight position={[45, 90, 30]} intensity={2} />
+                  <CircuitWorld coordinates={data.coordinates} />
+                  {replay?.drivers.map(driver => (
+                    <ReplayCar key={driver.driver_number} driver={driver}
+                      coordinates={data.coordinates} replayTime={replayTime} />
+                  ))}
+                  <RaceCamera driver={selectedDriver} coordinates={data.coordinates} replayTime={replayTime} />
+                </Canvas>
+              </div>
+            )}
+            {replayError && <div className="message error">{replayError}</div>}
+            {replay && (
+              <div style={{ padding: 18, background: '#151d28', borderRadius: 12, marginTop: 12, color: '#fff' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginBottom: 14, flexWrap: 'wrap' }}>
+                  <strong>HISTORICAL RACE REPLAY</strong>
+                  <span>{replay.drivers.length} DRIVERS · {eventName.toUpperCase()} {year}</span>
+                </div>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16 }}>
+                  <button style={{ ...controlButton, background: followDriver === null ? '#e5374b' : '#263343' }}
+                    onClick={() => setFollowDriver(null)}>🌐 Circuit overview</button>
+                  {replay.drivers.map(driver => (
+                    <button key={driver.driver_number}
+                      style={{ ...controlButton, borderColor: driver.color,
+                        background: followDriver === driver.driver_number ? driver.color : '#263343' }}
+                      onClick={() => setFollowDriver(driver.driver_number)}>Follow {driver.code}</button>
+                  ))}
+                </div>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 16 }}>
+                  {replay.drivers.map(driver => (
+                    <span key={driver.driver_number} style={{ fontSize: 12 }}>
+                      <span style={{ color: driver.color }}>● </span>{driver.code} #{driver.driver_number}
+                    </span>
+                  ))}
+                </div>
+                <input type="range" min={0} max={replayDuration} step={0.05} value={replayTime}
+                  onChange={event => setReplayTime(Number(event.target.value))}
+                  style={{ width: '100%', cursor: 'pointer' }} aria-label="Race replay timeline" />
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16, fontSize: 13 }}>
+                  <span>{formatTime(windowOffset+replayTime)}</span><span>{formatTime(windowOffset+replayDuration)} · excerpt end</span>
+                </div>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                  <button style={controlButton} onClick={() => setReplayTime(0)}>↺ Restart</button>
+                  <button style={controlButton} onClick={() => setPlaying(p => !p)}>{playing ? '⏸ Pause' : '▶ Play'}</button>
+                  <button style={controlButton} onClick={() => setReplayTime(t => Math.max(0, t - 5))}>−5s</button>
+                  <button style={controlButton} onClick={() => setReplayTime(t => Math.min(replayDuration, t + 5))}>+5s</button>
+                  <select value={playbackSpeed} onChange={e => setPlaybackSpeed(Number(e.target.value))}
+                    aria-label="Replay speed" style={{ ...controlButton }}>
+                    <option value={1}>1×</option><option value={2}>2×</option>
+                    <option value={5}>5×</option><option value={10}>10×</option>
+                  </select>
+                </div>
+              </div>
+            )}
+            <div className="foot">POSITION SAMPLES <strong>{data?.sample_count ?? '—'}</strong>
+              <span> • </span> HISTORICAL MULTI-CAR REPLAY</div>
+          </section>
+          <aside className="panel details">
+            <div className="eyebrow">SESSION INFORMATION</div><h2>Race data</h2>
+            {replay && (
+              <div style={{ margin: '20px 0' }}>
+                <div className="eyebrow">DRIVER TRACKING</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', margin: '12px 0', fontSize: 12, color: '#a8b5c5' }}>
+                  <span>DRIVER</span><span>TELEMETRY</span>
+                </div>
+                {replay.drivers.map(driver => {
+                  const active = data ? replayPoseAt(driver, replayTime, data.coordinates) !== null : false;
+                  return (
+                    <button key={driver.driver_number} onClick={() => setFollowDriver(driver.driver_number)}
+                      style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '12px 8px',
+                        marginBottom: 5, textAlign: 'left', color: '#fff', cursor: 'pointer',
+                        background: followDriver === driver.driver_number ? '#283444' : '#161f2a',
+                        border: 0, borderLeft: `4px solid ${driver.color}`, borderRadius: 5 }}>
+                      <strong style={{ color: driver.color }}>{driver.code}</strong>
+                      <span style={{ flex: 1, fontSize: 13 }}>{driver.name}</span>
+                      <span style={{ fontSize: 11, color: active ? '#58ddb0' : '#a8b5c5' }}>
+                        {active ? '● TRACKED' : '— NO SAMPLE'}
+                      </span>
+                    </button>
+                  );
+                })}
+                <div style={{ marginTop: 12, fontSize: 12, color: '#a8b5c5' }}>
+                  Recorded elapsed: {formatTime(windowOffset+replayTime)}
+                </div>
+              </div>
+            )}
+            <div className="stat"><span>Event</span><b>{data?.event ?? '—'}</b></div>
+            <div className="stat"><span>Season</span><b>{data?.year ?? '—'}</b></div>
+            <div className="stat"><span>Session</span><b>{data?.session ?? '—'}</b></div>
+            <div className="stat"><span>Reference lap</span><b>{data?.fastest_lap_driver ?? '—'}</b></div>
+            <div className="note">Track and driver positions use recorded OpenF1 X/Y samples.
+              Position samples are approximate; lateral racing lines and real track elevation are not reconstructed. Road width, lighting and stylised car models are illustrative; the driver list is tracking status, not official race order.</div>
+          </aside>
+        </div>
+        {replay && data && <PitWall key={`${year}/${round}/${windowOffset}`} year={year} round={round} offset={windowOffset} time={replayTime} drivers={replay.drivers} coordinates={data.coordinates} selected={followDriver} onSelect={setFollowDriver} duration={replayDuration} playing={playing} onTime={setReplayTime} onToggle={()=>setPlaying(p=>!p)} />}
+      </main>
+    </div>
+  );
+}
+
+
+
+type CalendarRace = {
+  meeting_key: number;
+  round: number;
+  name: string;
+  circuit: string;
+  location: string;
+  country: string;
+  start: string;
+  end: string;
+  status: 'upcoming' | 'in_progress' | 'completed' | 'cancelled';
+  replay_ready: boolean;
+};
+type CalendarResult = { season: number; races: CalendarRace[] };
+const panelStyle: React.CSSProperties = {
+  border: '1px solid #273347', background: '#151c28', borderRadius: 16, padding: 20,
+};
+function formatRaceDate(value: string) {
+  return new Intl.DateTimeFormat('en-GB', {
+    day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC',
+  }).format(new Date(value));
+}
+function RaceBrowser({ onCircuit, onGarage, onReplay, onRace, onDrivers, onStrategy, onPlanRace, onForecast }: { onCircuit:(year:number,round:number,name:string)=>void; onGarage:(year:number,round:number)=>void; onForecast:(year:number,round:number,name:string)=>void; onPlanRace:(race:RaceContext)=>void; onStrategy: () => void; onReplay: (year:number,round:number,name:string) => void; onRace: (year: number, round: number) => void; onDrivers: () => void }) {
+  const currentYear = new Date().getFullYear();
+  const [year, setYear] = useState(currentYear);
+  const [races, setRaces] = useState<CalendarRace[]>([]);
+  const [selectedKey, setSelectedKey] = useState<number | null>(null);
+  const [busy, setBusy] = useState(true);
+  const [error, setError] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'completed' | 'upcoming'>('all');
+  useEffect(() => {
+    const controller = new AbortController();
+    setBusy(true);
+    setError('');
+    setRaces([]);
+    setSelectedKey(null);
+    fetch(`/api/archive/season?year=${year}`, { signal: controller.signal })
+      .then(async r => {
+        if (!r.ok) throw new Error(`Calendar API returned HTTP ${r.status}`);
+        return r.json() as Promise<CalendarResult>;
+      })
+      .then(data => {
+        if (controller.signal.aborted) return;
+        setRaces(data.races);
+        const next = data.races.find(r => r.status === 'upcoming') ?? data.races[data.races.length - 1];
+        setSelectedKey(next?.meeting_key ?? null);
+      })
+      .catch(err => { if (!controller.signal.aborted) setError(String(err)); })
+      .finally(() => { if (!controller.signal.aborted) setBusy(false); });
+    return () => controller.abort();
+  }, [year]);
+
+  const selected = races.find(r => r.meeting_key === selectedKey) ?? null;
+  const nextRace = races.find(r => r.status === 'upcoming') ?? null;
+  const visible = races.filter(r => statusFilter === 'all' || r.status === statusFilter);
+  const seasons = Array.from({ length: currentYear - 1950 + 1 }, (_, i) => currentYear - i);
+
+  return (
+    <div className="app">
+      <header>
+        <div className="logo"><span className="logo-mark">F1</span> STRATEGY <span className="muted">LAB</span></div>
+        <span className="phase">RACE ARCHIVE · DRIVER STATISTICS</span>
+      </header>
+      <main>
+        <div className="intro">
+          <div>
+            <div className="eyebrow">RACE CALENDAR · HISTORICAL REPLAYS</div>
+            <h1>Race Intelligence <span>{year}</span></h1>
+            <p>Browse the current championship and previous seasons. Replay data is added as it becomes available.</p>
+          </div>
+          <div className="tag">● SEASON BROWSER</div>
+        </div>
+        <NewsDesk />
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 20, alignItems: 'center' }}>
+          <button onClick={onStrategy} style={{ background: '#247b74', color: 'white', border: 0, padding: '10px 16px', borderRadius: 8, cursor: 'pointer' }}>Strategy workbench</button><button onClick={onDrivers} style={{ background: '#e63850', color: 'white', border: 0, padding: '10px 16px', borderRadius: 8, cursor: 'pointer' }}>🏁 All-time drivers</button><label htmlFor="season" style={{ color: '#cbd5e1' }}>Season</label>
+          <select id="season" value={year} onChange={e => setYear(Number(e.target.value))}
+            style={{ background: '#1b2838', color: '#fff', padding: '10px 14px', borderRadius: 8, border: '1px solid #42526b' }}>
+            {seasons.map(y => <option key={y} value={y}>{y}</option>)}
+          </select>
+          {(['all', 'completed', 'upcoming'] as const).map(filter => (
+            <button key={filter} onClick={() => setStatusFilter(filter)} style={{
+              padding: '10px 14px', borderRadius: 8, cursor: 'pointer',
+              color: '#fff', border: '1px solid #42526b',
+              background: statusFilter === filter ? '#cc3045' : '#1b2838',
+            }}>{filter === 'all' ? 'All races' : filter === 'completed' ? 'Completed' : 'Upcoming'}</button>
+          ))}
+        </div>
+        {busy && <div className="message">Loading {year} race calendar…</div>}
+        {error && <div className="message error">{error}. Check that the FastAPI backend is running.</div>}
+        {!busy && !error && races.length === 0 && <div className="message">No calendar entries published for this season yet.</div>}
+        {!!nextRace && (
+          <div style={{ ...panelStyle, marginBottom: 20, borderColor: '#c33a55' }}>
+            <div className="eyebrow">NEXT SCHEDULED GRAND PRIX</div>
+            <h2 style={{ margin: '10px 0' }}>{nextRace.name}</h2>
+            <p style={{ color: '#cbd5e1', margin: 0 }}>{nextRace.circuit} · {nextRace.country} · Weekend starts {formatRaceDate(nextRace.start)}</p>
+          </div>
+        )}
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(250px, 1.15fr) minmax(270px, 1fr)', gap: 18 }}>
+          <section style={panelStyle}>
+            <div className="eyebrow">{year} GRAND PRIX CALENDAR · {visible.length} EVENTS</div>
+            <div style={{ display: 'grid', gap: 8, marginTop: 14, maxHeight: 590, overflowY: 'auto' }}>
+              {visible.map((race, i) => (
+                <button key={race.meeting_key} onClick={() => setSelectedKey(race.meeting_key)}
+                  style={{ cursor: 'pointer', textAlign: 'left', padding: 13, borderRadius: 9,
+                    border: race.meeting_key === selectedKey ? '1px solid #e63850' : '1px solid #303d50',
+                    background: race.meeting_key === selectedKey ? '#2e2533' : '#1b2635', color: '#fff' }}>
+                  <span style={{ fontSize: 12, opacity: 0.7 }}>{String(i + 1).padStart(2, '0')} · {formatRaceDate(race.start)}</span>
+                  <div style={{ fontWeight: 750, margin: '5px 0' }}>{race.name}</div>
+                  <span style={{ fontSize: 12, color: '#aebed2' }}>{race.circuit} · {race.status.replace('_', ' ')}</span>
+                </button>
+              ))}
+            </div>
+          </section>
+          <aside style={{ ...panelStyle, alignSelf: 'start' }}>
+            {selected ? <>
+              <div className="eyebrow">SELECTED GRAND PRIX</div>
+              <h2 style={{ margin: '12px 0' }}>{selected.name}</h2>
+              <div className="stat"><span>Season</span><b>{year}</b></div>
+              <div className="stat"><span>Location</span><b>{selected.location || selected.country}</b></div>
+              <div className="stat"><span>Circuit</span><b>{selected.circuit}</b></div>
+              <div className="stat"><span>Weekend begins</span><b>{formatRaceDate(selected.start)}</b></div>
+              <div className="stat"><span>Status</span><b>{selected.status.replace('_', ' ')}</b></div>
+              <button style={{...navigationButton,width:'100%',marginTop:16}} onClick={()=>onForecast(year,selected.round,selected.name)}>AI race forecast →</button>
+              <button style={{...navigationButton,width:'100%',marginTop:16}} onClick={()=>onPlanRace({season:year,round:selected.round,name:selected.name,circuit:selected.circuit,date:selected.start.slice(0,10)})}>Plan this Grand Prix →</button>
+              <button style={{...navigationButton,width:'100%',marginTop:16}} onClick={()=>onCircuit(year,selected.round,selected.name)}>🌤️ Explore circuit preview</button>
+              {selected.status==='completed'&&<button style={{...navigationButton,width:'100%',marginTop:16}} onClick={()=>onGarage(year,selected.round)}>🏎️ Explore this race’s 3D garage</button>}
+              {selected.status === 'completed' && (
+                <button onClick={() => onRace(year, selected.round)} style={{ width: '100%', background: '#2674b8', color: '#fff', padding: 14, border: 0, borderRadius: 9, fontWeight: 800, cursor: 'pointer', marginTop: 16 }}>🏆 View complete race results</button>
+              )}
+              <RaceViewing key={`${year}/${selected.round}`} year={year} round={selected.round} name={selected.name} completed={selected.status==='completed'} />
+              {year>=2023&&selected.status==='completed' ? (
+                <button onClick={()=>onReplay(year,selected.round,selected.name)} style={{ width: '100%', background: '#ed4055', color: '#fff',
+                  padding: 14, border: 0, borderRadius: 9, fontWeight: 800, cursor: 'pointer', marginTop: 18 }}>
+                  ▶ Load recorded 3D replay
+                </button>
+              ) : (
+                <div className="note" style={{ marginTop: 18 }}>
+                  {selected.status === 'upcoming' ? 'Replay can be checked after the race has ended and historical telemetry is available.'
+                    : 'Race results are available. The position-telemetry archive starts in 2023, so this older event has no recorded 3D replay in the current source.'}
+                </div>
+              )}
+            </> : <p>Select a Grand Prix to view details.</p>}
+          </aside>
+        </div>
+      </main>
+    </div>
+  );
+}
+type DriverInfo = { id: string; given_name: string; family_name: string; name: string; nationality?: string; birth_date?: string; number?: string; code?: string; info_url?: string };
+type DriverDirectory = { drivers: DriverInfo[]; total: number; page: number };
+type RaceDetail = { season: number; round: number; name: string; date: string; circuit: string; location: { locality?: string; country?: string }; winner: RaceRow | null; results: RaceRow[] };
+type RaceRow = { position: string; driver: DriverInfo; constructor: string; grid: string; laps: string; status: string; time?: string; points: string; fastest_lap?: string };
+type DriverProfile = { driver: DriverInfo; stats: { classified_results: number; wins: number; podiums: number; qualifying_poles_recorded: number }; recent_results: { season: number; round: number; race: string; date: string; position: string; constructor: string; points: string }[]; limitations: string };
+const navigationButton: React.CSSProperties = { background: '#243348', color: '#fff', border: '1px solid #42526b', borderRadius: 8, padding: '10px 14px', cursor: 'pointer' };
+
+function ContentShell({ title, caption, onBack, children }: { title: string; caption: string; onBack: () => void; children: React.ReactNode }) {
+  return <div className="app"><header><div className="logo"><span className="logo-mark">F1</span> STRATEGY <span className="muted">LAB</span></div><span className="phase">F1 RACE INTELLIGENCE · ARCHIVE</span></header>
+    <main><button onClick={onBack} style={{ ...navigationButton, marginBottom: 22 }}>← Back</button><div className="intro"><div><div className="eyebrow">{caption}</div><h1>{title}</h1></div></div>{children}</main></div>;
+}
+function useRemote<T>(url: string) {
+  const [data, setData] = useState<T | null>(null);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const controller = new AbortController();
+    setData(null); setLoading(true); setError('');
+    fetch(url, { signal: controller.signal }).then(async r => {
+      if (!r.ok) { const detail = await r.json().catch(() => ({})) as { detail?: string }; throw new Error(detail.detail || `API returned HTTP ${r.status}`); }
+      return r.json() as Promise<T>;
+    }).then(d => { if (!controller.signal.aborted) setData(d); })
+      .catch(e => { if (!controller.signal.aborted) setError(String(e.message)); })
+      .finally(() => { if (!controller.signal.aborted) setLoading(false); });
+    return () => controller.abort();
+  }, [url]);
+  return { data, error, loading };
+}
+
+function RaceResults({ year, round, onBack, onDriver, onReplay, onPlanRace, onGarage }: { onGarage:(year:number,round:number)=>void; onPlanRace:(race:RaceContext)=>void; year: number; round: number; onBack: () => void; onDriver: (id: string) => void; onReplay: (year:number,round:number,name:string) => void }) {
+  const { data, loading, error } = useRemote<RaceDetail>(`/api/archive/race/${year}/${round}`);
+  const winner = data?.winner;
+  return <ContentShell title={data?.name || `${year} · Round ${round}`} caption={`RACE RESULTS · ${year} · ROUND ${round}`} onBack={onBack}>
+    {loading && <div className="message">Loading official race classification…</div>}
+    {error && <div className="message error">{error}</div>}
+    {data && <>
+      <div style={{ ...panelStyle, marginBottom: 18 }}><div className="eyebrow">{data.circuit} · {data.date} · {data.location.country || ''}</div>
+        {winner && <><h2 style={{ margin: '12px 0 4px' }}>🏆 Winner: {winner.driver.name}</h2><p style={{ color: '#bbc8d9' }}>{winner.constructor} · {winner.laps} laps · {winner.time || winner.status}</p><button style={navigationButton} onClick={() => onDriver(winner.driver.id)}>View winner's career profile →</button></>}
+        <button style={{...navigationButton,marginTop:12}} onClick={()=>onPlanRace({season:data.season,round:data.round,name:data.name,circuit:data.circuit,date:data.date,recordedLaps:winner&&Number.isInteger(Number(winner.laps))&&Number(winner.laps)>0?Number(winner.laps):undefined,fastestLapSeconds:parseLapTime(winner?.fastest_lap)})}>Compare strategies for this race →</button>
+        <button style={{...navigationButton,marginTop:12}} onClick={()=>onGarage(year,round)}>🏎️ Explore this race’s 3D garage</button>
+        {year>=2023&&<button style={{...navigationButton,marginLeft:12}} onClick={()=>onReplay(year,round,data.name)}>▶ Load recorded 3D replay</button>}
+      </div>
+      <RaceViewing key={`${year}/${round}`} year={year} round={round} name={data.name} />
+      <section style={{ ...panelStyle, overflowX: 'auto' }}><div className="eyebrow">FULL RACE CLASSIFICATION · {data.results.length} DRIVERS</div>
+        <table style={{ width: '100%', marginTop: 16, borderCollapse: 'collapse', color: '#e8edf4', minWidth: 610 }}>
+          <thead><tr>{['POS','DRIVER','TEAM','GRID','LAPS','TIME / STATUS','PTS'].map(h => <th key={h} style={{ padding: '12px 8px', textAlign: 'left', borderBottom: '1px solid #46546a', fontSize: 12 }}>{h}</th>)}</tr></thead>
+          <tbody>{data.results.map((row, i) => <tr key={`${row.driver.id}-${i}`} style={{ borderBottom: '1px solid #273347' }}>
+            <td style={{ padding: '11px 8px' }}>{row.position}</td><td><button onClick={() => onDriver(row.driver.id)} style={{ border: 0, color: '#80bcff', background: 'none', cursor: 'pointer', textAlign: 'left', fontWeight: 700 }}>{row.driver.name}</button></td>
+            <td>{row.constructor}</td><td>{row.grid}</td><td>{row.laps}</td><td>{row.time || row.status}</td><td>{row.points}</td>
+          </tr>)}</tbody>
+        </table><p style={{ color: '#9caabd', fontSize: 12 }}>Classification, gaps and points are provided by Jolpica. Retirements show a status in place of a finishing time.</p>
+      </section>
+    </>}
+  </ContentShell>;
+}
+
+type CircuitPreviewData=TrackResponse&{requested_year:number;requested_round:number;requested_event:string;requested_date:string;reference_year:number;reference_round:number;reference_date:string;reference_event:string;limitations:string};
+function CircuitPreviewPage({year,round,name,onBack,onPlan}:{year:number;round:number;name:string;onBack:()=>void;onPlan:(race:RaceContext)=>void}){
+ const [expanded,setExpanded]=useState(false);
+ useEffect(()=>{if(!expanded)return;const old=document.body.style.overflow;document.body.style.overflow='hidden';const close=(e:KeyboardEvent)=>{if(e.key==='Escape')setExpanded(false);};window.addEventListener('keydown',close);return()=>{document.body.style.overflow=old;window.removeEventListener('keydown',close);};},[expanded]);
+ const [retry,setRetry]=useState(0);
+ const {data,loading,error}=useRemote<CircuitPreviewData>(`/api/track?preview_year=${year}&preview_round=${round}&retry=${retry}`);
+ const [daylight,setDaylight]=useState(true),[rotation,setRotation]=useState(false);
+ const [cameraView,setCameraView]=useState<'overview'|'low'>('overview');
+ const [cameraRevision,setCameraRevision]=useState(0);
+ return <ContentShell title={`${name} · ${year}`} caption="CIRCUIT PREVIEW · HISTORICAL LAYOUT REFERENCE" onBack={onBack}>
+  <p style={{color:'#c3d2e5'}}>Explore the venue before race day. This is a circuit inspection, with no predicted cars, race positions or results.</p>
+  {loading&&<p role="status">Finding a recorded layout for this circuit… First load can take a minute.</p>}
+  {error&&<div role="alert" className="message error"><p>{error}</p><button style={navigationButton} onClick={()=>setRetry(n=>n+1)}>Retry circuit preview</button></div>}
+  {data&&<>
+   <div style={{...panelStyle,marginBottom:14}}><strong>Layout reference: {data.reference_event}, {data.reference_year}</strong><p style={{color:'#b8c8db'}}>Recorded {data.reference_date} · {data.circuit} · source: OpenF1 lap positions. {data.limitations}</p></div>
+   <section style={expanded?{position:'fixed',inset:12,zIndex:10000,background:'#101923',padding:16,borderRadius:12,overflowY:'auto'}:{}}>{expanded&&<><h2 style={{margin:'0 0 8px'}}>{name} · circuit preview</h2><p style={{fontSize:12}}>Historical reference: {data.reference_year}. Flat terrain and illustrative surroundings.</p></>}
+   <div style={{display:'flex',gap:10,flexWrap:'wrap',marginBottom:12}}><button style={navigationButton} aria-expanded={expanded} onClick={()=>setExpanded(v=>!v)}>{expanded?'Close expanded circuit':'Expand circuit viewer'}</button><button style={navigationButton} onClick={()=>setDaylight(v=>!v)}>{daylight?'Daylight study':'Dusk study'}</button><button aria-pressed={rotation} style={navigationButton} onClick={()=>setRotation(v=>!v)}>Auto orbit: {rotation?'On':'Off'}</button><button style={navigationButton} onClick={()=>{setCameraView('overview');setCameraRevision(n=>n+1);}}>Circuit overview</button><button style={navigationButton} onClick={()=>{setCameraView('low');setCameraRevision(n=>n+1);}}>Low inspection view</button><button style={navigationButton} onClick={()=>onPlan({season:year,round,name,circuit:data.circuit||name,date:data.requested_date})}>Plan this event →</button></div>
+   <div style={{height:expanded?'calc(100vh - 175px)':'min(70vh,650px)',minHeight:360,borderRadius:14,overflow:'hidden'}} aria-label="Historical circuit layout preview"><Canvas shadows camera={{position:[0,125,135],fov:45,near:.1,far:2500}}><ambientLight intensity={.25}/><CircuitWorld coordinates={data.coordinates} daylight={daylight}/><PreviewCamera key={`${cameraView}-${cameraRevision}`} low={cameraView==='low'}/><OrbitControls makeDefault autoRotate={rotation} autoRotateSpeed={.5} target={[0,0,0]} minDistance={5} maxDistance={350} maxPolarAngle={Math.PI/2-.025}/></Canvas></div>
+   </section>
+   <p style={{fontSize:13,color:'#aebed2'}}>Drag to orbit and scroll to zoom. Lighting is a visual study, not a weather forecast. The lap outline is recorded; terrain is flat and safety furniture is illustrative. This is not a surveyed or photorealistic model of the venue.</p>
+  </>}
+ </ContentShell>;
+}
+function PreviewCamera({low}:{low:boolean}){const {camera}=useThree();useEffect(()=>{camera.position.set(...(low?[55,16,55]:[0,125,135]) as [number,number,number]);camera.lookAt(0,0,0);},[camera,low]);return null;}
+
+function RaceGarage({year,round,onBack,onDriver}:{year:number;round:number;onBack:()=>void;onDriver:(id:string)=>void}) {
+ const {data,loading,error}=useRemote<RaceDetail>(`/api/archive/race/${year}/${round}`);
+ const [driverId,setDriverId]=useState('');
+ const [filter,setFilter]=useState('');
+ const selected=data?.results.find(row=>row.driver.id===driverId)||data?.results[0];
+ const count=data?.results.filter(row=>matchGarageCar(row.driver.id,row.constructor,year)).length||0;
+ return <ContentShell title={`${year} · Race garage`} caption={data?`${data.name} · round ${round}`:'LOADING RACE GARAGE'} onBack={onBack}>
+  {loading&&<p role="status">Loading this race’s driver and team entries…</p>}
+  {error&&<p role="alert">{error}</p>}
+  {data&&<><p style={{color:'#c1d1e5'}}>{count} of {data.results.length} entries have a matching team-and-season car representation. Other entries use the engineering concept. Original liveries may carry another driver’s number; all standing figures are study models unless explicitly identified.</p>
+   <label style={{display:'block',marginBottom:12}}>Find a driver or team <input aria-label="Find a garage driver or team" value={filter} onChange={e=>setFilter(e.target.value)} style={{...navigationButton,marginLeft:10}} placeholder="Driver or team"/></label>
+   <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:18}}>{data.results.filter(row=>`${row.driver.name} ${row.constructor}`.toLowerCase().includes(filter.toLowerCase())).map(row=><button key={row.driver.id} aria-pressed={row===selected} style={{...navigationButton,borderColor:row===selected?'#ec4055':'#42526b',textAlign:'left'}} onClick={()=>setDriverId(row.driver.id)}><strong>{row.driver.name}</strong><br/><small>{row.constructor} · {matchGarageCar(row.driver.id,row.constructor,year)?'Matching car installed':'Concept car'}</small></button>)}</div>
+   {data.results.filter(row=>`${row.driver.name} ${row.constructor}`.toLowerCase().includes(filter.toLowerCase())).length===0&&<p>No drivers or teams match.</p>}
+   {selected&&<><EngineeringShowcase key={`${year}/${selected.driver.id}`} driverName={selected.driver.name} driverId={selected.driver.id} teamName={selected.constructor} driverNumber={selected.driver.number} season={year}/><button style={navigationButton} onClick={()=>onDriver(selected.driver.id)}>View {selected.driver.name}’s photos and career →</button></>}
+  </>}
+ </ContentShell>;
+}
+
+function DriverDirectoryPage({ onBack, onDriver }: { onBack: () => void; onDriver: (id: string) => void }) {
+  const [search, setSearch] = useState('');
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(0);
+  const { data, error, loading } = useRemote<DriverDirectory>(`/api/archive/drivers?page=${page}&search=${encodeURIComponent(query)}`);
+  return <ContentShell title="All-time F1 drivers" caption="WORLD CHAMPIONSHIP · 1950 TO PRESENT" onBack={onBack}>
+    <form onSubmit={e => { e.preventDefault(); setPage(0); setQuery(search.trim()); }} style={{ display: 'flex', gap: 10, marginBottom: 18 }}>
+      <input aria-label="Search drivers" placeholder="Search e.g. Senna, Hamilton, Schumacher" value={search} onChange={e => setSearch(e.target.value)} style={{ flex: 1, minWidth: 0, background: '#1b2838', color: 'white', border: '1px solid #42526b', borderRadius: 8, padding: 12 }}/>
+      <button type="submit" style={navigationButton}>Search</button>
+      {query && <button type="button" style={navigationButton} onClick={() => { setQuery(''); setSearch(''); setPage(0); }}>Clear</button>}
+    </form>
+    <section style={panelStyle}>
+      {loading && <div className="message">Loading driver records… Searches may take longer the first time.</div>}
+      {error && <div className="message error">{error}</div>}
+      {data && <><p style={{ color: '#aebed2' }}>{data.total} driver records {query ? `matching “${query}”` : 'in the archive'}</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 8 }}>
+          {data.drivers.map(d => <button key={d.id} style={{ ...navigationButton, textAlign: 'left', padding: 15 }} onClick={() => onDriver(d.id)}>
+            <strong>{d.name}</strong><div style={{ color: '#aebed2', fontSize: 12, marginTop: 5 }}>{d.nationality || 'Nationality unavailable'} · {d.birth_date || 'Date not recorded'}</div>
+          </button>)}
+        </div><div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 18 }}>
+          <button style={navigationButton} disabled={page === 0} onClick={() => setPage(p => Math.max(0, p - 1))}>← Previous</button>
+          <span>Page {page + 1}</span>
+          <button style={navigationButton} disabled={(page + 1) * (query ? 40 : 40) >= data.total} onClick={() => setPage(p => p + 1)}>Next →</button>
+        </div></>}
+    </section>
+  </ContentShell>;
+}
+
+
+function DriverHero({driverName,driverId}:{driverName:string;driverId:string}) {
+ const [imageOK,setImageOK]=useState(true);
+ useEffect(()=>setImageOK(true),[driverId]);
+ const image=`/images/driver-hero/${encodeURIComponent(driverId)}.jpg`;
+ return <section style={{position:'relative',height:330,overflow:'hidden',borderRadius:17,marginBottom:18,
+ background:'radial-gradient(ellipse at 65% 90%, #334452 0%, #131f30 44%, #080e17 100%)',border:'1px solid #30405a'}}>
+  {imageOK&&<img src={image} onError={()=>setImageOK(false)} alt={`${driverName} racing on circuit`} style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center 52%'}}/>}
+  {!imageOK&&<div style={{position:'absolute',inset:0,background:'linear-gradient(135deg,transparent 10%,#182b3d 80%),repeating-linear-gradient(-11deg,transparent 0 38px,#1d354477 40px 42px)'}}/>}
+  <div style={{position:'absolute',inset:0,background:'linear-gradient(90deg,#080e18ee 0%,#080e1877 45%,transparent 100%)'}}/>
+  <div style={{position:'absolute',bottom:24,left:24,right:24,color:'#fff',textShadow:'0 2px 7px #000'}}>
+   <div style={{fontSize:12,letterSpacing:3,color:'#a8e7e3'}}>F1 STRATEGY LAB · DRIVER FILE</div>
+   <h2 style={{fontSize:'clamp(26px,4vw,46px)',margin:'8px 0'}}>{driverName}</h2>
+   <div style={{fontSize:13,color:'#d1dfed'}}>{imageOK?'Trackside profile photograph':'Add a licensed track image to customise this driver profile'}</div>
+  </div>
+ </section>;
+}
+
+function DriverProfilePage({ id, onBack, onRace }: { id: string; onBack: () => void; onRace: (year: number, round: number) => void }) {
+  const { data, loading, error } = useRemote<DriverProfile>(`/api/archive/driver/${encodeURIComponent(id)}`);
+  return <ContentShell title={data?.driver.name || 'Driver profile'} caption="DRIVER CAREER · STATISTICS" onBack={onBack}>
+    {loading && <div className="message">Loading career statistics…</div>}
+    {error && <div className="message error">{error}</div>}
+    {data && <><DriverMedia id={id} name={data.driver.name}/><section style={{ ...panelStyle, marginBottom: 18 }}>
+      <div className="eyebrow">{data.driver.nationality || 'Nationality unavailable'} · Born {data.driver.birth_date || 'Not recorded'}</div>
+      <h2 style={{ margin: '12px 0' }}>{data.driver.name} {data.driver.code ? `(${data.driver.code})` : ''}</h2>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(135px, 1fr))', gap: 12 }}>
+        {([{ key: 'classified_results', label: 'Race result records' }, { key: 'wins', label: 'Race victories' }, { key: 'podiums', label: 'Podium finishes' }, { key: 'qualifying_poles_recorded', label: 'Recorded qualifying poles' }] as const).map(s =>
+          <div key={s.key} style={{ background: '#202d3f', padding: 16, borderRadius: 8 }}><div style={{ color: '#aebed2', fontSize: 12 }}>{s.label}</div><h2 style={{ fontSize: 28, margin: '9px 0 0' }}>{data.stats[s.key]}</h2></div>)}
+      </div><p style={{ color: '#aebed2', fontSize: 12 }}>{data.limitations}</p>
+      {data.driver.info_url?.startsWith('https://') && <a href={data.driver.info_url} target="_blank" rel="noreferrer" style={{ color: '#80bcff' }}>Additional biographical information ↗</a>}
+    </section>
+    <EngineeringShowcase driverName={data.driver.name} driverId={id} teamName={data.recent_results[0]?.constructor} driverNumber={data.driver.number} season={data.recent_results[0]?.season} />
+    <section style={panelStyle}><h2>Recent Grand Prix results</h2>
+      {data.recent_results.length === 0 && <p>No race results returned.</p>}
+      {data.recent_results.map((r, i) => <button key={`${r.season}-${r.round}-${i}`} style={{ ...navigationButton, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, width: '100%', textAlign: 'left', marginBottom: 8 }} onClick={() => onRace(r.season, r.round)}>
+        <span><strong>{r.race}</strong><br/><span style={{ color: '#aebed2', fontSize: 12 }}>{r.season} · {r.constructor}</span></span>
+        <strong>P{r.position} →</strong>
+      </button>)}
+    </section></>}
+  </ContentShell>;
+}
+
+type Screen = {type:'circuit';year:number;round:number;name:string} | {type:'garage';year:number;round:number} | {type:'forecast';year:number;round:number;name:string} | { type: 'strategy'; race?:RaceContext } | { type: 'calendar' } | { type: 'replay';year:number;round:number;name:string } | { type: 'drivers' } | { type: 'race'; year: number; round: number } | { type: 'driver'; id: string };
+function App() {
+  const [screen, setScreen] = useState<Screen>({ type: 'calendar' });
+  const [previous, setPrevious] = useState<Screen>({ type: 'calendar' });
+  const open = (next: Screen) => { setPrevious(screen); setScreen(next); };
+  const back = () => setScreen(previous.type === screen.type ? { type: 'calendar' } : previous);
+  if (screen.type === 'circuit') return <CircuitPreviewPage key={`${screen.year}/${screen.round}`} year={screen.year} round={screen.round} name={screen.name} onBack={()=>setScreen({type:'calendar'})} onPlan={race=>open({type:'strategy',race})}/>;
+  if (screen.type === 'garage') return <RaceGarage key={`${screen.year}/${screen.round}`} year={screen.year} round={screen.round} onBack={()=>setScreen({type:'calendar'})} onDriver={id=>open({type:'driver',id})}/>;
+  if (screen.type === 'forecast') return <ForecastPage year={screen.year} round={screen.round} name={screen.name} onBack={()=>setScreen({type:'calendar'})} onDriver={id=>open({type:'driver',id})}/>;
+  if (screen.type === 'strategy') return <StrategyWorkbench race={screen.race} onBack={() => setScreen({ type: 'calendar' })}/>;
+  if (screen.type === 'replay') return <HistoricalReplay key={`${screen.year}-${screen.round}`} year={screen.year} round={screen.round} eventName={screen.name} onBack={() => setScreen({ type: 'calendar' })}/>;
+  if (screen.type === 'race') return <RaceResults onGarage={(year,round)=>open({type:'garage',year,round})} onPlanRace={race=>open({type:'strategy',race})} year={screen.year} round={screen.round} onBack={back} onDriver={id => open({ type: 'driver', id })} onReplay={(year,round,name)=>open({type:'replay',year,round,name})}/>;
+  if (screen.type === 'drivers') return <DriverDirectoryPage onBack={back} onDriver={id => open({ type: 'driver', id })}/>;
+  if (screen.type === 'driver') return <DriverProfilePage id={screen.id} onBack={back} onRace={(year, round) => open({ type: 'race', year, round })}/>;
+  return <RaceBrowser onCircuit={(year,round,name)=>open({type:'circuit',year,round,name})} onGarage={(year,round)=>open({type:'garage',year,round})} onForecast={(year,round,name)=>open({type:'forecast',year,round,name})} onPlanRace={race=>open({type:'strategy',race})} onStrategy={() => open({ type: 'strategy' })} onReplay={(year,round,name)=>open({type:'replay',year,round,name})} onRace={(year, round) => open({ type: 'race', year, round })} onDrivers={() => open({ type: 'drivers' })}/>;
+}
+createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);
