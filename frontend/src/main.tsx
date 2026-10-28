@@ -717,14 +717,14 @@ function App() {
   if(screen.type==='news')return <main className="newsroom-page"><div className="edition-label">PADDOCK / NEWS & RADIO</div><h1>THE LATEST LAP.</h1><NewsDesk/></main>;
   if (screen.type === 'circuit') return <CircuitPreviewPage key={`${screen.year}/${screen.round}`} year={screen.year} round={screen.round} name={screen.name} onBack={()=>setScreen({type:'calendar'})} onPlan={race=>open({type:'strategy',race})}/>;
   if (screen.type === 'garage') return <RaceGarage key={`${screen.year}/${screen.round}/${screen.driver}`} initialDriver={screen.driver} year={screen.year} round={screen.round} onBack={()=>setScreen({type:'calendar'})} onDriver={id=>open({type:'driver',id})}/>;
-  if (screen.type === 'forecast') return <ForecastPage year={screen.year} round={screen.round} name={screen.name} onBack={()=>setScreen({type:'calendar'})} onDriver={id=>open({type:'driver',id})}/>;
-  if (screen.type === 'strategy') return <StrategyWorkbench race={screen.race} onBack={() => setScreen({ type: 'calendar' })}/>;
+  if (screen.type === 'forecast') return <ForecastPage key={`${screen.year}/${screen.round}`} year={screen.year} round={screen.round} name={screen.name} onBack={()=>setScreen({type:'calendar'})} onDriver={id=>open({type:'driver',id})}/>;
+  if (screen.type === 'strategy') return <StrategyWorkbench key={`${screen.race?.season}/${screen.race?.round}`} race={screen.race} onBack={() => setScreen({ type: 'calendar' })}/>;
   if (screen.type === 'replay') return <HistoricalReplay key={`${screen.year}-${screen.round}`} year={screen.year} round={screen.round} eventName={screen.name} onBack={() => setScreen({ type: 'calendar' })}/>;
   if (screen.type === 'race') return <RaceResults onGarage={(year,round)=>open({type:'garage',year,round})} onPlanRace={race=>open({type:'strategy',race})} year={screen.year} round={screen.round} onBack={back} onDriver={id => open({ type: 'driver', id })} onReplay={(year,round,name)=>open({type:'replay',year,round,name})}/>;
   if (screen.type === 'drivers') return <DriverDirectoryPage onBack={back} onDriver={id => open({ type: 'driver', id })}/>;
   if (screen.type === 'driver') return <DriverProfilePage id={screen.id} onBack={back} onRace={(year, round) => open({ type: 'race', year, round })}/>;
   return <RaceBrowser onCircuit={(year,round,name)=>open({type:'circuit',year,round,name})} onGarage={(year,round)=>open({type:'garage',year,round})} onForecast={(year,round,name)=>open({type:'forecast',year,round,name})} onPlanRace={race=>open({type:'strategy',race})} onStrategy={() => open({ type: 'strategy' })} onReplay={(year,round,name)=>open({type:'replay',year,round,name})} onRace={(year, round) => open({ type: 'race', year, round })} onDrivers={() => open({ type: 'drivers' })}/>;
   }
-  return <SiteShell screen={screen} onNavigate={open} blocked={!!entryTarget}><div inert={!!entryTarget}>{renderScreen()}</div>{entryTarget&&<RaceEntryTransition onDone={finishEntry}/>}</SiteShell>;
+  return <SiteShell screen={screen} onSelectRace={next=>{setPrevious(screen);setScreen(next);}} onNavigate={open} blocked={!!entryTarget}><div inert={!!entryTarget}>{renderScreen()}</div>{entryTarget&&<RaceEntryTransition onDone={finishEntry}/>}</SiteShell>;
 }
 createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);
