@@ -1,3 +1,4 @@
+import {historicCars} from './heritageData.ts';
 import type {MuseumSection} from './heritageData';
 import type {RaceContext} from './strategyModel';
 export type Screen={type:'museum';section?:MuseumSection;id?:string}|{type:'library'}|{type:'personal-garage'}|{type:'home'}|{type:'news'}|{type:'calendar';year?:number;round?:number}|{type:'careers';id?:string}|{type:'drivers'}|{type:'driver';id:string}|{type:'strategy';race?:RaceContext}|{type:'garage';year:number;round:number;driver?:string}|{type:'circuit'|'replay'|'forecast';year:number;round:number;name:string}|{type:'race';year:number;round:number};
@@ -5,7 +6,7 @@ export function screenUrl(screen:Screen){const p=new URLSearchParams();for(const
 export function readScreen(hash:string):Screen{
  const [kind,query]=hash.replace(/^#/,'').split('?'),p=new URLSearchParams(query);const year=Number(p.get('year')),round=Number(p.get('round')),name=p.get('name')||'Grand Prix';
  if(kind==='library'||kind==='personal-garage'||kind==='home'||kind==='news'||kind==='drivers')return {type:kind};
- if(kind==='museum'){const section=p.get('section')||'origins',id=p.get('id');return {type:'museum',section:(['origins','timeline','collection','innovations','compare','races','historian'].includes(section)?section:'origins') as MuseumSection,...(id&&['alfa-158','lotus-25','mp4-1'].includes(id)?{id}:{})};}
+ if(kind==='museum'){const section=p.get('section')||'origins',id=p.get('id');return {type:'museum',section:(['origins','timeline','collection','innovations','compare','races','historian'].includes(section)?section:'origins') as MuseumSection,...(id&&historicCars.some(car=>car.id===id)?{id}:{})};}
  if(kind==='calendar')return {type:'calendar',...(Number.isInteger(year)&&year>=1950&&year<=new Date().getFullYear()?{year}:{}),...(Number.isInteger(round)&&round>=1&&round<=30?{round}:{})};
  if(kind==='driver'&&/^[a-zA-Z0-9_]+$/.test(p.get('id')||''))return {type:'driver',id:p.get('id')!};
  if(kind==='careers')return {type:'careers',...(/^[a-zA-Z0-9_]+$/.test(p.get('id')||'')?{id:p.get('id')!}:{})};
