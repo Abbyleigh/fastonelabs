@@ -1,12 +1,20 @@
 """Group existing triangles for inspection; preserve every source triangle and texture."""
 from pathlib import Path
-import json,struct,hashlib,numpy as np
+import json,struct,hashlib,numpy as np,sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'backend'))
+from model_assets import read_model_bytes
 from scipy.sparse import coo_matrix
 from scipy.sparse.csgraph import connected_components
 ROOT=Path(__file__).resolve().parents[1]/'frontend/public/models/cars'
 NAMES=['body','frontWing','rearWing','floor','power','wheels','wheels','wheels','wheels','suspension']
-for source in sorted(ROOT.glob('*/*/*.glb')):
- raw=source.read_bytes();length=struct.unpack_from('<I',raw,12)[0];j=json.loads(raw[20:20+length]);binary=20+length+8
+sources=set(ROOT.glob('*/*/*.glb'))
+packed=ROOT.parent/'packed-models.json'
+if packed.exists():
+ for logical in json.loads(packed.read_text())['models']:
+  path=ROOT.parents[1]/logical.lstrip('/')
+  if path.parent.parent.parent==ROOT:sources.add(path)
+for source in sorted(sources):
+ raw=read_model_bytes(source);length=struct.unpack_from('<I',raw,12)[0];j=json.loads(raw[20:20+length]);binary=20+length+8
  def accessor(i):
   a=j['accessors'][i];v=j['bufferViews'][a['bufferView']];cols={'SCALAR':1,'VEC2':2,'VEC3':3,'VEC4':4}[a['type']];dt=np.dtype({5126:'<f4',5125:'<u4',5123:'<u2',5121:'u1'}[a['componentType']]);return np.ndarray((a['count'],cols),dtype=dt,buffer=raw,offset=binary+v.get('byteOffset',0)+a.get('byteOffset',0),strides=(v.get('byteStride',dt.itemsize*cols),dt.itemsize))
  world={}

@@ -1,10 +1,12 @@
+import {useManagedGLTF as useGLTF} from './useManagedGLTF';
+import {isPackedModel,probePackedModel} from './packedModelLoader';
 import {GARAGE_PHOTO,coverRect} from './garagePhoto';
 import EngineeringCar, { useEngineeringMap } from './EngineeringCar';
 import { garageCars, matchGarageCar } from './GarageAssets';
 import EngineeringDetails from './EngineeringDetails';
 import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { ContactShadows, OrbitControls, RoundedBox, useGLTF } from '@react-three/drei';
+import { ContactShadows, OrbitControls, RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
 import { clone as cloneSkeleton } from 'three/examples/jsm/utils/SkeletonUtils.js';
 
@@ -131,6 +133,7 @@ function useLocalAsset(url: string) {
   useEffect(() => {
     const controller = new AbortController();
     setExists(false);
+    if(isPackedModel(url)){probePackedModel(url,controller.signal).then(valid=>{if(!controller.signal.aborted)setExists(valid);}).catch(()=>{if(!controller.signal.aborted)setExists(false);});return()=>controller.abort();}
 
     fetch(url, {
       method: 'HEAD',

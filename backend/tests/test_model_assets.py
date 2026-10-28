@@ -1,8 +1,9 @@
+from model_assets import read_model_bytes
 import unittest,json,struct
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]/'frontend/public/models'
 def read_glb(path):
-    raw=path.read_bytes();assert raw[:4]==b'glTF';assert struct.unpack_from('<I',raw,8)[0]==len(raw)
+    raw=read_model_bytes(path);assert raw[:4]==b'glTF';assert struct.unpack_from('<I',raw,8)[0]==len(raw)
     return json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
 class Models(unittest.TestCase):
     def test_car_has_named_assemblies_and_licence(self):

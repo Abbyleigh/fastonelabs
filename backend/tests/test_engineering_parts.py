@@ -1,3 +1,4 @@
+from model_assets import read_model_bytes
 import unittest,json,struct,hashlib
 from collections import Counter
 from pathlib import Path
@@ -8,7 +9,7 @@ class EngineeringParts(unittest.TestCase):
   manifests=list(ROOT.glob('*/*/engineering-parts.json'));self.assertEqual(len(manifests),9)
   for path in manifests:
    with self.subTest(model=str(path.parent)):
-    mapping=json.loads(path.read_text());raw=(path.parent/mapping['source']).read_bytes();glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
+    mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
     self.assertEqual(hashlib.sha256(raw).hexdigest(),mapping['source_sha256'])
     count=sum(glb['accessors'][p['indices']]['count']//3 if 'indices'in p else glb['accessors'][p['attributes']['POSITION']]['count']//3 for mesh in glb['meshes']for p in mesh['primitives'])
     labels=(path.parent/'engineering-parts.bin').read_bytes();self.assertEqual(len(labels),count);self.assertEqual(count,mapping['triangle_count']);self.assertTrue(all(code<len(PARTS)for code in labels))
@@ -26,7 +27,7 @@ class EngineeringParts(unittest.TestCase):
  def test_mapping_bounds_are_finite_and_source_nodes_exist(self):
   import math
   for path in ROOT.glob('*/*/engineering-parts.json'):
-   mapping=json.loads(path.read_text());raw=(path.parent/mapping['source']).read_bytes();glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]]);names={node.get('name')for node in glb['nodes']if 'mesh'in node}
+   mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]]);names={node.get('name')for node in glb['nodes']if 'mesh'in node}
    self.assertEqual({entry['name']for entry in mapping['entries']},names)
    for entry in mapping['entries']:
     for bound in entry['bounds'].values():

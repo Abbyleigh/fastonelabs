@@ -1,0 +1,13 @@
+# Lossless model delivery under static-host size limits
+
+Concurrent Cloudflare deployment commits removed the 26,370,656-byte concept GLB and 57,802,256-byte Ferrari SF23 GLB. Their oversized raw files remain excluded from `frontend/public`; they were not restored into the deployment. Source-equivalent local originals are retained only in ignored backups.
+
+`tools/pack_large_models.py` gzip-compresses explicitly supplied local originals and splits the stream into parts no larger than 20,000,000 bytes. It never downloads or alters a model. Current compressed sizes: concept 15,982,852 bytes; Ferrari 38,103,757 bytes (two parts). Every built file is below 25 MiB. This changes transfer packaging, not polygon count or materials; it is not a race LOD optimisation.
+
+The public manifest (`frontend/public/models/packed-models.json`) and generated `packedModels.ts` retain original byte counts, original SHA-256, compressed SHA-256 and ordered chunk sizes/paths. `packedModelLoader.ts` verifies type, lengths and both hashes, decompresses using the browser’s DecompressionStream, and creates a local GLB Blob URL. `useManagedGLTF.ts` retains the normal Drei path/cache for unpacked models. Logical model paths remain unchanged for car identity and engineering sidecars. Missing HTML responses remain invalid; packed HEAD probes reject HTML too. Failed part loads surface the existing viewer fallback and a retry action.
+
+No Cloudflare rewrite or custom Content-Encoding rule is required. Parts are ordinary binary static files. Modern secure-context browsers (HTTPS or localhost) are required for digest verification and decompression. If a future deployment introduces restrictive CSP, its model-loading policy must support the Blob URLs used here. Actual Cloudflare production delivery has not been tested in this task; localhost loading and the built size constraints have been verified.
+
+`backend/model_assets.py` reads the same source-equivalent GLBs from packed parts for model and engineering-map verification. Existing tests still assert original nodes, materials, embedded buffers, source hashes and triangle grouping: no asset tests were skipped or weakened. The audit and component-generation tools can read packed originals. Attribution files and original licences remain alongside the assets.
+
+The packed Ferrari was verified rendering and disassembling in the browser. A Drei HTML loading-portal cleanup error was fixed by keeping the loading graphic inside the Three.js scene and its text outside the canvas. A fresh browser run switching Ferrari → McLaren → Ferrari completed without console errors.

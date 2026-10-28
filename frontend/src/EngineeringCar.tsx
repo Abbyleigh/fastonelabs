@@ -1,6 +1,6 @@
 import {useEffect,useMemo,useRef,useState} from 'react';
 import {useFrame} from '@react-three/fiber';
-import {useGLTF} from '@react-three/drei';
+import {useManagedGLTF as useGLTF} from './useManagedGLTF';
 import * as THREE from 'three';
 export type CarPart='body'|'frontWing'|'rearWing'|'floor'|'power'|'wheels'|'suspension';
 type Bounds={min:number[];max:number[]};

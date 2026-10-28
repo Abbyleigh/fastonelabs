@@ -1,10 +1,12 @@
 """Audit installed GLBs without changing original bytes or inferring physical scale."""
 from pathlib import Path
-import json, struct, hashlib
+import json, struct, hashlib, sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'backend'))
+from model_assets import read_model_bytes
 ROOT=Path(__file__).resolve().parents[1]
 rows={}
 for info in (ROOT/'frontend/public/models/cars').glob('*/*/model-info.json'):
- d=json.loads(info.read_text()); p=next(info.parent.glob('*.glb')); raw=p.read_bytes(); n=struct.unpack_from('<I',raw,12)[0]; gltf=json.loads(raw[20:20+n]); triangles=0
+ d=json.loads(info.read_text()); p=Path(str(ROOT/'frontend/public')+d.get('path','/models/cars/ferrari/2023/sf23.glb')); raw=read_model_bytes(p); n=struct.unpack_from('<I',raw,12)[0]; gltf=json.loads(raw[20:20+n]); triangles=0
  for mesh in gltf.get('meshes',[]):
   for prim in mesh['primitives']:
    if prim.get('mode',4)==4: triangles+=gltf['accessors'][prim.get('indices',prim['attributes']['POSITION'])]['count']//3
