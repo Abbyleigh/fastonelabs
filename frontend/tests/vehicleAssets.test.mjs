@@ -1,0 +1,12 @@
+import {readFileSync} from 'node:fs';
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import ts from 'typescript';
+const url=name=>new URL('../src/'+name,import.meta.url);
+function moduleUrl(name,replacements={}){let src=readFileSync(url(name),'utf8');for(const [key,val]of Object.entries(replacements))src=src.replaceAll(key,val);return 'data:text/javascript;base64,'+Buffer.from(ts.transpileModule(src,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2020}}).outputText).toString('base64');}
+const garage=moduleUrl('GarageAssets.ts'),audit=moduleUrl('vehicleAudit.ts');
+const {vehicles,eligible,parseGarage,sketchfabUid}=await import(moduleUrl('VehicleAssets.ts',{'./GarageAssets':garage,'./vehicleAudit':audit}));
+test('all installed models have provenance, attribution and matching geometry evidence',()=>{assert.equal(vehicles.length,10);for(const v of vehicles.filter(v=>v.path)){assert.match(v.sha256,/^[a-f0-9]{64}$/);assert.ok(v.triangles>0&&v.bytes>0);assert.ok(v.components.length);assert.ok(v.attribution.includes(v.author));assert.ok(v.restrictions.length);}});
+test('commercial and race eligibility fail closed independently of appearance',()=>{for(const v of vehicles){assert.equal(eligible(v,'commercial'),false);assert.equal(eligible(v,'race'),false);}const v=vehicles[1];assert.equal(eligible({...v,commercialReview:true},'commercial'),true);assert.equal(eligible({...v,commercial:'blocked',commercialReview:true},'commercial'),false);assert.equal(eligible({...v,racePath:'/optimised.glb',modify:'blocked'},'race'),false);assert.equal(eligible({...v,racePath:'/optimised.glb'},'race'),true);});
+test('garage restoration tolerates corrupt, outdated and unknown model choices',()=>{for(const raw of [null,'not JSON','{}','{"version":2}'])assert.equal(parseGarage(raw).selected,'original-study');assert.deepEqual(parseGarage(JSON.stringify({version:1,selected:'removed',favourites:['mclaren-2026','mclaren-2026','unknown',null]})),{version:1,selected:'original-study',favourites:['mclaren-2026']});});
+test('embed IDs accept only canonical Sketchfab model addresses',()=>{for(const v of vehicles.filter(v=>v.path))assert.match(sketchfabUid(v.source),/^[a-f0-9]{32}$/);for(const value of ['https://evil.com/models/'+ 'a'.repeat(32),'javascript:alert(1)','https://sketchfab.com.evil.com/models/'+ 'a'.repeat(32),'https://sketchfab.com/models/'+ 'a'.repeat(32)+'?url=evil'])assert.equal(sketchfabUid(value),null);});

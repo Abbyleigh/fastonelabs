@@ -80,7 +80,7 @@ function ComponentGroup({id,exploded,selected,isolate,onSelect,children}:{id:Par
  </group>;
 }
 function Paint({color,metalness=.4,roughness=.36}:{color:string;metalness?:number;roughness?:number}){const identity=useContext(Identity);if(['#bd233b','#da3346','#c72d41','#eb5261','#cc2942','#b82340','#c52a46'].includes(color))color=identity.primary;return <meshStandardMaterial color={color} metalness={metalness} roughness={roughness}/>;}
-function Car({exploded,selected,isolate,onSelect}:{exploded:number;selected:PartId|null;isolate:boolean;onSelect:(id:PartId)=>void}){
+export function Car({exploded,selected,isolate,onSelect}:{exploded:number;selected:PartId|null;isolate:boolean;onSelect:(id:PartId)=>void}){
  const colored=(id:PartId,base:string)=>selected===id?'#ffd36d':base;
  const wheels:[number,number,number][]=[[-1.13,.1,-1.65],[1.13,.1,-1.65],[-1.17,.1,1.6],[1.17,.1,1.6]];
  return <group position={[0,.48,0]}>

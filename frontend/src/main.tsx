@@ -1,3 +1,4 @@
+import VehicleLibrary from './VehicleLibrary';
 import DriverCareers from './DriverCareers';
 import SiteShell,{useWorkspace} from './SiteShell';
 import DriverShowcase from './DriverShowcase';
@@ -714,6 +715,7 @@ function App() {
   const back = () => setScreen(previous.type === screen.type ? { type: 'calendar' } : previous);
   function renderScreen(){
   if(screen.type==='home')return <><CinematicHome onNavigate={open} effects={effects} onEffects={value=>{setEffects(value);localStorage.setItem('ri-effects',value?'on':'off');}}/><DriverShowcase onNavigate={open}/></>;
+  if(screen.type==='library'||screen.type==='personal-garage')return <VehicleLibrary key={screen.type} personal={screen.type==='personal-garage'}/>;
   if(screen.type==='careers')return <DriverCareers initialId={screen.id} onNavigate={open}/>;
   if(screen.type==='news')return <main className="newsroom-page"><div className="edition-label">PADDOCK / NEWS & RADIO</div><h1>THE LATEST LAP.</h1><NewsDesk/></main>;
   if (screen.type === 'circuit') return <CircuitPreviewPage key={`${screen.year}/${screen.round}`} year={screen.year} round={screen.round} name={screen.name} onBack={()=>setScreen({type:'calendar'})} onPlan={race=>open({type:'strategy',race})}/>;
