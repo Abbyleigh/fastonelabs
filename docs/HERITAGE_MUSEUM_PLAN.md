@@ -1,0 +1,24 @@
+# Heritage & Engineering Museum — implementation plan
+
+## Audit / preserved baseline
+
+Baseline: e7ff0ad, restore tag before-heritage-museum-20261028. Existing React/TypeScript hash router (navigation.ts/main.tsx), SiteShell navigation and race workspace remain. Reuse VehicleAssets/vehicleAudit provenance, VehicleViewer/EngineeringCar for eligible local assets, EngineeringDetails for lessons, and existing calendar/results/replay routes. No authentic pre-2023 telemetry or licensed historic-car models are installed. Modern creator cars are not historic reconstructions. Fantasy accounts/championship and a production AI research service are roadmap features, not currently implemented systems to claim as preserved. Backend is FastAPI with OpenF1 recorded replay, Jolpica results/careers and experimental forecasting; FastF1 is not the current principal replay source and must not be claimed otherwise.
+
+## Modular stages tied to files
+
+1. First milestone: heritageData.ts typed, cited origins/events and first three car exhibits; HeritageMuseum.tsx origins, searchable/era-filtered timeline, car exhibits and an educational wing-load experiment; heritage.css responsive/motion-aware styling. Add hash routes and Heritage & Engineering menu in navigation.ts/SiteShell.tsx/main.tsx. Link verified archive results, never invented telemetry. Use original explanatory SVG diagrams when no licensed historic model/image exists. No unauthorized media download.
+2. Expand first three exhibit specifications with per-field reference/version/units and uncertainty. Add further named cars (W196, Lotus49/79, MP4/4, FW14B, F2004, Brawn, W05,2022/2026) only after primary-source verification. Preserve missing/unknown fields; no fabricated exact figures.
+3. Reuse VehicleAssets for reviewed historical GLBs, historical accuracy and rights evidence; only enable supported mesh modes. Keep historic displays separate from generic study geometry. Add original illustrated regulation/technology lessons in aero, engines and chassis, then dynamics/safety.
+4. Comparison: source-backed dimensions/weights/power/era technologies, unit-safe conversion, reference conditions and comparable-scale geometry only when measured scale exists. Never morph unrelated meshes. Source-backed race catalogue links existing archive/results; genuine modern replay only for supported recorded sessions.
+5. Historian: curated claim-level retrieval index, deterministic retrieval/abstention first, then optional actual language-model service with server-side key and source-grounded answers. Do not label keyword search as AI. Add fact/explanation/uncertainty categories and exhibit/lesson links.
+6. Expand content and permitted imagery, cinematic map/timeline, accessibility/performance/device verification. Preserve vehicle library, careers, predictions, strategy and recorded replay; keep the independent fantasy roadmap intact.
+
+## First milestone acceptance
+
+Chronological events and claim references; explicit dates, model units and source links; absence of authentic historic 3D assets disclosed. Origins distinguish Grand Prix, technical formula and drivers championship. Timeline filters and exhibit selection work. Wing-load lesson uses L=0.5*rho*v²*S*CL and D=0.5*rho*v²*S*CD, with assumed coefficients clearly distinguished from actual F1 data. Navigation/deep links survive reload; archive links carry correct year/round. All existing gates plus museum data/physics tests pass. Desktop/mobile/reduced-motion CSS checked. No historic replay or AI capability is falsely advertised.
+
+## Delivered opening milestone
+
+Ten sourced milestones (1904–2026), three opening car exhibits (Alfa 158, Lotus 25, MP4/1), original structural diagrams, source-linked comparison table, NASA-equation wing-load experiment, archive/replay entry points and curated research lookup. Specifications are partial and explicitly unknown where unverified; these are not yet exhaustive technical monographs. The museum is accessible through seven functional gallery tabs and the new primary menu. Curated lookup is explicitly not a connected AI assistant. Historic geometry/footage is not installed or fabricated. No backend or race engine changes were needed.
+
+Validation: 53 backend plus 53 frontend tests passed (106), race contract check passed, TypeScript/production build passed. Browser tests checked timeline filtering into the Lotus exhibit, deep links, two-exhibit comparison, research topic retrieval, and speed slider updating forces at 360 km/h. Desktop (1280), tablet (820) and phone (390) layouts had no document horizontal overflow. Header-style collision fixed and screenshot rechecked. Reduced-motion users receive no entrance animation. Existing bundle-size and backend dependency deprecation warnings remain. Screenshot: task outputs/heritage-museum.png.
