@@ -25,6 +25,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import './style.css';
+import './professional.css';
 
 type XY = [number, number];
 type TrackResponse = {
