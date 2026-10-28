@@ -54,3 +54,11 @@ historicEvents.push(
 {id:'kers',year:2009,category:'Regulations',title:'Kinetic energy recovery becomes an option',fact:'The 2009 changes allowed KERS and brought slick tyres back.',why:'Braking energy could be recovered and redeployed, adding another energy-management trade-off.',refs:['rule-history']});
 historicEvents.sort((a,b)=>a.year-b.year);
 export function comparisonDelta(a:HistoricCar,b:HistoricCar,label:string){const x=a.specs.find(s=>s.label===label),y=b.specs.find(s=>s.label===label);if(!x||!y||x.value===undefined||y.value===undefined||!x.unit||x.unit!==y.unit)return null;return {difference:y.value-x.value,unit:x.unit,qualified:!!x.context||!!y.context};}
+references.push({id:'lotus25-manufacturer',publisher:'Lotus Cars',title:'Type 25 engineering and racing history',url:'https://www.lotuscars.com/en-BE/lotus-story/race-cars/type-25',checked:'2026-10-28'});
+historicCars.find(c=>c.id==='lotus-25')!.specs.push(
+{label:'Design leadership',text:'Colin Chapman',refs:['lotus25-manufacturer']},
+{label:'Materials',text:'Riveted 16 SWG aluminium sheet monocoque',refs:['lotus25-manufacturer']},
+{label:'Power',text:'Around 200 bhp in the manufacturer retrospective',context:'Approximate retrospective figure. FWMV versions and development years differ; this is not an exact 1962 dyno measurement.',refs:['lotus25-manufacturer']},
+{label:'Transmission',text:'ZF five-speed gearbox',refs:['lotus25-manufacturer']},
+{label:'Front suspension',text:'Cantilever upper arm operating an inboard coil-spring/damper unit',refs:['lotus25-manufacturer']},
+{label:'Fuel packaging',text:'Aircraft-style flexible bag tanks within the monocoque sidewalls',refs:['lotus25-manufacturer']});

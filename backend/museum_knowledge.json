@@ -1,0 +1,1251 @@
+{
+  "version": 1,
+  "references": [
+    {
+      "id": "origins",
+      "publisher": "Formula 1",
+      "title": "Why is it called Formula 1? Championship origins",
+      "url": "https://www.formula1.com/en/latest/article/why-is-it-called-formula-1-and-12-other-questions-about-the-championships.1GHeel6u4jga6hMpX2eFs1.1GHeel6u4jga6hMpX2eFs1",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "fia-foundation",
+      "publisher": "FIA",
+      "title": "Founding members and the 1904 international association",
+      "url": "https://www.fia.com/news/founding-members-meet-celebrate-fias-120th-anniversary",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "fia-formula",
+      "publisher": "FIA / AUTO",
+      "title": "AUTO issue 9 — post-war Formula One origins",
+      "url": "https://www.fia.com/sites/default/files/auto9.pdf",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "alfa",
+      "publisher": "Museo Alfa Romeo",
+      "title": "GP Tipo 158 “Alfetta” — collection specification",
+      "url": "https://www.museoalfaromeo.com/en-us/collezione/Pages/GP-Tipo-158-%E2%80%9CAlfetta%E2%80%9D-.aspx",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "first-race",
+      "publisher": "Formula 1",
+      "title": "Facts about the first championship Grand Prix",
+      "url": "https://www.formula1.com/en/latest/article/10-fascinating-facts-about-the-very-first-f1-grand-prix-held-on-this-day-70.14iQuQ4N2IbV93EZj4Ruuj",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "lotus",
+      "publisher": "Classic Team Lotus",
+      "title": "Team Lotus Type 25 register",
+      "url": "https://classicteamlotus.co.uk/en/about/team-lotus-register-2/type-25/",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "lotus-history",
+      "publisher": "Classic Team Lotus",
+      "title": "The first World Championships — 1960s",
+      "url": "https://classicteamlotus.co.uk/en/past/the-first-world-championships-1960s/",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "mclaren",
+      "publisher": "McLaren Racing",
+      "title": "1981 MP4/1 heritage profile",
+      "url": "https://www.mclaren.com/racing/heritage/formula-1/cars/1981-formula-1-mclaren-mp4-1/",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "halo",
+      "publisher": "FIA",
+      "title": "Legacy of safety — development since 1994",
+      "url": "https://api.fia.com/news/legacy-safety-how-fia-responded-tragedy-imola-1994-and-launched-drive-safer-racing",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "2026",
+      "publisher": "Formula 1",
+      "title": "2026 regulations — terminology update, December 2025",
+      "url": "https://corp.formula1.com/f1-2026-regulations-terminology-update/",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "physics",
+      "publisher": "NASA Glenn Research Center",
+      "title": "Dynamic pressure and aerodynamic force coefficients",
+      "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/dynamic-pressure/",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "mauto",
+      "publisher": "Museo Nazionale dell’Automobile",
+      "title": "Mercedes-Benz W196 R collection",
+      "url": "https://www.museoauto.com/en/collection/mercedes-benz-w196-r/",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "lotus49",
+      "publisher": "Classic Team Lotus",
+      "title": "Type 49 register",
+      "url": "https://classicteamlotus.co.uk/en/about/team-lotus-register-2/type-49/",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "lotus79",
+      "publisher": "Classic Team Lotus",
+      "title": "Type 79 register",
+      "url": "https://classicteamlotus.co.uk/en/about/team-lotus-register-2/type-79/",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "mp44",
+      "publisher": "McLaren Racing",
+      "title": "1988 MP4/4 heritage profile",
+      "url": "https://www.mclaren.com/racing/heritage/formula-1/cars/1988-formula-1-mclaren-mp4-4/",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "fw14b",
+      "publisher": "Williams Racing",
+      "title": "Nigel Mansell and the FW14B",
+      "url": "https://www.williamsf1.com/articles/22794892-7962-4c82-b00b-90aac32870b8/nigel-mansell-and-the-fw14b-an-iconic-duo",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "f2004",
+      "publisher": "Ferrari",
+      "title": "90 years of Scuderia Ferrari — heritage exhibition",
+      "url": "https://www.ferrari.com/content/dam/ferrari-fcom/old/pdf/pr_90_years_eng_fin.pdf",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "brawn",
+      "publisher": "Formula 1",
+      "title": "Brawn documentary: the double diffuser and debut",
+      "url": "https://www.formula1.com/en/latest/article/plumbers-pound-coins-and-politics-6-unbelievable-moments-from-brawn-the.5LkfMpTAn37TSYZbhPtGpl",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "w05",
+      "publisher": "Mercedes-AMG Petronas",
+      "title": "The Silver Arrows Story: Mercedes W05",
+      "url": "https://www.mercedesamgf1.com/news/the-silver-arrows-story-mercedes-w05",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "w05-engine",
+      "publisher": "Mercedes-AMG Petronas",
+      "title": "How Mercedes mastered the 2014 era",
+      "url": "https://www.mercedesamgf1.com/news/how-mercedes-mastered-a-new-era-ten-years-on-from-our-first-f1-constructors",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "era2022",
+      "publisher": "Formula 1",
+      "title": "What changed on the 2022 cars",
+      "url": "https://www.formula1.com/en/latest/article/2021-vs-2022-whats-changed-on-formula-1s-all-new-cars-for-this-season.1SrJj7fQgv4Iw2IxCTnb1l",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "w17-spec",
+      "publisher": "Mercedes-AMG Petronas",
+      "title": "F1 W17: 2026 technical specifications",
+      "url": "https://www.mercedesamgf1.com/f1-w17-2026-technical-specifications",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "era2026",
+      "publisher": "FIA",
+      "title": "F1’s new era: 2026 power units and chassis",
+      "url": "https://www.fia.com/news/f1s-new-era-everything-you-need-know-about-how-fia-making-formula-1-more-competitive-more",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "early",
+      "publisher": "Mercedes-Benz media",
+      "title": "1894 Paris–Rouen competition",
+      "url": "https://media.mercedes-benz.fr/retromobile-2014--mercedes-benz-celebre--120-ans-de-competition-automobile-/",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "acf",
+      "publisher": "Automobile Club de l’Ouest",
+      "title": "Origins of the 1906 ACF Grand Prix",
+      "url": "https://www.24h-lemans.com/fr/actualites/24-heures-du-mans-aux-origines-de-la-legende-51838",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "spring",
+      "publisher": "OpenStax / Rice University",
+      "title": "Energy in simple harmonic motion",
+      "url": "https://openstax.org/books/university-physics-volume-1/pages/15-2-energy-in-simple-harmonic-motion",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "friction",
+      "publisher": "OpenStax / Rice University",
+      "title": "Friction and the limits of the simple model",
+      "url": "https://openstax.org/books/university-physics-volume-1/pages/6-2-friction",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "rotation",
+      "publisher": "OpenStax / Rice University",
+      "title": "Rotational power",
+      "url": "https://openstax.org/books/university-physics-volume-1/pages/10-8-work-and-power-for-rotational-motion",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "structure",
+      "publisher": "MIT OpenCourseWare",
+      "title": "Engineering mechanics: stress, strain and elasticity",
+      "url": "https://ocw.mit.edu/courses/1-050-engineering-mechanics-i-fall-2007/pages/lecture-notes/",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "rule-history",
+      "publisher": "Formula 1",
+      "title": "Key regulation changes through F1 history",
+      "url": "https://www.formula1.com/en/latest/article/the-key-regulation-changes-in-f1-history-and-the-teams-that-nailed-them.2iq8c5E6S1HOffT5PBLl6i",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "aco1920",
+      "publisher": "Automobile Club de l’Ouest",
+      "title": "Early circuits and the origins of Le Mans",
+      "url": "https://www.lemans.org/en/news/aco/the-aco-s-120th-anniversary-how-the-24-hours-of-le-mans-came-into-being-60406",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "silverstone-history",
+      "publisher": "Silverstone",
+      "title": "F1 in the 1950s",
+      "url": "https://www.silverstone.co.uk/news/f1-1950s-edge",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "lotus-engineering",
+      "publisher": "Lotus Engineering",
+      "title": "Engineering history",
+      "url": "https://www.lotusengineering.com/lotus-engineering-history/",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "lotus25-manufacturer",
+      "publisher": "Lotus Cars",
+      "title": "Type 25 engineering and racing history",
+      "url": "https://www.lotuscars.com/en-BE/lotus-story/race-cars/type-25",
+      "checked": "2026-10-28"
+    }
+  ],
+  "events": [
+    {
+      "id": "paris-rouen",
+      "year": 1894,
+      "title": "Paris–Rouen: reliability before lap times",
+      "fact": "The 1894 Paris–Rouen competition tested practical motor vehicles, not just outright speed.",
+      "why": "Road contests helped demonstrate the new automobile’s capabilities.",
+      "refs": [
+        "early"
+      ],
+      "category": "Origins"
+    },
+    {
+      "id": "international",
+      "year": 1904,
+      "date": "1904-06-20",
+      "category": "Origins",
+      "title": "An international organising body",
+      "fact": "The AIACR was founded in Paris by national automobile clubs; it became the FIA in 1946.",
+      "why": "International coordination preceded a single Formula One world championship.",
+      "refs": [
+        "fia-foundation"
+      ]
+    },
+    {
+      "id": "acf-gp",
+      "year": 1906,
+      "title": "The ACF Grand Prix in the Sarthe",
+      "fact": "Ferenc Szisz won the 1906 ACF Grand Prix in a Renault.",
+      "why": "Grand Prix organisation developed decades before the world championship.",
+      "refs": [
+        "acf"
+      ],
+      "category": "Origins"
+    },
+    {
+      "id": "circuits1920",
+      "year": 1920,
+      "category": "Origins",
+      "title": "Public roads become organised circuits",
+      "fact": "A new Le Mans-area course was designed in 1920, using public roads south of the city.",
+      "why": "Inter-war racing developed venues and organising institutions, well before the F1 world title.",
+      "refs": [
+        "aco1920"
+      ]
+    },
+    {
+      "id": "european",
+      "year": 1931,
+      "title": "A European championship before the world title",
+      "fact": "The AIACR’s European Championship preceded the post-war world championship.",
+      "why": "Championship competition did not begin from nothing in 1950.",
+      "refs": [
+        "origins"
+      ],
+      "category": "Championship"
+    },
+    {
+      "id": "war",
+      "year": 1939,
+      "title": "War interrupts the European championship",
+      "fact": "The European Championship ended with the outbreak of the Second World War.",
+      "why": "Post-war officials had to rebuild international racing.",
+      "refs": [
+        "origins"
+      ],
+      "category": "Origins"
+    },
+    {
+      "id": "postwar",
+      "year": 1946,
+      "category": "Origins",
+      "title": "The post-war technical formula",
+      "fact": "After the war, international officials rebuilt Grand Prix rules. Formula One described the leading technical category, distinct from the later championship.",
+      "why": "A formula defines which cars may compete; a championship defines how events award a title.",
+      "refs": [
+        "fia-formula"
+      ]
+    },
+    {
+      "id": "championship",
+      "year": 1949,
+      "category": "Championship",
+      "title": "A world title is agreed",
+      "fact": "The 1950 drivers’ championship was confirmed in 1949, bringing selected events into a shared title competition.",
+      "why": "Existing Grand Prix racing gained a season-long international championship.",
+      "refs": [
+        "origins"
+      ]
+    },
+    {
+      "id": "silverstone",
+      "year": 1950,
+      "date": "1950-05-13",
+      "category": "Championship",
+      "title": "Silverstone opens the championship",
+      "fact": "Giuseppe Farina won the inaugural championship Grand Prix in an Alfa Romeo. He became the first drivers’ champion later that season.",
+      "why": "This was the championship’s beginning, not the beginning of motor racing or Grand Prix racing.",
+      "refs": [
+        "origins",
+        "first-race"
+      ],
+      "car": "alfa-158"
+    },
+    {
+      "id": "formula2",
+      "year": 1952,
+      "category": "Regulations",
+      "title": "Championship races run to Formula Two rules",
+      "fact": "The championship’s principal Grands Prix used Formula Two machinery in 1952 and 1953.",
+      "why": "The world championship and the technical Formula One were not always identical. Indianapolis also had its own rules.",
+      "refs": [
+        "silverstone-history"
+      ]
+    },
+    {
+      "id": "exhibit-w196",
+      "year": 1954,
+      "title": "Mercedes-Benz W196 R",
+      "fact": "The W196 R won on its 1954 French Grand Prix debut. Fangio’s 1954–55 titles established its place in championship history.",
+      "why": "An eight-cylinder powertrain and carefully developed bodywork targeted the performance opportunities of the period’s formula. A museum specification describes one preserved configuration, not every race evolution.",
+      "refs": [
+        "mauto"
+      ],
+      "category": "Regulations",
+      "car": "w196"
+    },
+    {
+      "id": "constructors",
+      "year": 1958,
+      "category": "Championship",
+      "title": "Constructors gain their own championship",
+      "fact": "A championship for constructors was introduced in 1958, eight years after the drivers’ competition began.",
+      "why": "Teams could now compete for a distinct season title alongside their drivers.",
+      "refs": [
+        "origins"
+      ]
+    },
+    {
+      "id": "rear-engine",
+      "year": 1959,
+      "category": "Chassis",
+      "title": "A rear-engined champion",
+      "fact": "Jack Brabham won the 1959 drivers’ title with Cooper, the first champion in a rear-engined car.",
+      "why": "Moving the engine behind the driver changed packaging, weight distribution and the path toward modern mid-engined layouts.",
+      "refs": [
+        "silverstone-history"
+      ]
+    },
+    {
+      "id": "monocoque",
+      "year": 1962,
+      "category": "Chassis",
+      "title": "Lotus 25: the chassis becomes a shell",
+      "fact": "The Type 25 used a radical semi-monocoque chassis and a 1.5-litre Coventry Climax V8.",
+      "why": "Using the shell to carry loads offered a different route to stiffness and packaging than a frame of tubes.",
+      "refs": [
+        "lotus"
+      ],
+      "car": "lotus-25"
+    },
+    {
+      "id": "clark",
+      "year": 1963,
+      "category": "Championship",
+      "title": "Lotus and Clark take the titles",
+      "fact": "The Lotus 25 helped Jim Clark and Team Lotus secure the 1963 drivers’ and constructors’ championships.",
+      "why": "The new chassis architecture had translated into championship success.",
+      "refs": [
+        "lotus-history"
+      ],
+      "car": "lotus-25"
+    },
+    {
+      "id": "exhibit-lotus-49",
+      "year": 1967,
+      "title": "Lotus 49",
+      "fact": "The Type 49 won its first Grand Prix at Zandvoort in 1967 with the new Cosworth DFV.",
+      "why": "Integrating engine and car design reduced compromises between powertrain packaging and the rest of the machine.",
+      "refs": [
+        "lotus49"
+      ],
+      "category": "Chassis",
+      "car": "lotus-49"
+    },
+    {
+      "id": "wings",
+      "year": 1968,
+      "category": "Regulations",
+      "title": "Wings reshape the engineering problem",
+      "fact": "Lotus’s engineering history identifies aerofoil wings on the Type 49 in 1968.",
+      "why": "Aerodynamic load created new demands on structures, suspension and tyre behaviour.",
+      "refs": [
+        "lotus-engineering"
+      ],
+      "car": "lotus-49"
+    },
+    {
+      "id": "turbo-debut",
+      "year": 1977,
+      "category": "Regulations",
+      "title": "Renault introduces turbocharging",
+      "fact": "Renault’s RS01 introduced turbocharging to Formula 1 in 1977.",
+      "why": "Exhaust-driven compression offered a route to high output from a smaller engine, with major thermal and reliability challenges.",
+      "refs": [
+        "rule-history"
+      ]
+    },
+    {
+      "id": "exhibit-lotus-79",
+      "year": 1978,
+      "title": "Lotus 79",
+      "fact": "The Type 79 developed the ground-effect architecture of the Type 78.",
+      "why": "Longer Venturi tunnels and improved skirts sought stronger underbody performance while reducing drag. Moving fuel into a central cell also changed packaging.",
+      "refs": [
+        "lotus79"
+      ],
+      "category": "Chassis",
+      "car": "lotus-79"
+    },
+    {
+      "id": "carbon",
+      "year": 1981,
+      "category": "Chassis",
+      "title": "McLaren MP4/1: carbon composite chassis",
+      "fact": "John Barnard’s MP4/1 brought a carbon-composite chassis into world-championship race use; John Watson won the 1981 British Grand Prix.",
+      "why": "Composite construction allowed a compact structure with high stiffness for its weight.",
+      "refs": [
+        "mclaren"
+      ],
+      "car": "mp4-1"
+    },
+    {
+      "id": "flat-floor",
+      "year": 1983,
+      "category": "Regulations",
+      "title": "Flat-bottom floor rules",
+      "fact": "Flat-bottom rules replaced the previous ground-effect floor approach for 1983.",
+      "why": "Regulators responded to rising cornering speeds; teams had to redesign their cars.",
+      "refs": [
+        "rule-history"
+      ]
+    },
+    {
+      "id": "exhibit-mp4-4",
+      "year": 1988,
+      "title": "McLaren MP4/4",
+      "fact": "The MP4/4 won 15 of the 16 championship races in 1988. Senna took the drivers’ title; McLaren the constructors’ championship.",
+      "why": "A turbo engine had to work with tight fuel and boost constraints. Success depended on the complete package, not peak power alone.",
+      "refs": [
+        "mp44"
+      ],
+      "category": "Regulations",
+      "car": "mp4-4"
+    },
+    {
+      "id": "turbo-ban",
+      "year": 1989,
+      "category": "Regulations",
+      "title": "Turbo engines are banned",
+      "fact": "Turbocharged engines were banned for the 1989 season.",
+      "why": "Power, safety and cost concerns had already prompted restrictions; the new formula changed the development priorities.",
+      "refs": [
+        "rule-history"
+      ]
+    },
+    {
+      "id": "exhibit-fw14b",
+      "year": 1992,
+      "title": "Williams FW14B",
+      "fact": "The FW14B won ten races in 1992, nine with Mansell, who secured the drivers’ championship.",
+      "why": "Active suspension helped control the aerodynamic platform while the Renault engine and semi-automatic gearbox contributed to the package.",
+      "refs": [
+        "fw14b"
+      ],
+      "category": "Regulations",
+      "car": "fw14b"
+    },
+    {
+      "id": "driver-aids",
+      "year": 1994,
+      "category": "Regulations",
+      "title": "Active suspension and electronic aids restricted",
+      "fact": "Active suspension and other electronic driver aids were banned for 1994.",
+      "why": "Rules can remove a successful technology and force teams to solve vehicle-control problems differently.",
+      "refs": [
+        "rule-history"
+      ],
+      "car": "fw14b"
+    },
+    {
+      "id": "narrow-track",
+      "year": 1998,
+      "category": "Regulations",
+      "title": "Narrower cars and grooved tyres",
+      "fact": "The 1998 rules reduced car width and introduced grooved tyres.",
+      "why": "Regulatory control of tyre and chassis geometry targeted performance rather than a single engine technology.",
+      "refs": [
+        "rule-history"
+      ]
+    },
+    {
+      "id": "exhibit-f2004",
+      "year": 2004,
+      "title": "Ferrari F2004",
+      "fact": "Schumacher won 13 races in the F2004 on the way to his seventh and final drivers’ title.",
+      "why": "Sustaining dominance required a complete race package: speed, durability and consistent execution rather than a single isolated invention.",
+      "refs": [
+        "f2004"
+      ],
+      "category": "Regulations",
+      "car": "f2004"
+    },
+    {
+      "id": "exhibit-brawn",
+      "year": 2009,
+      "title": "Brawn BGP 001",
+      "fact": "Brawn’s debut Australian Grand Prix produced a one-two finish after Honda’s withdrawal and the team’s rescue.",
+      "why": "The double diffuser exploited an interpretation of the new aerodynamic rules, making regulatory detail part of the engineering opportunity.",
+      "refs": [
+        "brawn"
+      ],
+      "category": "Regulations",
+      "car": "brawn"
+    },
+    {
+      "id": "kers",
+      "year": 2009,
+      "category": "Regulations",
+      "title": "Kinetic energy recovery becomes an option",
+      "fact": "The 2009 changes allowed KERS and brought slick tyres back.",
+      "why": "Braking energy could be recovered and redeployed, adding another energy-management trade-off.",
+      "refs": [
+        "rule-history"
+      ]
+    },
+    {
+      "id": "exhibit-w05",
+      "year": 2014,
+      "title": "Mercedes W05 Hybrid",
+      "fact": "The W05 delivered 16 wins, 18 poles and both 2014 world titles.",
+      "why": "A new hybrid formula demanded close integration of combustion, electrical systems, cooling and chassis packaging. The team’s engine programme evolved from an early inline-four concept to a V6.",
+      "refs": [
+        "w05"
+      ],
+      "category": "Regulations",
+      "car": "w05"
+    },
+    {
+      "id": "halo",
+      "year": 2018,
+      "category": "Safety",
+      "title": "Halo cockpit protection arrives",
+      "fact": "The Halo cockpit protection device was introduced in Formula 1 in 2018.",
+      "why": "Head protection became part of the car’s safety architecture, alongside the survival cell and crash structures.",
+      "refs": [
+        "halo"
+      ]
+    },
+    {
+      "id": "exhibit-era-2022",
+      "year": 2022,
+      "title": "2022 ground-effect regulation study",
+      "fact": "The 2022 rules shifted more aerodynamic work toward shaped underfloor tunnels and introduced 18-inch wheel rims.",
+      "why": "The intent was to make the following car less sensitive to the disturbed air behind another car.",
+      "refs": [
+        "era2022"
+      ],
+      "category": "Regulations",
+      "car": "era-2022"
+    },
+    {
+      "id": "active-aero",
+      "year": 2026,
+      "category": "Regulations",
+      "title": "A new active-aerodynamics era",
+      "fact": "The 2026 framework introduces movable front and rear wings and revised power units.",
+      "why": "The December 2025 overview explains the planned high- and low-downforce configurations. It is an overview, not a substitute for the current technical rules.",
+      "refs": [
+        "2026"
+      ]
+    }
+  ],
+  "cars": [
+    {
+      "id": "alfa-158",
+      "year": 1950,
+      "name": "Alfa Romeo 158",
+      "constructor": "Alfa Romeo",
+      "drivers": "Giuseppe Farina, Luigi Fagioli, Juan Manuel Fangio",
+      "story": "A pre-war design became the benchmark at the opening championship race. Farina led Alfa Romeo’s Silverstone victory in 1950.",
+      "problem": "Supercharging increased the mass of air admitted to a small engine. The 158 combined that approach with a front-engine layout and rear-wheel drive.",
+      "legacy": "Its success connects pre-war Grand Prix machinery with the new drivers’ championship.",
+      "refs": [
+        "first-race"
+      ],
+      "specs": [
+        {
+          "label": "Engine",
+          "text": "Front-mounted, longitudinal straight-eight; two-stage supercharger",
+          "refs": [
+            "alfa"
+          ]
+        },
+        {
+          "label": "Displacement",
+          "text": "1,479 cc",
+          "value": 1479,
+          "unit": "cc",
+          "refs": [
+            "alfa"
+          ]
+        },
+        {
+          "label": "Power",
+          "text": "350 hp at 8,500 rpm",
+          "value": 350,
+          "unit": "hp",
+          "context": "Museum collection specification; not a universal output for every 158 evolution. Source does not identify the horsepower convention.",
+          "refs": [
+            "alfa"
+          ]
+        },
+        {
+          "label": "Weight",
+          "text": "620 kg",
+          "value": 620,
+          "unit": "kg",
+          "context": "Museum-listed specification; fuel/load condition is not stated.",
+          "refs": [
+            "alfa"
+          ]
+        },
+        {
+          "label": "Length",
+          "text": "4,150 mm",
+          "value": 4150,
+          "unit": "mm",
+          "refs": [
+            "alfa"
+          ]
+        },
+        {
+          "label": "Wheelbase",
+          "text": "2,500 mm",
+          "value": 2500,
+          "unit": "mm",
+          "refs": [
+            "alfa"
+          ]
+        },
+        {
+          "label": "Transmission",
+          "text": "Four forward speeds, rear-wheel drive",
+          "refs": [
+            "alfa"
+          ]
+        },
+        {
+          "label": "Structure",
+          "text": "Tubular longitudinal members with sheet-metal cross members",
+          "refs": [
+            "alfa"
+          ]
+        },
+        {
+          "label": "Suspension",
+          "text": "Independent front and rear; trailing arms and transverse leaf springs",
+          "refs": [
+            "alfa"
+          ]
+        },
+        {
+          "label": "Brakes",
+          "text": "Hydraulic drums",
+          "refs": [
+            "alfa"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "w196",
+      "year": 1954,
+      "name": "Mercedes-Benz W196 R",
+      "constructor": "Mercedes-Benz",
+      "drivers": "Juan Manuel Fangio, Karl Kling",
+      "story": "The W196 R won on its 1954 French Grand Prix debut. Fangio’s 1954–55 titles established its place in championship history.",
+      "problem": "An eight-cylinder powertrain and carefully developed bodywork targeted the performance opportunities of the period’s formula. A museum specification describes one preserved configuration, not every race evolution.",
+      "legacy": "A reminder that circuit needs and engine development create different configurations within one car family.",
+      "refs": [
+        "mauto"
+      ],
+      "specs": [
+        {
+          "label": "Engine",
+          "text": "Eight cylinders",
+          "refs": [
+            "mauto"
+          ]
+        },
+        {
+          "label": "Displacement",
+          "text": "2,496 cc",
+          "refs": [
+            "mauto"
+          ],
+          "value": 2496,
+          "unit": "cc"
+        },
+        {
+          "label": "Power",
+          "text": "290 HP at 8,000 rpm",
+          "refs": [
+            "mauto"
+          ],
+          "value": 290,
+          "unit": "hp",
+          "context": "Museum label; horsepower convention and test conditions are unspecified."
+        }
+      ]
+    },
+    {
+      "id": "lotus-25",
+      "year": 1962,
+      "name": "Lotus 25",
+      "constructor": "Team Lotus",
+      "drivers": "Jim Clark",
+      "story": "The Type 25 made its breakthrough in 1962; Clark and Lotus took both championships in 1963.",
+      "problem": "A stressed shell can resist bending and twisting while reducing the volume devoted to a conventional tube frame. That makes chassis architecture an aerodynamic packaging decision too.",
+      "legacy": "Monocoque construction became a central design approach in Formula 1.",
+      "refs": [
+        "lotus-history",
+        "lotus"
+      ],
+      "specs": [
+        {
+          "label": "Engine",
+          "text": "Coventry Climax V8",
+          "refs": [
+            "lotus"
+          ]
+        },
+        {
+          "label": "Displacement",
+          "text": "1.5 litres (nominal)",
+          "value": 1500,
+          "unit": "cc",
+          "context": "Nominal capacity in the heritage register, not a measured swept volume.",
+          "refs": [
+            "lotus"
+          ]
+        },
+        {
+          "label": "Structure",
+          "text": "Semi-monocoque; twin booms with bulkheads",
+          "refs": [
+            "lotus",
+            "lotus-history"
+          ]
+        },
+        {
+          "label": "Achievement",
+          "text": "1963 drivers’ title for Clark and constructors’ title for Lotus",
+          "refs": [
+            "lotus-history"
+          ]
+        },
+        {
+          "label": "Design leadership",
+          "text": "Colin Chapman",
+          "refs": [
+            "lotus25-manufacturer"
+          ]
+        },
+        {
+          "label": "Materials",
+          "text": "Riveted 16 SWG aluminium sheet monocoque",
+          "refs": [
+            "lotus25-manufacturer"
+          ]
+        },
+        {
+          "label": "Power",
+          "text": "Around 200 bhp in the manufacturer retrospective",
+          "context": "Approximate retrospective figure. FWMV versions and development years differ; this is not an exact 1962 dyno measurement.",
+          "refs": [
+            "lotus25-manufacturer"
+          ]
+        },
+        {
+          "label": "Transmission",
+          "text": "ZF five-speed gearbox",
+          "refs": [
+            "lotus25-manufacturer"
+          ]
+        },
+        {
+          "label": "Front suspension",
+          "text": "Cantilever upper arm operating an inboard coil-spring/damper unit",
+          "refs": [
+            "lotus25-manufacturer"
+          ]
+        },
+        {
+          "label": "Fuel packaging",
+          "text": "Aircraft-style flexible bag tanks within the monocoque sidewalls",
+          "refs": [
+            "lotus25-manufacturer"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lotus-49",
+      "year": 1967,
+      "name": "Lotus 49",
+      "constructor": "Team Lotus",
+      "drivers": "Jim Clark, Graham Hill",
+      "story": "The Type 49 won its first Grand Prix at Zandvoort in 1967 with the new Cosworth DFV.",
+      "problem": "Integrating engine and car design reduced compromises between powertrain packaging and the rest of the machine.",
+      "legacy": "The DFV became inseparable from the story of the late-1960s and 1970s grid.",
+      "refs": [
+        "lotus49"
+      ],
+      "specs": [
+        {
+          "label": "Engine",
+          "text": "Cosworth DFV, nominal 3 litres",
+          "refs": [
+            "lotus49"
+          ],
+          "value": 3000,
+          "unit": "cc",
+          "context": "Nominal capacity from the heritage register."
+        },
+        {
+          "label": "Debut",
+          "text": "1967 Dutch Grand Prix victory",
+          "refs": [
+            "lotus49"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lotus-79",
+      "year": 1978,
+      "name": "Lotus 79",
+      "constructor": "Team Lotus",
+      "drivers": "Mario Andretti, Ronnie Peterson",
+      "story": "The Type 79 developed the ground-effect architecture of the Type 78.",
+      "problem": "Longer Venturi tunnels and improved skirts sought stronger underbody performance while reducing drag. Moving fuel into a central cell also changed packaging.",
+      "legacy": "Underfloor flow and the quality of the car’s seal to the road became central engineering concerns.",
+      "refs": [
+        "lotus79"
+      ],
+      "specs": [
+        {
+          "label": "Aerodynamics",
+          "text": "Longer Venturi tunnels, more effective skirts",
+          "refs": [
+            "lotus79"
+          ]
+        },
+        {
+          "label": "Fuel packaging",
+          "text": "Single inboard cell between driver and engine",
+          "refs": [
+            "lotus79"
+          ]
+        },
+        {
+          "label": "Period",
+          "text": "1978–1979 racing development",
+          "refs": [
+            "lotus79"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mp4-1",
+      "year": 1981,
+      "name": "McLaren MP4/1",
+      "constructor": "McLaren",
+      "drivers": "John Watson, Andrea de Cesaris",
+      "story": "Designed by John Barnard, the MP4/1 won the 1981 British Grand Prix with John Watson.",
+      "problem": "A narrow chassis needed adequate torsional stiffness. Carbon composite offered a new way to achieve that combination.",
+      "legacy": "Its success and crash survival helped demonstrate the value of composite chassis construction. McLaren’s account also discusses the contemporary Lotus 88; simple “first carbon car” labels need that context.",
+      "refs": [
+        "mclaren"
+      ],
+      "specs": [
+        {
+          "label": "Design leadership",
+          "text": "John Barnard",
+          "refs": [
+            "mclaren"
+          ]
+        },
+        {
+          "label": "Structure",
+          "text": "Carbon-composite monocoque; early construction used five major flat-faced components",
+          "refs": [
+            "mclaren"
+          ]
+        },
+        {
+          "label": "Manufacturing partner",
+          "text": "Hercules Corporation",
+          "refs": [
+            "mclaren"
+          ]
+        },
+        {
+          "label": "1981 race wins",
+          "text": "One",
+          "refs": [
+            "mclaren"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mp4-4",
+      "year": 1988,
+      "name": "McLaren MP4/4",
+      "constructor": "McLaren",
+      "drivers": "Ayrton Senna, Alain Prost",
+      "story": "The MP4/4 won 15 of the 16 championship races in 1988. Senna took the drivers’ title; McLaren the constructors’ championship.",
+      "problem": "A turbo engine had to work with tight fuel and boost constraints. Success depended on the complete package, not peak power alone.",
+      "legacy": "A highly integrated chassis, powertrain and driver pairing defined the last season before the 1989 turbo ban.",
+      "refs": [
+        "mp44"
+      ],
+      "specs": [
+        {
+          "label": "Engine",
+          "text": "Honda RA168E turbocharged V6",
+          "refs": [
+            "mp44"
+          ]
+        },
+        {
+          "label": "Displacement",
+          "text": "1.5 litres (nominal)",
+          "refs": [
+            "mp44"
+          ],
+          "value": 1500,
+          "unit": "cc",
+          "context": "Nominal capacity."
+        },
+        {
+          "label": "Power",
+          "text": "More than 700 bhp at times",
+          "refs": [
+            "mp44"
+          ],
+          "context": "Manufacturer narrative, not a fixed rated output for all sessions."
+        },
+        {
+          "label": "Fuel allowance",
+          "text": "150 litres under 1988 rules",
+          "refs": [
+            "mp44"
+          ]
+        },
+        {
+          "label": "Achievement",
+          "text": "15 wins in 16 races; both titles",
+          "refs": [
+            "mp44"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fw14b",
+      "year": 1992,
+      "name": "Williams FW14B",
+      "constructor": "Williams",
+      "drivers": "Nigel Mansell, Riccardo Patrese",
+      "story": "The FW14B won ten races in 1992, nine with Mansell, who secured the drivers’ championship.",
+      "problem": "Active suspension helped control the aerodynamic platform while the Renault engine and semi-automatic gearbox contributed to the package.",
+      "legacy": "Controlling ride attitude connected suspension design directly with aerodynamic performance.",
+      "refs": [
+        "fw14b"
+      ],
+      "specs": [
+        {
+          "label": "Engine",
+          "text": "Renault naturally aspirated 3.5-litre V10",
+          "refs": [
+            "fw14b"
+          ],
+          "value": 3500,
+          "unit": "cc",
+          "context": "Nominal capacity in the team history."
+        },
+        {
+          "label": "Suspension",
+          "text": "Active suspension",
+          "refs": [
+            "fw14b"
+          ]
+        },
+        {
+          "label": "Transmission",
+          "text": "Semi-automatic",
+          "refs": [
+            "fw14b"
+          ]
+        },
+        {
+          "label": "Design leadership",
+          "text": "Patrick Head and Adrian Newey",
+          "refs": [
+            "fw14b"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f2004",
+      "year": 2004,
+      "name": "Ferrari F2004",
+      "constructor": "Ferrari",
+      "drivers": "Michael Schumacher, Rubens Barrichello",
+      "story": "Schumacher won 13 races in the F2004 on the way to his seventh and final drivers’ title.",
+      "problem": "Sustaining dominance required a complete race package: speed, durability and consistent execution rather than a single isolated invention.",
+      "legacy": "A benchmark exhibit for the mature early-2000s championship era. Technical figures are withheld where not established by the cited exhibition document.",
+      "refs": [
+        "f2004"
+      ],
+      "specs": [
+        {
+          "label": "Achievement",
+          "text": "13 Schumacher victories; 2004 drivers’ title",
+          "refs": [
+            "f2004"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "brawn",
+      "year": 2009,
+      "name": "Brawn BGP 001",
+      "constructor": "Brawn GP",
+      "drivers": "Jenson Button, Rubens Barrichello",
+      "story": "Brawn’s debut Australian Grand Prix produced a one-two finish after Honda’s withdrawal and the team’s rescue.",
+      "problem": "The double diffuser exploited an interpretation of the new aerodynamic rules, making regulatory detail part of the engineering opportunity.",
+      "legacy": "A celebrated example of how rule interpretation and an integrated design can change the competitive order.",
+      "refs": [
+        "brawn"
+      ],
+      "specs": [
+        {
+          "label": "Aerodynamics",
+          "text": "Double diffuser",
+          "refs": [
+            "brawn"
+          ]
+        },
+        {
+          "label": "Debut result",
+          "text": "Australian Grand Prix one-two",
+          "refs": [
+            "brawn"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "w05",
+      "year": 2014,
+      "name": "Mercedes W05 Hybrid",
+      "constructor": "Mercedes",
+      "drivers": "Lewis Hamilton, Nico Rosberg",
+      "story": "The W05 delivered 16 wins, 18 poles and both 2014 world titles.",
+      "problem": "A new hybrid formula demanded close integration of combustion, electrical systems, cooling and chassis packaging. The team’s engine programme evolved from an early inline-four concept to a V6.",
+      "legacy": "The start of a long Mercedes championship run and a new emphasis on energy management.",
+      "refs": [
+        "w05"
+      ],
+      "specs": [
+        {
+          "label": "Engine architecture",
+          "text": "V6 hybrid power-unit programme",
+          "refs": [
+            "w05-engine"
+          ]
+        },
+        {
+          "label": "Achievement",
+          "text": "16 wins; 18 poles; both titles",
+          "refs": [
+            "w05"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "era-2022",
+      "year": 2022,
+      "name": "2022 ground-effect regulation study",
+      "constructor": "Regulation-era exhibit",
+      "drivers": "Whole-grid regulation change",
+      "story": "The 2022 rules shifted more aerodynamic work toward shaped underfloor tunnels and introduced 18-inch wheel rims.",
+      "problem": "The intent was to make the following car less sensitive to the disturbed air behind another car.",
+      "legacy": "Floor performance, wheel wake and ride-height control became closely connected. This is an era exhibit, not a specific championship-winning chassis.",
+      "refs": [
+        "era2022"
+      ],
+      "specs": [
+        {
+          "label": "Aerodynamics",
+          "text": "Shaped underfloor tunnels and simplified upper surfaces",
+          "refs": [
+            "era2022"
+          ]
+        },
+        {
+          "label": "Wheels",
+          "text": "18-inch wheel rims; low-profile tyres",
+          "refs": [
+            "era2022"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "era-2026",
+      "year": 2026,
+      "name": "2026 regulation study / Mercedes W17 example",
+      "constructor": "Regulation-era exhibit",
+      "drivers": "George Russell, Andrea Kimi Antonelli (W17 example)",
+      "story": "The 2026 formula combines revised hybrid power units with active aerodynamic surfaces. This exhibit uses published W17 specifications as a named example, not a specification for every constructor.",
+      "problem": "Removing the MGU-H and increasing electrical capability changes energy management. Moving front and rear wings changes the car’s drag/downforce configuration.",
+      "legacy": "Read each figure in its published context: regulations and in-season implementation can be revised. The creator model is a visual representation, not official engineering CAD.",
+      "refs": [
+        "era2026"
+      ],
+      "specs": [
+        {
+          "label": "Displacement",
+          "text": "1.6 litres",
+          "refs": [
+            "w17-spec"
+          ],
+          "value": 1600,
+          "unit": "cc",
+          "context": "W17 manufacturer specification."
+        },
+        {
+          "label": "Engine",
+          "text": "Six cylinders, 90-degree bank angle; turbocharged hybrid",
+          "refs": [
+            "w17-spec"
+          ]
+        },
+        {
+          "label": "Width",
+          "text": "1,900 mm",
+          "refs": [
+            "w17-spec"
+          ],
+          "value": 1900,
+          "unit": "mm",
+          "context": "W17 manufacturer specification."
+        },
+        {
+          "label": "Weight",
+          "text": "772 kg",
+          "refs": [
+            "w17-spec"
+          ],
+          "value": 772,
+          "unit": "kg",
+          "context": "Manufacturer-listed overall weight; do not substitute the earlier 770 kg planning figure."
+        },
+        {
+          "label": "Transmission",
+          "text": "Eight forward speeds and reverse",
+          "refs": [
+            "w17-spec"
+          ]
+        },
+        {
+          "label": "Energy recovery",
+          "text": "MGU-K maximum 350 kW; no MGU-H in the 2026 architecture",
+          "refs": [
+            "era2026"
+          ]
+        },
+        {
+          "label": "Structure",
+          "text": "Carbon-fibre chassis architecture; see the manufacturer specification",
+          "refs": [
+            "w17-spec"
+          ]
+        }
+      ],
+      "assetId": "mercedes-2026"
+    }
+  ]
+}

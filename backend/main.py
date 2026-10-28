@@ -11,7 +11,7 @@ import logging
 
 from circuit_preview import load_circuit_preview
 from race_replay import Unavailable as CircuitUnavailable
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request as FastAPIRequest
 from fastapi.middleware.cors import CORSMiddleware
 
 logger = logging.getLogger(__name__)
@@ -667,3 +667,36 @@ def race_state_verify(year:int,round:int,start:float=0,time:float=0,driver:int|N
     state=read_race_state(year,round,start,time,driver)
     second=read_race_state(year,round,start,time,driver)
     return {**verify(state),'repeatSeekIdentical':fingerprint(state)==fingerprint(second)}
+
+@app.get('/api/museum/historian')
+def museum_historian(question: str = ''):
+    # Public demo is always read-only retrieval. External AI is separately enabled,
+    # loopback-only and not forwarded by demo/server.py.
+    from museum import answer, ai_ready
+    if not question:
+        return {'mode': 'curated-retrieval', 'local_ai_configured': bool(ai_ready()), 'public_ai_enabled': False}
+    try:
+        return answer(question, allow_ai=False)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+
+
+@app.post('/api/museum/historian')
+async def museum_historian_ai(request: FastAPIRequest):
+    from museum import answer
+    if request.client is None or request.client.host not in ('127.0.0.1', '::1'):
+        raise HTTPException(status_code=403, detail='AI historian is only available locally until authenticated hosting is configured')
+    if request.headers.get('content-type', '').split(';')[0].strip().lower() != 'application/json':
+        raise HTTPException(status_code=415, detail='JSON required')
+    origin = request.headers.get('origin')
+    if origin and origin not in ('http://127.0.0.1:5173', 'http://localhost:5173'):
+        raise HTTPException(status_code=403, detail='Use the local development app for AI requests')
+    body = await request.body()
+    if len(body) > 2048:
+        raise HTTPException(status_code=413, detail='Question is too long')
+    try:
+        data = json.loads(body)
+        from starlette.concurrency import run_in_threadpool
+        return await run_in_threadpool(answer, data.get('question'), allow_ai=True)
+    except (ValueError, AttributeError) as error:
+        raise HTTPException(status_code=422, detail='Ask a question between 3 and 500 characters.') from error
