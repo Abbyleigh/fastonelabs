@@ -65,5 +65,181 @@ export const portraits:Record<string,Portrait>={
     "source": "https://commons.wikimedia.org/wiki/File:2024-08-25_Motorsport,_Formel_1,_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_3973_by_Stepro_(medium_crop).jpg",
     "date": "2024-08-25",
     "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "arvid_lindblad": {
+    "path": "/images/showcase/arvid_lindblad.jpg",
+    "name": "Arvid Lindblad",
+    "title": "Arvid Lindblad at the Red Bull Fan Zone \u2013 Crown Riverwalk, Melbourne (028A7869) (cropped).jpg",
+    "author": "Yu Chu Chin",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Arvid_Lindblad_at_the_Red_Bull_Fan_Zone_%E2%80%93_Crown_Riverwalk,_Melbourne_(028A7869)_(cropped).jpg",
+    "date": "2026-03-05",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "sainz": {
+    "path": "/images/showcase/sainz.jpg",
+    "name": "Carlos Sainz Jr.",
+    "title": "Carlos Sainz at the 83rd Venice FILM festival-9 (cropped).jpg",
+    "author": "LucaFazPhoto",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Carlos_Sainz_at_the_83rd_Venice_FILM_festival-9_(cropped).jpg",
+    "date": "2026-09-02 18:22:43",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "ocon": {
+    "path": "/images/showcase/ocon.jpg",
+    "name": "Esteban Ocon",
+    "title": "Esteban Ocon 2024 Suzuka (cropped).jpg",
+    "author": "Rrtb505050",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "source": "https://commons.wikimedia.org/wiki/File:Esteban_Ocon_2024_Suzuka_(cropped).jpg",
+    "date": "2024-04-04 16:25:58",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "colapinto": {
+    "path": "/images/showcase/colapinto.jpg",
+    "name": "Franco Colapinto",
+    "title": "Franco Colapinto at the Melbourne Walk during the 2026 Australian Grand Prix (028A8698) cropped.jpg",
+    "author": "Yu Chu Chin",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Franco_Colapinto_at_the_Melbourne_Walk_during_the_2026_Australian_Grand_Prix_(028A8698)_cropped.jpg",
+    "date": "2026-03-08",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "bortoleto": {
+    "path": "/images/showcase/bortoleto.jpg",
+    "name": "Gabriel Bortoleto",
+    "title": "Gabriel Bortoleto at the Melbourne Walk during the 2026 Australian Grand Prix (028A8581) cropped.jpg",
+    "author": "Yu Chu Chin",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Gabriel_Bortoleto_at_the_Melbourne_Walk_during_the_2026_Australian_Grand_Prix_(028A8581)_cropped.jpg",
+    "date": "2026-03-08",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "russell": {
+    "path": "/images/showcase/russell.jpg",
+    "name": "George Russell (racing driver)",
+    "title": "KingsLeonSilverstne040724 (28 of 112) (53838006028) (cropped).jpg",
+    "author": "Raph_PH",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:KingsLeonSilverstne040724_(28_of_112)_(53838006028)_(cropped).jpg",
+    "date": "2024-07-04 20:33",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "hadjar": {
+    "path": "/images/showcase/hadjar.jpg",
+    "name": "Isack Hadjar",
+    "title": "Isack Hadjar at the Melbourne Walk during the 2026 Australian Grand Prix (028A8753) (cropped).jpg",
+    "author": "Yu Chu Chin",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Isack_Hadjar_at_the_Melbourne_Walk_during_the_2026_Australian_Grand_Prix_(028A8753)_(cropped).jpg",
+    "date": "2026-03-08",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "stroll": {
+    "path": "/images/showcase/stroll.jpg",
+    "name": "Lance Stroll",
+    "title": "2025 Japan GP - Aston Martin - Lance Stroll - Fanzone Stage (cropped).jpg",
+    "author": "Liauzh",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:2025_Japan_GP_-_Aston_Martin_-_Lance_Stroll_-_Fanzone_Stage_(cropped).jpg",
+    "date": "2025-04-04 09:19:27",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "lawson": {
+    "path": "/images/showcase/lawson.jpg",
+    "name": "Liam Lawson",
+    "title": "Liam Lawson at the Red Bull Fan Zone \u2013 Crown Riverwalk, Melbourne (028A7795).jpg",
+    "author": "Yu Chu Chin",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Liam_Lawson_at_the_Red_Bull_Fan_Zone_%E2%80%93_Crown_Riverwalk,_Melbourne_(028A7795).jpg",
+    "date": "2026-03-05",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "hulkenberg": {
+    "path": "/images/showcase/hulkenberg.jpg",
+    "name": "Nico H\u00fclkenberg",
+    "title": "2019 Formula One tests Barcelona, Hulkenberg (40287128313).jpg",
+    "author": "Marc Alvarado",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:2019_Formula_One_tests_Barcelona,_Hulkenberg_(40287128313).jpg",
+    "date": "2019-03-01 15:59:42",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "bearman": {
+    "path": "/images/showcase/bearman.jpg",
+    "name": "Oliver Bearman",
+    "title": "2025 Japan GP - Haas - Oliver Bearman - Thursday (cropped).jpg",
+    "author": "Liauzh",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:2025_Japan_GP_-_Haas_-_Oliver_Bearman_-_Thursday_(cropped).jpg",
+    "date": "2025-04-03 12:03:22",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "piastri": {
+    "path": "/images/showcase/piastri.jpg",
+    "name": "Oscar Piastri",
+    "title": "2026 Chinese GP - Oscar Piastri (cropped) (cropped).jpg",
+    "author": "Liauzh",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:2026_Chinese_GP_-_Oscar_Piastri_(cropped)_(cropped).jpg",
+    "date": "2026-03-15 13:23:26",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "gasly": {
+    "path": "/images/showcase/gasly.jpg",
+    "name": "Pierre Gasly",
+    "title": "Pierre Gasly 2017 Malaysia.jpg",
+    "author": "Morio",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Pierre_Gasly_2017_Malaysia.jpg",
+    "date": "2017-10-01",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "perez": {
+    "path": "/images/showcase/perez.jpg",
+    "name": "Sergio P\u00e9rez",
+    "title": "Sergio P\u00e9rez 2019 (cropped).jpg",
+    "author": "XaviYuahanda",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Sergio_P%C3%A9rez_2019_(cropped).jpg",
+    "date": "2019-06-27 20:36:14",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "bottas": {
+    "path": "/images/showcase/bottas.jpg",
+    "name": "Valtteri Bottas",
+    "title": "Valtteri Bottas at the 2026 Adelaide Motorsport Festival (028A7556).jpg",
+    "author": "Yu Chu Chin",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Valtteri_Bottas_at_the_2026_Adelaide_Motorsport_Festival_(028A7556).jpg",
+    "date": "2026-03-01",
+    "modifications": "Resized for web display; framing varies with viewport."
+  },
+  "albon": {
+    "path": "/images/showcase/albon.jpg",
+    "name": "Alex Albon",
+    "title": "Alex Albon at the Melbourne Walk during the 2026 Australian Grand Prix (028A8626) (cropped).jpg",
+    "author": "Yu Chu Chin",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Alex_Albon_at_the_Melbourne_Walk_during_the_2026_Australian_Grand_Prix_(028A8626)_(cropped).jpg",
+    "date": "2026-03-08",
+    "modifications": "Resized for web display; framing varies with viewport."
   }
 };

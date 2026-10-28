@@ -19,7 +19,7 @@ Race replay continues to use its existing lightweight stylised fleet. Its data c
 - Separations operate on the same original geometry as the full Engineering Explorer. Reduced-motion preferences make the separation immediate.
 - Real 3D car launch into recorded Silverstone 2024 Race Centre, first entry only per app session, 2.2-second upper bound, Skip and Escape. Car wheel surface groups rotate about their own pivots. No audio autoplays. Navigation remains available if rendering fails.
 - Shared responsive dropdown navigation for Race Centre, Strategy Lab, Drivers & Cars and Newsroom. Hash URLs retain page, event and selected driver, and support browser navigation. Season/Grand Prix workspace is shared with the calendar.
-- Six-driver slow 12-second showcase with real licensed portraits, matched team/season cars, biography, sourced career statistics and general FIA regulation specifications. Portrait and model credits remain visible. Historical seasons without matching 3D assets say so.
+- Full-grid slow 12-second showcase with real licensed portraits, matched team/season cars, biography, sourced career statistics and general FIA regulation specifications. Portrait and model credits remain visible. Historical seasons without matching 3D assets say so.
 - Pause, previous/next and direct driver controls. Autoplay pauses on hover, focus, hidden tab and off-screen, and respects reduced motion.
 - Existing internal pages share the chrome and a short reduced-motion-aware entrance fade. Existing strategy, prediction, replay and news functionality remains accessible.
 - Demand-rendered showcase models, capped pixel ratio/shadow costs, off-screen/hidden hero rendering suspension, low-FPS DPR reduction, scene failure boundary and saved effects preference.
@@ -52,3 +52,9 @@ Higgsfield was attempted for a concept in the earlier layout task, but generatio
 Corrected launch yaw so the model's negative-Z nose points along positive-X travel (left to right on screen). Verified the nose-first side view midway through the animation.
 
 Replaced individual material-surface pivots with common assembly pivots. Each wheel's tyre and rim now turn together; wing surfaces stay together. Homepage separation adds restrained assembly tilts to show depth. New Solo selected component and Rotate selected component controls support inspection, with a closer camera target and zoom. Existing garage assembly geometry and reassembly remain intact; no imaginary internal components were introduced. Full 90-test project check and subsequent production build pass; browser inspection and final console checks pass. Checkpoint before this refinement: `5e60562`.
+
+## Full-grid carousel
+
+Removed the six-driver featured shortlist and historical six-entry cap. The carousel now follows every entry in the latest completed race of the selected season (22 entries in the current 2026 archive). Added Jump to driver, lazy thumbnail loading and readable code badges if a historical portrait is unavailable. Only the active slide mounts a car scene. Added licensed archival portraits for all 22 current entries, with source/author/licence metadata; these are reused by Driver Careers too. Existing missing-model explanations remain accurate.
+
+Verified 22 options, Oliver Bearman as slide 22, next wrapping to Antonelli at slide 1, portrait display, no console errors and 390 px mobile layout without horizontal overflow. Full 96-test project check and final production build pass. Before-change checkpoint: `dc99d41`. Screenshot: task outputs `all-drivers-carousel.jpg`.
