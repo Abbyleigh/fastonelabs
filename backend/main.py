@@ -788,12 +788,20 @@ async def museum_historian_ai(request: FastAPIRequest):
     origin = request.headers.get('origin')
     if origin and origin not in ('http://127.0.0.1:5173', 'http://localhost:5173'):
         raise HTTPException(status_code=403, detail='Use the local development app for AI requests')
-    body = await request.body()
-    if len(body) > 2048:
-        raise HTTPException(status_code=413, detail='Question is too long')
+    # Bound streamed bodies before buffering, including chunked transfer requests.
+    body = bytearray()
+    async for chunk in request.stream():
+        if len(body) + len(chunk) > 2048:
+            raise HTTPException(status_code=413, detail='Question is too long')
+        body.extend(chunk)
     try:
         data = json.loads(body)
         from starlette.concurrency import run_in_threadpool
         return await run_in_threadpool(answer, data.get('question'), allow_ai=True)
     except (ValueError, AttributeError) as error:
         raise HTTPException(status_code=422, detail='Ask a question between 3 and 500 characters.') from error
+
+
+# Isolated offline heritage catalogue; simulator/provider contracts are preserved.
+from heritage.router import router as heritage_router
+app.include_router(heritage_router)

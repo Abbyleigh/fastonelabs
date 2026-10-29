@@ -1,0 +1,83 @@
+/** Local browser integration checks. Requires externally installed Playwright + Chromium.
+ * No dependency manifests, deployed services or existing processes are changed.
+ */
+import assert from 'node:assert/strict';
+import {spawn} from 'node:child_process';
+import {createServer as netServer} from 'node:net';
+import {createRequire} from 'node:module';
+import {mkdir} from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+import path from 'node:path';
+import {createServer} from '../frontend/node_modules/vite/dist/node/index.js';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const modulePath=process.env.PLAYWRIGHT_MODULE || (process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES ? process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/playwright' : 'playwright');
+const {chromium}=createRequire(import.meta.url)(modulePath);
+const freePort=()=>new Promise(resolve=>{const s=netServer();s.listen(0,'127.0.0.1',()=>{const p=s.address().port;s.close(()=>resolve(p));});});
+const port=await freePort();
+const api=spawn(process.env.PYTHON||'python',['-m','uvicorn','main:app','--host','127.0.0.1','--port',String(port)],{cwd:path.join(root,'backend'),stdio:'ignore'});
+let server,browser;
+const checks=[],errors=[];
+const preview=path.join(root,'docs/previews');await mkdir(preview,{recursive:true});
+try{
+ for(let i=0;i<100;i++){
+  try{if((await fetch(`http://127.0.0.1:${port}/api/heritage/entities`)).ok)break;}catch{}
+  if(i===99)throw Error('Isolated backend does not start');
+  await new Promise(r=>setTimeout(r,100));
+ }
+ server=await createServer({root:path.join(root,'frontend'),configFile:false,server:{host:'127.0.0.1',port:0,proxy:{'/api':`http://127.0.0.1:${port}`}}});await server.listen();
+ const url=`http://127.0.0.1:${server.httpServer.address().port}/#museum?section=origins`;
+ browser=await chromium.launch({headless:true,...(process.env.BROWSER_EXECUTABLE_PATH?{executablePath:process.env.BROWSER_EXECUTABLE_PATH}:{}),args:['--no-sandbox','--disable-dev-shm-usage']});
+ const page=await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
+ page.on('pageerror',e=>errors.push(e.message));
+ await page.addInitScript(()=>sessionStorage.setItem('fastone.pit-intro.seen.v1','1'));
+ await page.goto(url);
+ const gallery=page.locator('.heritage-catalogue');
+ await gallery.getByRole('button',{name:'Next',exact:true}).waitFor();
+ assert.match(await gallery.innerText(),/10 records match/);
+ await gallery.screenshot({style:'.site-header {visibility:hidden !important}',path:path.join(preview,'heritage-desktop.png')});checks.push('desktop real API catalogue');
+ await gallery.getByRole('button',{name:'Next',exact:true}).click();
+ await gallery.getByText('7–10 of 10',{exact:true}).waitFor();checks.push('pagination');
+ await gallery.getByLabel('Record type').selectOption('vehicle');
+ await gallery.getByRole('button',{name:/Explore Alfa Romeo GP/}).click();
+ await gallery.getByRole('heading',{name:'Alfa Romeo GP Tipo 158 “Alfetta”',exact:true}).waitFor();
+ assert.match(await gallery.innerText(),/620 kg/);assert.match(await gallery.innerText(),/unspecified/);assert.match(await gallery.innerText(),/Not available/);
+ await gallery.screenshot({style:'.site-header {visibility:hidden !important}',path:path.join(preview,'heritage-vehicle.png')});checks.push('vehicle claims, citations, missing data');
+ await gallery.getByRole('button',{name:'← Back to results',exact:true}).click();
+ await gallery.getByRole('button',{name:'Clear filters',exact:true}).click();
+ await gallery.getByLabel('Search the collection').fill('nothing-matches-this');
+ await gallery.getByText(/No reviewed records match/).waitFor();checks.push('empty state');
+ await gallery.getByRole('button',{name:'Clear filters',exact:true}).click();
+ await gallery.getByLabel('Record type').selectOption('race');
+ await gallery.getByRole('button',{name:'Explore 1950 British Grand Prix →',exact:true}).click();
+ await gallery.getByRole('table').waitFor();
+ assert.equal(await gallery.locator('tbody tr').count(),4);assert.match(await gallery.innerText(),/partial coverage/);checks.push('partial race and qualifying coverage');
+ await gallery.getByRole('button',{name:'← Back to results',exact:true}).click();
+ await page.setViewportSize({width:390,height:844});
+ await gallery.getByRole('button',{name:'Clear filters',exact:true}).click();
+ await gallery.getByText('10 records match · silverstone-1950-v1',{exact:true}).waitFor();
+ assert.equal(await gallery.evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
+ assert.equal(await gallery.locator(':scope > header').evaluate(el=>getComputedStyle(el).display),'block');
+ await gallery.screenshot({style:'.site-header {visibility:hidden !important}',path:path.join(preview,'heritage-mobile.png')});checks.push('390px responsive gallery');
+ await page.route('**/api/heritage/entities?**',route=>route.fulfill({status:503,body:'{}',contentType:'application/json'}));
+ await gallery.getByLabel('Search the collection').fill('Alfa');
+ await gallery.getByRole('alert').waitFor();
+ await page.unroute('**/api/heritage/entities?**');
+ await gallery.getByRole('button',{name:'Retry collection'}).click();
+ await gallery.getByText('2 records match · silverstone-1950-v1',{exact:true}).waitFor();checks.push('HTTP failure and retry');
+ await page.route('**/api/heritage/entities?**',async route=>{await new Promise(r=>setTimeout(r,500));await route.continue();});
+ await gallery.getByLabel('Search the collection').fill('Farina');
+ await gallery.getByText('Loading the research collection…',{exact:true}).waitFor();
+ await gallery.getByLabel('Search the collection').fill('Alfetta');
+ await gallery.getByRole('button',{name:/Explore Alfa Romeo GP/}).waitFor();checks.push('loading state and stale-search cancellation');
+ await gallery.getByLabel('Search the collection').focus();
+ await page.keyboard.press('Tab');assert.equal(await gallery.getByLabel('Record type').evaluate(el=>el===document.activeElement),true);checks.push('keyboard filter navigation');
+ assert.deepEqual(errors,[]);checks.push('no JavaScript page errors');
+ console.log(JSON.stringify({status:'passed',checks,screenshots:['heritage-desktop.png','heritage-vehicle.png','heritage-mobile.png']},null,2));
+}catch(error){
+ if(browser){const pages=browser.contexts()[0].pages();if(pages.length)console.error('Gallery at failure:',await pages[0].locator('.heritage-catalogue').innerText());}
+ throw error;
+}finally{
+ if(browser)await browser.close();
+ if(server)await server.close();
+ api.kill('SIGTERM');
+}

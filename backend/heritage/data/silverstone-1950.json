@@ -1,0 +1,657 @@
+{
+  "schema_version": 1,
+  "revision": "silverstone-1950-v1",
+  "coverage": "Research pilot: 1950 Silverstone, four Alfa Romeo drivers, one vehicle configuration, podium race results, one qualifying row and the final drivers top three. Not the complete 1950 season. No historical circuit geometry, photographs or 3D reconstructions. Source reuse permissions remain unreviewed.",
+  "sources": [
+    {
+      "id": "f1-race-1950",
+      "title": "1950 British Grand Prix — race result",
+      "publisher": "Formula 1",
+      "url": "https://www.formula1.com/en/results/1950/races/94/great-britain/race-result",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established by this review",
+      "reuse": "unreviewed",
+      "notes": "Manual verification of selected factual fields. No photos, full tables or source prose are reproduced. Verification is not permission for redistribution."
+    },
+    {
+      "id": "f1-qualifying-1950",
+      "title": "1950 British Grand Prix — qualifying",
+      "publisher": "Formula 1",
+      "url": "https://www.formula1.com/en/results/1950/races/94/great-britain/qualifying",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established by this review",
+      "reuse": "unreviewed",
+      "notes": "The reviewed qualifying table supplies Farina only. Do not expand it by treating the separate starting grid as qualifying results."
+    },
+    {
+      "id": "f1-standings-1950",
+      "title": "1950 drivers championship standings",
+      "publisher": "Formula 1",
+      "url": "https://www.formula1.com/en/results/1950/drivers",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established by this review",
+      "reuse": "unreviewed",
+      "notes": "Selected final top-three standings. Championship totals are not obtained by summing every race score; period scoring rules matter."
+    },
+    {
+      "id": "alfa-museum-158",
+      "title": "GP Tipo 158 Alfetta — collection specifications",
+      "publisher": "Museo Alfa Romeo",
+      "url": "https://www.museoalfaromeo.com/en-us/collezione/Pages/GP-Tipo-158-%E2%80%9CAlfetta%E2%80%9D-.aspx",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established by this review",
+      "reuse": "unreviewed",
+      "notes": "Specifications apply to the museum-described configuration. Weight basis is not specified. No source imagery is included."
+    },
+    {
+      "id": "f1-first-race",
+      "title": "Ten facts about the first championship Grand Prix",
+      "publisher": "Formula 1",
+      "url": "https://www.formula1.com/en/latest/article/10-fascinating-facts-about-the-very-first-f1-grand-prix-held-on-this-day-70.14iQuQ4N2IbV93EZj4Ruuj",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established by this review",
+      "reuse": "unreviewed",
+      "notes": "Reference for the first championship event, the Alfa Romeo drivers and 158. Collection descriptions use original short wording."
+    }
+  ],
+  "entities": [
+    {
+      "id": "season-1950",
+      "kind": "season",
+      "name": "1950 World Drivers Championship",
+      "coverage_start": 1950,
+      "coverage_end": 1950,
+      "summary": "The inaugural championship season includes the Silverstone opening round.",
+      "coverage": "Pilot collection: one race, four drivers, three final standings. Other races and full biographies are not yet ingested.",
+      "sources": [
+        "f1-first-race",
+        "f1-standings-1950"
+      ],
+      "claims": [
+        {
+          "key": "champion",
+          "label": "Drivers champion",
+          "value": "Giuseppe “Nino” Farina",
+          "unit": null,
+          "status": "verified",
+          "context": "Selected factual field checked against the cited source.",
+          "sources": [
+            "f1-standings-1950"
+          ]
+        },
+        {
+          "key": "constructors-title",
+          "label": "Constructors championship",
+          "value": null,
+          "unit": null,
+          "status": "missing",
+          "context": "Not applicable in 1950. Do not manufacture a constructors champion from race wins.",
+          "sources": []
+        }
+      ]
+    },
+    {
+      "id": "silverstone",
+      "kind": "circuit",
+      "name": "Silverstone Circuit",
+      "coverage_start": 1950,
+      "coverage_end": 1950,
+      "summary": "Silverstone hosts the opening championship race on 13 May 1950.",
+      "coverage": "Circuit identity only. This record does not treat modern geometry as the 1950 layout.",
+      "sources": [
+        "f1-race-1950",
+        "f1-first-race"
+      ],
+      "claims": [
+        {
+          "key": "country",
+          "label": "Country",
+          "value": "Great Britain",
+          "unit": null,
+          "status": "verified",
+          "context": "Selected factual field checked against the cited source.",
+          "sources": [
+            "f1-race-1950"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "silverstone-1950",
+      "kind": "layout",
+      "name": "Silverstone — 1950 event layout",
+      "coverage_start": 1950,
+      "coverage_end": 1950,
+      "summary": "A separate layout identity preserves the distinction between the 1950 event and later circuit configurations.",
+      "coverage": "Coverage is the 1950 event only, not a claim about layout introduction or retirement dates. No geometry is provided.",
+      "sources": [
+        "f1-race-1950"
+      ],
+      "claims": [
+        {
+          "key": "length",
+          "label": "Lap length",
+          "value": null,
+          "unit": "km",
+          "status": "missing",
+          "context": "No primary-source layout measurement is validated in this batch.",
+          "sources": []
+        },
+        {
+          "key": "geometry",
+          "label": "Surveyed circuit geometry",
+          "value": null,
+          "unit": null,
+          "status": "missing",
+          "context": "No measured coordinates or historic reconstruction are supplied.",
+          "sources": []
+        }
+      ]
+    },
+    {
+      "id": "british-gp-1950",
+      "kind": "race",
+      "name": "1950 British Grand Prix",
+      "coverage_start": 1950,
+      "coverage_end": 1950,
+      "summary": "Farina wins at Silverstone ahead of Fagioli and Parnell.",
+      "coverage": "Race classification: podium only. Qualifying: Farina only. Neither is a complete session table. No telemetry exists in this collection.",
+      "sources": [
+        "f1-race-1950",
+        "f1-first-race"
+      ],
+      "claims": [
+        {
+          "key": "date",
+          "label": "Race date",
+          "value": "1950-05-13",
+          "unit": null,
+          "status": "verified",
+          "context": "Selected factual field checked against the cited source.",
+          "sources": [
+            "f1-race-1950"
+          ]
+        },
+        {
+          "key": "laps",
+          "label": "Race laps",
+          "value": 70,
+          "unit": "laps",
+          "status": "verified",
+          "context": "Selected factual field checked against the cited source.",
+          "sources": [
+            "f1-race-1950"
+          ]
+        },
+        {
+          "key": "race-time",
+          "label": "Winning time",
+          "value": "2:13:23.600",
+          "unit": null,
+          "status": "verified",
+          "context": "Selected factual field checked against the cited source.",
+          "sources": [
+            "f1-race-1950"
+          ]
+        },
+        {
+          "key": "telemetry",
+          "label": "Recorded telemetry",
+          "value": null,
+          "unit": null,
+          "status": "missing",
+          "context": "Do not infer measured 1950 trajectories, lap traces or speeds from race results.",
+          "sources": []
+        }
+      ]
+    },
+    {
+      "id": "alfa-romeo",
+      "kind": "constructor",
+      "name": "Alfa Romeo",
+      "coverage_start": 1950,
+      "coverage_end": 1950,
+      "summary": "Alfa Romeo occupies all three podium positions at the opening championship race.",
+      "coverage": "1950 pilot coverage only. Constructor identity is separate from later entrants and ownership changes.",
+      "sources": [
+        "f1-race-1950"
+      ],
+      "claims": []
+    },
+    {
+      "id": "farina",
+      "kind": "driver",
+      "name": "Giuseppe “Nino” Farina",
+      "coverage_start": 1950,
+      "coverage_end": 1950,
+      "summary": "The opening race winner is also the 1950 drivers champion.",
+      "coverage": "Selected 1950 relationships and results, not a full career history.",
+      "sources": [
+        "f1-race-1950",
+        "f1-standings-1950"
+      ],
+      "claims": [
+        {
+          "key": "season-position",
+          "label": "1950 championship position",
+          "value": 1,
+          "unit": null,
+          "status": "verified",
+          "context": "Selected factual field checked against the cited source.",
+          "sources": [
+            "f1-standings-1950"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fagioli",
+      "kind": "driver",
+      "name": "Luigi Fagioli",
+      "coverage_start": 1950,
+      "coverage_end": 1950,
+      "summary": "Fagioli finishes second in the 1950 British Grand Prix.",
+      "coverage": "Selected 1950 relationships and results, not a full career history.",
+      "sources": [
+        "f1-race-1950"
+      ],
+      "claims": []
+    },
+    {
+      "id": "parnell",
+      "kind": "driver",
+      "name": "Reg Parnell",
+      "coverage_start": 1950,
+      "coverage_end": 1950,
+      "summary": "Parnell completes the Alfa Romeo podium at Silverstone.",
+      "coverage": "Selected 1950 relationships and results, not a full career history.",
+      "sources": [
+        "f1-race-1950"
+      ],
+      "claims": []
+    },
+    {
+      "id": "fangio",
+      "kind": "driver",
+      "name": "Juan Manuel Fangio",
+      "coverage_start": 1950,
+      "coverage_end": 1950,
+      "summary": "Fangio finishes second in the 1950 drivers championship.",
+      "coverage": "Selected 1950 relationships and results, not a full career history.",
+      "sources": [
+        "f1-standings-1950",
+        "f1-first-race"
+      ],
+      "claims": []
+    },
+    {
+      "id": "alfa-158",
+      "kind": "vehicle",
+      "name": "Alfa Romeo GP Tipo 158 “Alfetta”",
+      "coverage_start": 1950,
+      "coverage_end": 1950,
+      "summary": "The supercharged straight-eight 158 represents Alfa Romeo at the first championship race.",
+      "coverage": "Museum-described configuration, linked to the 1950 season. Values do not certify a particular Silverstone chassis or every development version.",
+      "sources": [
+        "alfa-museum-158",
+        "f1-first-race"
+      ],
+      "claims": [
+        {
+          "key": "engine",
+          "label": "Engine layout",
+          "value": "Supercharged straight-eight",
+          "unit": null,
+          "status": "verified",
+          "context": "Front longitudinal engine in the museum collection specification.",
+          "sources": [
+            "alfa-museum-158"
+          ]
+        },
+        {
+          "key": "displacement",
+          "label": "Engine displacement",
+          "value": 1479,
+          "unit": "cc",
+          "status": "verified",
+          "context": "Selected factual field checked against the cited source.",
+          "sources": [
+            "alfa-museum-158"
+          ]
+        },
+        {
+          "key": "power",
+          "label": "Published power",
+          "value": 350,
+          "unit": "hp",
+          "status": "verified",
+          "context": "Museum specification at 8,500 rpm; not a session-specific measured output.",
+          "sources": [
+            "alfa-museum-158"
+          ]
+        },
+        {
+          "key": "weight",
+          "label": "Published weight",
+          "value": 620,
+          "unit": "kg",
+          "status": "verified",
+          "context": "Museum-listed figure; dry, wet and fuel-loading basis are unspecified. Do not calculate validated power-to-weight performance.",
+          "sources": [
+            "alfa-museum-158"
+          ]
+        },
+        {
+          "key": "wheelbase",
+          "label": "Wheelbase",
+          "value": 2500,
+          "unit": "mm",
+          "status": "verified",
+          "context": "Selected factual field checked against the cited source.",
+          "sources": [
+            "alfa-museum-158"
+          ]
+        },
+        {
+          "key": "brakes",
+          "label": "Brakes",
+          "value": "Hydraulic drum brakes",
+          "unit": null,
+          "status": "verified",
+          "context": "Selected factual field checked against the cited source.",
+          "sources": [
+            "alfa-museum-158"
+          ]
+        },
+        {
+          "key": "model",
+          "label": "Historically validated 3D asset",
+          "value": null,
+          "unit": null,
+          "status": "missing",
+          "context": "No licensed, dimensional reconstruction is attached. A future Blender/glTF asset needs its own rights and fidelity review.",
+          "sources": []
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "subject": "british-gp-1950",
+      "predicate": "part-of-season",
+      "target": "season-1950",
+      "start_year": 1950,
+      "end_year": 1950,
+      "sources": [
+        "f1-first-race"
+      ],
+      "context": "Verified association within the 1950 pilot collection; does not imply complete period coverage."
+    },
+    {
+      "subject": "british-gp-1950",
+      "predicate": "held-at",
+      "target": "silverstone",
+      "start_year": 1950,
+      "end_year": 1950,
+      "sources": [
+        "f1-race-1950"
+      ],
+      "context": "Verified association within the 1950 pilot collection; does not imply complete period coverage."
+    },
+    {
+      "subject": "british-gp-1950",
+      "predicate": "uses-layout",
+      "target": "silverstone-1950",
+      "start_year": 1950,
+      "end_year": 1950,
+      "sources": [
+        "f1-race-1950"
+      ],
+      "context": "Collection identity for this event only; geometry and full layout lifespan remain unverified."
+    },
+    {
+      "subject": "silverstone-1950",
+      "predicate": "layout-of",
+      "target": "silverstone",
+      "start_year": 1950,
+      "end_year": 1950,
+      "sources": [
+        "f1-race-1950"
+      ],
+      "context": "Verified association within the 1950 pilot collection; does not imply complete period coverage."
+    },
+    {
+      "subject": "alfa-158",
+      "predicate": "built-by",
+      "target": "alfa-romeo",
+      "start_year": 1950,
+      "end_year": 1950,
+      "sources": [
+        "alfa-museum-158"
+      ],
+      "context": "Verified association within the 1950 pilot collection; does not imply complete period coverage."
+    },
+    {
+      "subject": "farina",
+      "predicate": "drove-for",
+      "target": "alfa-romeo",
+      "start_year": 1950,
+      "end_year": 1950,
+      "sources": [
+        "f1-first-race"
+      ],
+      "context": "Verified association within the 1950 pilot collection; does not imply complete period coverage."
+    },
+    {
+      "subject": "farina",
+      "predicate": "raced-vehicle",
+      "target": "alfa-158",
+      "start_year": 1950,
+      "end_year": 1950,
+      "sources": [
+        "f1-first-race"
+      ],
+      "context": "Verified association within the 1950 pilot collection; does not imply complete period coverage."
+    },
+    {
+      "subject": "fagioli",
+      "predicate": "drove-for",
+      "target": "alfa-romeo",
+      "start_year": 1950,
+      "end_year": 1950,
+      "sources": [
+        "f1-first-race"
+      ],
+      "context": "Verified association within the 1950 pilot collection; does not imply complete period coverage."
+    },
+    {
+      "subject": "fagioli",
+      "predicate": "raced-vehicle",
+      "target": "alfa-158",
+      "start_year": 1950,
+      "end_year": 1950,
+      "sources": [
+        "f1-first-race"
+      ],
+      "context": "Verified association within the 1950 pilot collection; does not imply complete period coverage."
+    },
+    {
+      "subject": "parnell",
+      "predicate": "drove-for",
+      "target": "alfa-romeo",
+      "start_year": 1950,
+      "end_year": 1950,
+      "sources": [
+        "f1-first-race"
+      ],
+      "context": "Verified association within the 1950 pilot collection; does not imply complete period coverage."
+    },
+    {
+      "subject": "parnell",
+      "predicate": "raced-vehicle",
+      "target": "alfa-158",
+      "start_year": 1950,
+      "end_year": 1950,
+      "sources": [
+        "f1-first-race"
+      ],
+      "context": "Verified association within the 1950 pilot collection; does not imply complete period coverage."
+    },
+    {
+      "subject": "fangio",
+      "predicate": "drove-for",
+      "target": "alfa-romeo",
+      "start_year": 1950,
+      "end_year": 1950,
+      "sources": [
+        "f1-first-race"
+      ],
+      "context": "Verified association within the 1950 pilot collection; does not imply complete period coverage."
+    },
+    {
+      "subject": "fangio",
+      "predicate": "raced-vehicle",
+      "target": "alfa-158",
+      "start_year": 1950,
+      "end_year": 1950,
+      "sources": [
+        "f1-first-race"
+      ],
+      "context": "Verified association within the 1950 pilot collection; does not imply complete period coverage."
+    }
+  ],
+  "classifications": [
+    {
+      "id": "race-farina",
+      "category": "race",
+      "season_id": "season-1950",
+      "race_id": "british-gp-1950",
+      "entry": "farina-1950-britain",
+      "driver_ids": [
+        "farina"
+      ],
+      "constructor_id": "alfa-romeo",
+      "position": 1,
+      "position_text": "1",
+      "sources": [
+        "f1-race-1950"
+      ],
+      "context": "Selected reviewed row only; consult entity coverage for omitted records.",
+      "laps": 70,
+      "points": 9,
+      "time": "2:13:23.600"
+    },
+    {
+      "id": "race-fagioli",
+      "category": "race",
+      "season_id": "season-1950",
+      "race_id": "british-gp-1950",
+      "entry": "fagioli-1950-britain",
+      "driver_ids": [
+        "fagioli"
+      ],
+      "constructor_id": "alfa-romeo",
+      "position": 2,
+      "position_text": "2",
+      "sources": [
+        "f1-race-1950"
+      ],
+      "context": "Selected reviewed row only; consult entity coverage for omitted records.",
+      "laps": 70,
+      "points": 6,
+      "time": "+2.600s"
+    },
+    {
+      "id": "race-parnell",
+      "category": "race",
+      "season_id": "season-1950",
+      "race_id": "british-gp-1950",
+      "entry": "parnell-1950-britain",
+      "driver_ids": [
+        "parnell"
+      ],
+      "constructor_id": "alfa-romeo",
+      "position": 3,
+      "position_text": "3",
+      "sources": [
+        "f1-race-1950"
+      ],
+      "context": "Selected reviewed row only; consult entity coverage for omitted records.",
+      "laps": 70,
+      "points": 4,
+      "time": "+52.000s"
+    },
+    {
+      "id": "qualifying-farina",
+      "category": "qualifying",
+      "season_id": "season-1950",
+      "race_id": "british-gp-1950",
+      "entry": "farina-1950-britain",
+      "driver_ids": [
+        "farina"
+      ],
+      "constructor_id": "alfa-romeo",
+      "position": 1,
+      "position_text": "1",
+      "sources": [
+        "f1-qualifying-1950"
+      ],
+      "context": "Selected reviewed row only; consult entity coverage for omitted records.",
+      "time": "1:50.800"
+    },
+    {
+      "id": "standing-farina",
+      "category": "driver-standing",
+      "season_id": "season-1950",
+      "race_id": null,
+      "entry": "farina-1950",
+      "driver_ids": [
+        "farina"
+      ],
+      "constructor_id": "alfa-romeo",
+      "position": 1,
+      "position_text": "1",
+      "sources": [
+        "f1-standings-1950"
+      ],
+      "context": "Selected reviewed row only; consult entity coverage for omitted records.",
+      "points": 30
+    },
+    {
+      "id": "standing-fangio",
+      "category": "driver-standing",
+      "season_id": "season-1950",
+      "race_id": null,
+      "entry": "fangio-1950",
+      "driver_ids": [
+        "fangio"
+      ],
+      "constructor_id": "alfa-romeo",
+      "position": 2,
+      "position_text": "2",
+      "sources": [
+        "f1-standings-1950"
+      ],
+      "context": "Selected reviewed row only; consult entity coverage for omitted records.",
+      "points": 27
+    },
+    {
+      "id": "standing-fagioli",
+      "category": "driver-standing",
+      "season_id": "season-1950",
+      "race_id": null,
+      "entry": "fagioli-1950",
+      "driver_ids": [
+        "fagioli"
+      ],
+      "constructor_id": "alfa-romeo",
+      "position": 3,
+      "position_text": "3",
+      "sources": [
+        "f1-standings-1950"
+      ],
+      "context": "Selected reviewed row only; consult entity coverage for omitted records.",
+      "points": 24
+    }
+  ]
+}

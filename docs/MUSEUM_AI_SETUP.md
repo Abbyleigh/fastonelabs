@@ -1,29 +1,26 @@
 # Optional museum AI connection
 
-The museum works without an AI account. Public GET `/api/museum/historian` always uses curated source retrieval. It never invokes a paid provider. The UI labels that mode explicitly.
+Public GET `/api/museum/historian` always retrieves from the existing editorial corpus. It never invokes an AI provider. The local-only POST can optionally ask **Groq** to select evidence IDs. Displayed facts and sources still come from the checked corpus; free-form model text is never shown.
 
-A local-only POST endpoint is prepared for OpenAI Responses API evidence selection. It requires all three server settings: `MUSEUM_AI_ENABLED=1`, `OPENAI_API_KEY`, and `MUSEUM_AI_MODEL`. No model ID or secret is guessed. Public demo proxy forwards GET only, so it cannot expose the paid endpoint. A future public AI rollout requires authenticated users and enforceable quotas, not simply enabling this flag.
+## Configuration
 
-## Private local setup
+The checkpoint uses `GROQ_API_KEY` and `MUSEUM_AI_ENABLED=1`. `MUSEUM_AI_MODEL` optionally overrides its existing `openai/gpt-oss-20b` model setting. The `openai/` prefix is the Groq-hosted model ID; it does not make the provider OpenAI. Model availability and permissions depend on the configured account. No credentials are supplied or live paid request is executed during this assignment.
 
-Do not paste an API key into chat or commit it. From the repository root, run:
+For local setup, `tools/configure_museum_ai.py` prompts with hidden key input and a model ID, then writes the ignored `backend/.env.museum` with owner-only permissions. `tools/start_museum_backend.py` loads only the three museum variables and starts loopback Uvicorn on port 8001. The helper now uses the same Groq variable as the backend. Previous OpenAI-only helper files do not activate Groq; rerun setup locally if that older configuration is present. Do not commit keys or paste them into chat.
 
-```
-backend/.venv312/bin/python tools/configure_museum_ai.py
-```
+The standard-library HTTP implementation needs no `openai` or `groq` SDK. It posts to a fixed Groq chat-completions endpoint, uses a 25-second timeout, caps output bytes at 64 KiB and refuses incomplete or malformed responses. There are no automatic paid retries. The provider can return only up to four candidate IDs plus an abstention flag; IDs outside the supplied candidates are rejected. Provider failure returns curated matches with a visible fallback notice.
 
-The script asks for the key with hidden input and the Responses-compatible model ID from your account. It saves `backend/.env.museum` with owner-only permissions; `.gitignore` excludes it. Restart the existing local backend using `backend/.venv312/bin/python tools/start_museum_backend.py` after stopping its current instance. The app on port 5173 detects the configured local service. The public demonstration remains source-only. API usage can incur provider charges; configure spending limits in your provider account.
+POST remains restricted to loopback clients, expected local browser origins and JSON, with a 2 KiB limit enforced while reading the request stream. The public demo forwards GET only and does not expose POST. Behind a reverse proxy, **loopback client checks alone are not authentication**: the proxy itself may appear local. Keep POST blocked at the edge and AI disabled until authenticated user identity, quotas, spending limits and privacy review exist.
 
-## Grounding and implementation
+## Retrieval and corpus integrity
 
-`tools/export_museum_knowledge.mjs` produces the versioned backend snapshot from the same typed sources used by the UI. The gate checks for snapshot drift.
+`tools/export_museum_knowledge.mjs` exports the existing UI editorial collection. The backend validates its version, collection sizes, unique IDs, source URLs/dates, entity references and specification citations before indexing. Cached lexical matching stores bounded immutable ID tuples and returns independent copies, preventing one caller from corrupting later answers. This is source-backed lexical retrieval, not semantic search, live web research or proof of every inherited factual claim.
 
-`backend/museum.py` retrieves bounded candidates. The model receives only the submitted question and those public museum summaries; no user history or application secrets. `store:false` is set. Structured output is a list of existing evidence IDs plus an abstention flag. The server validates those IDs and renders the corpus text and references, rather than displaying invented generated statements. This design constrains what is displayed; it does not guarantee that retrieval selected the best answer or that every source is infallible. Uncertainty is displayed with each record.
+The new `/api/heritage` collection is a separate reviewed structured pilot. Legacy editorial records do not automatically acquire the new pilot's verification or reuse status. Do not merge them without checking each source/configuration.
 
-No live provider request has been verified: no provider key/model is configured. Mock tests cover request shape, secret isolation, unknown IDs, source-only operation and route restrictions. Live verification remains required after configuration.
+Offline tests cover valid Groq request shape, configured public GET isolation, malformed/oversized/truncated outputs, unknown IDs, fallback, streamed body limits and cache mutation isolation. Live provider connectivity and billing behaviour remain untested.
 
-Official OpenAI Docs checked 28 October 2026:
-- https://developers.openai.com/api/docs/guides/structured-outputs
-- https://developers.openai.com/api/reference/resources/responses/methods/create
+Primary provider documentation checked 29 October 2026:
 
-The API reference exceeded the research tool’s page-length limit when opened; request format was corroborated using the fetched Structured Outputs guide and official reference search. No claim that JSON schema alone prevents factual hallucination is made; the application’s ID-only selection and corpus rendering are separate controls.
+- https://console.groq.com/docs/openai
+- https://console.groq.com/docs/text-chat

@@ -13,7 +13,7 @@ def test_retrieval_is_sourced_and_refuses_unknown_questions():
     assert len({r['fact']for r in rows})==len(rows)
 
 def test_public_lookup_never_calls_ai_even_when_configured(monkeypatch):
-    monkeypatch.setenv('MUSEUM_AI_ENABLED','1');monkeypatch.setenv('OPENAI_API_KEY','test-secret');monkeypatch.setenv('MUSEUM_AI_MODEL','test-model')
+    monkeypatch.setenv('MUSEUM_AI_ENABLED','1');monkeypatch.setenv('GROQ_API_KEY','test-secret');monkeypatch.setenv('MUSEUM_AI_MODEL','test-model')
     def forbidden(*args,**kwargs):raise AssertionError('Public lookup must never invoke AI')
     monkeypatch.setattr(museum,'select_with_ai',forbidden)
     client=TestClient(app)
@@ -23,18 +23,19 @@ def test_public_lookup_never_calls_ai_even_when_configured(monkeypatch):
     assert client.get('/api/museum/historian',params={'question':'x'*501}).status_code==422
 
 def test_ai_selects_ids_without_generating_new_displayed_facts(monkeypatch):
-    monkeypatch.setenv('OPENAI_API_KEY','test-secret');monkeypatch.setenv('MUSEUM_AI_MODEL','test-model')
+    monkeypatch.setenv('GROQ_API_KEY','test-secret');monkeypatch.setenv('MUSEUM_AI_MODEL','test-model')
     candidates=museum.retrieve('carbon chassis');wanted=candidates[0]['id'];sent={}
     def transport(request,timeout):
-        sent.update(json.loads(request.data));assert request.full_url=='https://api.openai.com/v1/responses'
-        return io.BytesIO(json.dumps({'status':'completed','output':[{'type':'message','content':[{'type':'output_text','text':json.dumps({'record_ids':[wanted],'abstain':False})}]}]}).encode())
+        sent.update(json.loads(request.data));assert request.full_url=='https://api.groq.com/openai/v1/chat/completions'
+        return io.BytesIO(json.dumps({'choices':[{'finish_reason':'stop','message':{'content':json.dumps({'record_ids':[wanted],'abstain':False})}}]}).encode())
     rows=museum.select_with_ai('carbon chassis',candidates,transport)
     assert rows==[museum.INDEX[wanted]]
-    assert sent['store']is False and sent['text']['format']['strict']is True
+    assert sent['model']=='test-model' and sent['response_format']=={'type':'json_object'}
+    assert sent['max_completion_tokens']==1500
 
 def test_ai_hallucinated_ids_are_rejected(monkeypatch):
-    monkeypatch.setenv('OPENAI_API_KEY','test-secret');monkeypatch.setenv('MUSEUM_AI_MODEL','test-model')
-    def bad(request,timeout):return io.BytesIO(json.dumps({'status':'completed','output':[{'type':'message','content':[{'type':'output_text','text':'{"record_ids":["invented"],"abstain":false}'}]}]}).encode())
+    monkeypatch.setenv('GROQ_API_KEY','test-secret');monkeypatch.setenv('MUSEUM_AI_MODEL','test-model')
+    def bad(request,timeout):return io.BytesIO(json.dumps({'choices':[{'finish_reason':'stop','message':{'content':'{"record_ids":["invented"],"abstain":false}'}}]}).encode())
     import pytest
     with pytest.raises(ValueError):museum.select_with_ai('carbon chassis',museum.retrieve('carbon chassis'),bad)
 
