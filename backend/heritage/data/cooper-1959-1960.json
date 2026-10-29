@@ -1,0 +1,1221 @@
+{
+  "schema_version": 1,
+  "revision": "cooper-1959-1960-v1",
+  "coverage": "Reviewed Cooper 1959–1960 engineering slice: two cars, one engine configuration, selected drivers/events/championship winners and dated venue identities. Includes a 1950 Silverstone comparison identity and a referenced 1958 milestone, not complete seasons or measured geometry. Reuse permissions remain unreviewed.",
+  "sources": [
+    {
+      "id": "cooper-history",
+      "title": "Cooper history",
+      "publisher": "Cooper Car Company",
+      "url": "https://www.coopercarcompany.com/cooper-history",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established in this review",
+      "reuse": "unreviewed",
+      "notes": "Marque account of the T51 and 1959/1960 titles; not a dimensional specification. Original short factual synthesis only; no images, copied tables or article prose imported."
+    },
+    {
+      "id": "brabham-history",
+      "title": "Jack Brabham — Hall of Fame",
+      "publisher": "Formula 1",
+      "url": "https://www.formula1.com/en/information/drivers-hall-of-fame-jack-brabham.3XK2XWdL0moCmnSC55m84J",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established in this review",
+      "reuse": "unreviewed",
+      "notes": "Retrospective source for rear-engine transition and 1958 Cooper victory; do not call Cooper the inventor of all mid-engine racing cars. Original short factual synthesis only; no images, copied tables or article prose imported."
+    },
+    {
+      "id": "goodwood-t51",
+      "title": "Stirling Moss race-winning Cooper T51",
+      "publisher": "Goodwood",
+      "url": "https://api.goodwood.com/grr/event-coverage/goodwood-revival/stirling-moss-race-winning-cooper-t51-returned-to-goodwood/",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established in this review",
+      "reuse": "unreviewed",
+      "notes": "Publisher event report: period T51 uses a nominal 2.5-litre four-cylinder Climax behind the driver. Not validation of every surviving chassis or later engine conversion. Original short factual synthesis only; no images, copied tables or article prose imported."
+    },
+    {
+      "id": "sd-t53",
+      "title": "1961 Cooper T53 — Formula One Stories",
+      "publisher": "San Diego Automotive Museum",
+      "url": "https://sdautomuseum.org/explore/exhibits/formula-one-stories/1961-cooper-t53/",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established in this review",
+      "reuse": "unreviewed",
+      "notes": "Page title concerns a 1961 exhibit, while its historical text explicitly describes the 1960 design. Treat that text as a museum account, not serial-specific 1960 measurements. Original short factual synthesis only; no images, copied tables or article prose imported."
+    },
+    {
+      "id": "silverstone-history",
+      "title": "History of the British Grand Prix",
+      "publisher": "Silverstone",
+      "url": "https://www.silverstone.co.uk/about/history-grand-prix",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established in this review",
+      "reuse": "unreviewed",
+      "notes": "Circuit operator identifies Brabham and Cooper-Climax T53 for the 1960 British GP. No surveyed coordinates supplied. Original short factual synthesis only; no images, copied tables or article prose imported."
+    },
+    {
+      "id": "f1-monaco-1959",
+      "title": "1959 Monaco Grand Prix — race result",
+      "publisher": "Formula 1",
+      "url": "https://www.formula1.com/en/results/1959/races/169/monaco/race-result",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established in this review",
+      "reuse": "unreviewed",
+      "notes": "Selected rows manually checked; partial race coverage. Constructor/engine label does not identify a particular chassis serial. Original short factual synthesis only; no images, copied tables or article prose imported."
+    },
+    {
+      "id": "f1-british-1959",
+      "title": "1959 British Grand Prix — race result",
+      "publisher": "Formula 1",
+      "url": "https://www.formula1.com/en/results/1959/races/173/great-britain/race-result",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established in this review",
+      "reuse": "unreviewed",
+      "notes": "Selected rows manually checked; partial race coverage. Constructor/engine label does not identify a particular chassis serial. Original short factual synthesis only; no images, copied tables or article prose imported."
+    },
+    {
+      "id": "f1-british-1960",
+      "title": "1960 British Grand Prix — race result",
+      "publisher": "Formula 1",
+      "url": "https://www.formula1.com/en/results/1960/races/184/great-britain/race-result",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established in this review",
+      "reuse": "unreviewed",
+      "notes": "Selected rows manually checked; partial race coverage. Constructor/engine label does not identify a particular chassis serial. Original short factual synthesis only; no images, copied tables or article prose imported."
+    },
+    {
+      "id": "f1-drivers-1959",
+      "title": "1959 drivers standings",
+      "publisher": "Formula 1",
+      "url": "https://www.formula1.com/en/results/1959/drivers",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established in this review",
+      "reuse": "unreviewed",
+      "notes": "Selected final standings only; published counted points are not a sum of every race score. No full table copied. Original short factual synthesis only; no images, copied tables or article prose imported."
+    },
+    {
+      "id": "f1-constructors-1959",
+      "title": "1959 constructors standings",
+      "publisher": "Formula 1",
+      "url": "https://www.formula1.com/en/results/1959/team",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established in this review",
+      "reuse": "unreviewed",
+      "notes": "Selected final standings only; published counted points are not a sum of every race score. No full table copied. Original short factual synthesis only; no images, copied tables or article prose imported."
+    },
+    {
+      "id": "f1-drivers-1960",
+      "title": "1960 drivers standings",
+      "publisher": "Formula 1",
+      "url": "https://www.formula1.com/en/results/1960/drivers",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established in this review",
+      "reuse": "unreviewed",
+      "notes": "Selected final standings only; published counted points are not a sum of every race score. No full table copied. Original short factual synthesis only; no images, copied tables or article prose imported."
+    },
+    {
+      "id": "f1-constructors-1960",
+      "title": "1960 constructors standings",
+      "publisher": "Formula 1",
+      "url": "https://www.formula1.com/en/results/1960/team",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established in this review",
+      "reuse": "unreviewed",
+      "notes": "Selected final standings only; published counted points are not a sum of every race score. No full table copied. Original short factual synthesis only; no images, copied tables or article prose imported."
+    },
+    {
+      "id": "f1-race-1950",
+      "title": "1950 British Grand Prix — race result",
+      "publisher": "Formula 1",
+      "url": "https://www.formula1.com/en/results/1950/races/94/great-britain/race-result",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established by this review",
+      "reuse": "unreviewed",
+      "notes": "Manual verification of selected factual fields. No photos, full tables or source prose are reproduced. Verification is not permission for redistribution."
+    },
+    {
+      "id": "f1-first-race",
+      "title": "Ten facts about the first championship Grand Prix",
+      "publisher": "Formula 1",
+      "url": "https://www.formula1.com/en/latest/article/10-fascinating-facts-about-the-very-first-f1-grand-prix-held-on-this-day-70.14iQuQ4N2IbV93EZj4Ruuj",
+      "checked": "2026-10-29",
+      "licence": "No redistribution grant established by this review",
+      "reuse": "unreviewed",
+      "notes": "Reference for the first championship event, the Alfa Romeo drivers and 158. Collection descriptions use original short wording."
+    }
+  ],
+  "entities": [
+    {
+      "id": "season-1959",
+      "kind": "season",
+      "name": "1959 World Championship",
+      "coverage_start": 1959,
+      "coverage_end": 1959,
+      "summary": "Brabham and Cooper-Climax lead the published final driver and constructor standings.",
+      "coverage": "Selected 1959–1960 research slice; not a complete career, season or technical specification.",
+      "sources": [
+        "f1-drivers-1959",
+        "f1-constructors-1959"
+      ],
+      "claims": [
+        {
+          "key": "driver-champion",
+          "label": "Drivers champion",
+          "value": "Jack Brabham",
+          "unit": null,
+          "status": "verified",
+          "context": "Selected historical field checked against the cited source.",
+          "sources": [
+            "f1-drivers-1959"
+          ]
+        },
+        {
+          "key": "constructor-champion",
+          "label": "Winning constructor/engine",
+          "value": "Cooper Climax",
+          "unit": null,
+          "status": "verified",
+          "context": "Selected historical field checked against the cited source.",
+          "sources": [
+            "f1-constructors-1959"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "season-1960",
+      "kind": "season",
+      "name": "1960 World Championship",
+      "coverage_start": 1960,
+      "coverage_end": 1960,
+      "summary": "Brabham and Cooper-Climax lead the published final driver and constructor standings.",
+      "coverage": "Selected 1959–1960 research slice; not a complete career, season or technical specification.",
+      "sources": [
+        "f1-drivers-1960",
+        "f1-constructors-1960"
+      ],
+      "claims": [
+        {
+          "key": "driver-champion",
+          "label": "Drivers champion",
+          "value": "Jack Brabham",
+          "unit": null,
+          "status": "verified",
+          "context": "Selected historical field checked against the cited source.",
+          "sources": [
+            "f1-drivers-1960"
+          ]
+        },
+        {
+          "key": "constructor-champion",
+          "label": "Winning constructor/engine",
+          "value": "Cooper Climax",
+          "unit": null,
+          "status": "verified",
+          "context": "Selected historical field checked against the cited source.",
+          "sources": [
+            "f1-constructors-1960"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cooper-climax",
+      "kind": "constructor",
+      "name": "Cooper-Climax",
+      "coverage_start": 1959,
+      "coverage_end": 1960,
+      "summary": "The Cooper chassis and Climax engine combination heads the 1959 and 1960 constructor standings.",
+      "coverage": "Selected 1959–1960 research slice; not a complete career, season or technical specification.",
+      "sources": [
+        "cooper-history",
+        "f1-constructors-1959",
+        "f1-constructors-1960"
+      ],
+      "claims": [
+        {
+          "key": "identity",
+          "label": "Identity scope",
+          "value": "Cooper chassis / Climax engine pairing",
+          "unit": null,
+          "status": "verified",
+          "context": "Not every Cooper entrant, engine supplier or later ownership history.",
+          "sources": [
+            "f1-constructors-1959",
+            "f1-constructors-1960"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "jack-brabham",
+      "kind": "driver",
+      "name": "Jack Brabham",
+      "coverage_start": 1959,
+      "coverage_end": 1960,
+      "summary": "Brabham takes consecutive titles in rear-engined Coopers.",
+      "coverage": "Selected 1959–1960 research slice; not a complete career, season or technical specification.",
+      "sources": [
+        "brabham-history",
+        "f1-drivers-1959",
+        "f1-drivers-1960"
+      ],
+      "claims": []
+    },
+    {
+      "id": "bruce-mclaren",
+      "kind": "driver",
+      "name": "Bruce McLaren",
+      "coverage_start": 1959,
+      "coverage_end": 1960,
+      "summary": "McLaren is third at Aintree in 1959 and second in the 1960 final driver standings.",
+      "coverage": "Selected 1959–1960 research slice; not a complete career, season or technical specification.",
+      "sources": [
+        "f1-british-1959",
+        "f1-drivers-1960"
+      ],
+      "claims": [
+        {
+          "key": "1960-standing",
+          "label": "1960 final position",
+          "value": 2,
+          "unit": null,
+          "status": "verified",
+          "context": "Selected historical field checked against the cited source.",
+          "sources": [
+            "f1-drivers-1960"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "climax-25",
+      "kind": "engine",
+      "name": "Coventry Climax — selected 2.5-litre configurations",
+      "coverage_start": 1959,
+      "coverage_end": 1960,
+      "summary": "The T51 report identifies a four-cylinder Climax; the T53 museum account names the FPF.",
+      "coverage": "Selected T51/T53 engine descriptions, not proof of identical revisions, serial numbers or an interchangeable unit.",
+      "sources": [
+        "goodwood-t51",
+        "sd-t53"
+      ],
+      "claims": [
+        {
+          "key": "cylinders",
+          "label": "T51 reported cylinder count",
+          "value": 4,
+          "unit": null,
+          "status": "verified",
+          "context": "The Goodwood T51 account supplies this count; no event-specific engine inspection is claimed.",
+          "sources": [
+            "goodwood-t51"
+          ]
+        },
+        {
+          "key": "t53-family",
+          "label": "T53 reported engine family",
+          "value": "FPF",
+          "unit": null,
+          "status": "verified",
+          "context": "Explicitly named in the museum T53 account; not inferred as a serial-specific T51 engine designation.",
+          "sources": [
+            "sd-t53"
+          ]
+        },
+        {
+          "key": "capacity",
+          "label": "Nominal capacity",
+          "value": 2.5,
+          "unit": "litres",
+          "status": "verified",
+          "context": "Nominal class/configuration label, not a measured displacement for a selected chassis.",
+          "sources": [
+            "goodwood-t51",
+            "sd-t53"
+          ]
+        },
+        {
+          "key": "power",
+          "label": "Event-specific measured power",
+          "value": null,
+          "unit": null,
+          "status": "missing",
+          "context": "No period test sheet is validated. Museum approximate output is not promoted to a race-specific measurement.",
+          "sources": []
+        }
+      ]
+    },
+    {
+      "id": "rear-engine-transition",
+      "kind": "development",
+      "name": "The engine moves behind the driver",
+      "coverage_start": 1958,
+      "coverage_end": 1960,
+      "summary": "Moss gives Cooper a championship-race victory in 1958; Brabham follows with the 1959 and 1960 titles.",
+      "coverage": "A transition milestone, not a claim of instantaneous replacement of every front-engined car. Educational balance calculations remain separate from historical measurements.",
+      "sources": [
+        "brabham-history",
+        "cooper-history"
+      ],
+      "claims": [
+        {
+          "key": "placement",
+          "label": "Documented Cooper placement",
+          "value": "Behind the driver",
+          "unit": null,
+          "status": "verified",
+          "context": "Period sources often say rear-engined. This is not a claim that Cooper invents all mid-engine cars or a measured axle-relative coordinate.",
+          "sources": [
+            "brabham-history",
+            "goodwood-t51"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cooper-t51",
+      "kind": "vehicle",
+      "name": "Cooper T51",
+      "coverage_start": 1959,
+      "coverage_end": 1959,
+      "summary": "A championship-winning Cooper with its engine behind the driver.",
+      "coverage": "Selected 1959–1960 research slice; not a complete career, season or technical specification.",
+      "sources": [
+        "goodwood-t51",
+        "cooper-history"
+      ],
+      "claims": [
+        {
+          "key": "engine-position",
+          "label": "Engine position",
+          "value": "Behind the driver",
+          "unit": null,
+          "status": "verified",
+          "context": "Selected historical field checked against the cited source.",
+          "sources": [
+            "goodwood-t51"
+          ]
+        },
+        {
+          "key": "engine-type",
+          "label": "Published engine configuration",
+          "value": "Four-cylinder Climax, nominal 2.5 litres",
+          "unit": null,
+          "status": "verified",
+          "context": "Selected historical field checked against the cited source.",
+          "sources": [
+            "goodwood-t51"
+          ]
+        },
+        {
+          "key": "weight",
+          "label": "Race-specific weight",
+          "value": null,
+          "unit": null,
+          "status": "missing",
+          "context": "No validated weighing record for the selected race chassis.",
+          "sources": []
+        },
+        {
+          "key": "asset",
+          "label": "Approved historic 3D asset",
+          "value": null,
+          "unit": null,
+          "status": "missing",
+          "context": "No licensed model or dimensional reconstruction supplied.",
+          "sources": []
+        }
+      ]
+    },
+    {
+      "id": "cooper-t53",
+      "kind": "vehicle",
+      "name": "Cooper T53",
+      "coverage_start": 1960,
+      "coverage_end": 1960,
+      "summary": "The T53 carries Brabham to victory at Silverstone in 1960.",
+      "coverage": "Selected 1959–1960 research slice; not a complete career, season or technical specification.",
+      "sources": [
+        "silverstone-history",
+        "sd-t53"
+      ],
+      "claims": [
+        {
+          "key": "structure",
+          "label": "Museum-described frame",
+          "value": "Tubular steel frame with aluminium panels",
+          "unit": null,
+          "status": "verified",
+          "context": "Historical description on a 1961-labelled museum exhibit page; not factory CAD.",
+          "sources": [
+            "sd-t53"
+          ]
+        },
+        {
+          "key": "suspension",
+          "label": "Museum-described suspension",
+          "value": "Double wishbones, coil springs and telescopic dampers",
+          "unit": null,
+          "status": "verified",
+          "context": "Museum account contrasts this arrangement with the preceding transverse rear leaf spring; no hard-point geometry validated.",
+          "sources": [
+            "sd-t53"
+          ]
+        },
+        {
+          "key": "dimensions",
+          "label": "Measured period dimensions",
+          "value": null,
+          "unit": null,
+          "status": "missing",
+          "context": "No serial-specific drawing is validated.",
+          "sources": []
+        },
+        {
+          "key": "asset",
+          "label": "Approved historic 3D asset",
+          "value": null,
+          "unit": null,
+          "status": "missing",
+          "context": "No licensed model or dimensional reconstruction supplied.",
+          "sources": []
+        }
+      ]
+    },
+    {
+      "id": "monaco",
+      "kind": "circuit",
+      "name": "Circuit de Monaco",
+      "coverage_start": 1959,
+      "coverage_end": 1959,
+      "summary": "A reviewed venue identity linked to selected championship events.",
+      "coverage": "Only the linked event years are reviewed; the coverage interval does not assert every intervening year or configuration.",
+      "sources": [
+        "f1-monaco-1959"
+      ],
+      "claims": []
+    },
+    {
+      "id": "aintree",
+      "kind": "circuit",
+      "name": "Aintree Racecourse",
+      "coverage_start": 1959,
+      "coverage_end": 1959,
+      "summary": "A reviewed venue identity linked to selected championship events.",
+      "coverage": "Only the linked event years are reviewed; the coverage interval does not assert every intervening year or configuration.",
+      "sources": [
+        "f1-british-1959"
+      ],
+      "claims": []
+    },
+    {
+      "id": "silverstone",
+      "kind": "circuit",
+      "name": "Silverstone Circuit",
+      "coverage_start": 1950,
+      "coverage_end": 1960,
+      "summary": "A reviewed venue identity linked to selected championship events.",
+      "coverage": "Only the linked event years are reviewed; the coverage interval does not assert every intervening year or configuration.",
+      "sources": [
+        "f1-race-1950",
+        "f1-british-1960",
+        "f1-first-race"
+      ],
+      "claims": []
+    },
+    {
+      "id": "silverstone-1950",
+      "kind": "layout",
+      "name": "Silverstone — 1950 event layout",
+      "coverage_start": 1950,
+      "coverage_end": 1950,
+      "summary": "The event has a separate layout identity; surveyed geometry remains unavailable.",
+      "coverage": "Event-year identity only. This is not a surveyed outline, a configuration lifespan, or proof that adjacent event layouts have different geometry.",
+      "sources": [
+        "f1-race-1950"
+      ],
+      "claims": [
+        {
+          "key": "length",
+          "label": "Validated lap length",
+          "value": null,
+          "unit": "km",
+          "status": "missing",
+          "context": "No suitable primary measurement is validated in this batch.",
+          "sources": []
+        },
+        {
+          "key": "geometry",
+          "label": "Surveyed circuit geometry",
+          "value": null,
+          "unit": null,
+          "status": "missing",
+          "context": "No reviewed coordinates, accuracy statement or geometry reuse permission supplied.",
+          "sources": []
+        }
+      ]
+    },
+    {
+      "id": "monaco-1959",
+      "kind": "layout",
+      "name": "Monaco — 1959 event layout",
+      "coverage_start": 1959,
+      "coverage_end": 1959,
+      "summary": "The event has a separate layout identity; surveyed geometry remains unavailable.",
+      "coverage": "Event-year identity only. This is not a surveyed outline, a configuration lifespan, or proof that adjacent event layouts have different geometry.",
+      "sources": [
+        "f1-monaco-1959"
+      ],
+      "claims": [
+        {
+          "key": "length",
+          "label": "Validated lap length",
+          "value": null,
+          "unit": "km",
+          "status": "missing",
+          "context": "No suitable primary measurement is validated in this batch.",
+          "sources": []
+        },
+        {
+          "key": "geometry",
+          "label": "Surveyed circuit geometry",
+          "value": null,
+          "unit": null,
+          "status": "missing",
+          "context": "No reviewed coordinates, accuracy statement or geometry reuse permission supplied.",
+          "sources": []
+        }
+      ]
+    },
+    {
+      "id": "aintree-1959",
+      "kind": "layout",
+      "name": "Aintree — 1959 event layout",
+      "coverage_start": 1959,
+      "coverage_end": 1959,
+      "summary": "The event has a separate layout identity; surveyed geometry remains unavailable.",
+      "coverage": "Event-year identity only. This is not a surveyed outline, a configuration lifespan, or proof that adjacent event layouts have different geometry.",
+      "sources": [
+        "f1-british-1959"
+      ],
+      "claims": [
+        {
+          "key": "length",
+          "label": "Validated lap length",
+          "value": null,
+          "unit": "km",
+          "status": "missing",
+          "context": "No suitable primary measurement is validated in this batch.",
+          "sources": []
+        },
+        {
+          "key": "geometry",
+          "label": "Surveyed circuit geometry",
+          "value": null,
+          "unit": null,
+          "status": "missing",
+          "context": "No reviewed coordinates, accuracy statement or geometry reuse permission supplied.",
+          "sources": []
+        }
+      ]
+    },
+    {
+      "id": "silverstone-1960",
+      "kind": "layout",
+      "name": "Silverstone — 1960 event layout",
+      "coverage_start": 1960,
+      "coverage_end": 1960,
+      "summary": "The event has a separate layout identity; surveyed geometry remains unavailable.",
+      "coverage": "Event-year identity only. This is not a surveyed outline, a configuration lifespan, or proof that adjacent event layouts have different geometry.",
+      "sources": [
+        "f1-british-1960"
+      ],
+      "claims": [
+        {
+          "key": "length",
+          "label": "Validated lap length",
+          "value": null,
+          "unit": "km",
+          "status": "missing",
+          "context": "No suitable primary measurement is validated in this batch.",
+          "sources": []
+        },
+        {
+          "key": "geometry",
+          "label": "Surveyed circuit geometry",
+          "value": null,
+          "unit": null,
+          "status": "missing",
+          "context": "No reviewed coordinates, accuracy statement or geometry reuse permission supplied.",
+          "sources": []
+        }
+      ]
+    },
+    {
+      "id": "monaco-gp-1959",
+      "kind": "race",
+      "name": "1959 Monaco Grand Prix",
+      "coverage_start": 1959,
+      "coverage_end": 1959,
+      "summary": "Jack Brabham wins the selected championship event for Cooper-Climax.",
+      "coverage": "Selected Cooper entries only, not a complete race result. No qualifying or telemetry data supplied.",
+      "sources": [
+        "f1-monaco-1959"
+      ],
+      "claims": [
+        {
+          "key": "date",
+          "label": "Race date",
+          "value": "1959-05-10",
+          "unit": null,
+          "status": "verified",
+          "context": "Selected historical field checked against the cited source.",
+          "sources": [
+            "f1-monaco-1959"
+          ]
+        },
+        {
+          "key": "laps",
+          "label": "Winner completed laps",
+          "value": 100,
+          "unit": "laps",
+          "status": "verified",
+          "context": "Selected historical field checked against the cited source.",
+          "sources": [
+            "f1-monaco-1959"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "british-gp-1959",
+      "kind": "race",
+      "name": "1959 British Grand Prix",
+      "coverage_start": 1959,
+      "coverage_end": 1959,
+      "summary": "Jack Brabham wins the selected championship event for Cooper-Climax.",
+      "coverage": "Selected Cooper entries only, not a complete race result. No qualifying or telemetry data supplied.",
+      "sources": [
+        "f1-british-1959"
+      ],
+      "claims": [
+        {
+          "key": "date",
+          "label": "Race date",
+          "value": "1959-07-18",
+          "unit": null,
+          "status": "verified",
+          "context": "Selected historical field checked against the cited source.",
+          "sources": [
+            "f1-british-1959"
+          ]
+        },
+        {
+          "key": "laps",
+          "label": "Winner completed laps",
+          "value": 75,
+          "unit": "laps",
+          "status": "verified",
+          "context": "Selected historical field checked against the cited source.",
+          "sources": [
+            "f1-british-1959"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "british-gp-1960",
+      "kind": "race",
+      "name": "1960 British Grand Prix",
+      "coverage_start": 1960,
+      "coverage_end": 1960,
+      "summary": "Jack Brabham wins the selected championship event for Cooper-Climax.",
+      "coverage": "Selected Cooper entries only, not a complete race result. No qualifying or telemetry data supplied.",
+      "sources": [
+        "f1-british-1960"
+      ],
+      "claims": [
+        {
+          "key": "date",
+          "label": "Race date",
+          "value": "1960-07-16",
+          "unit": null,
+          "status": "verified",
+          "context": "Selected historical field checked against the cited source.",
+          "sources": [
+            "f1-british-1960"
+          ]
+        },
+        {
+          "key": "laps",
+          "label": "Winner completed laps",
+          "value": 77,
+          "unit": "laps",
+          "status": "verified",
+          "context": "Selected historical field checked against the cited source.",
+          "sources": [
+            "f1-british-1960"
+          ]
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "subject": "cooper-t51",
+      "predicate": "built-by",
+      "target": "cooper-climax",
+      "start_year": 1959,
+      "end_year": 1959,
+      "sources": [
+        "cooper-history"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "cooper-t51",
+      "predicate": "powered-by",
+      "target": "climax-25",
+      "start_year": 1959,
+      "end_year": 1959,
+      "sources": [
+        "goodwood-t51"
+      ],
+      "context": "Links to the selected nominal engine configurations; does not assert identical revision or physical unit."
+    },
+    {
+      "subject": "cooper-t51",
+      "predicate": "illustrates",
+      "target": "rear-engine-transition",
+      "start_year": 1959,
+      "end_year": 1959,
+      "sources": [
+        "brabham-history"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "jack-brabham",
+      "predicate": "raced-vehicle",
+      "target": "cooper-t51",
+      "start_year": 1959,
+      "end_year": 1959,
+      "sources": [
+        "cooper-history"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "jack-brabham",
+      "predicate": "drove-for",
+      "target": "cooper-climax",
+      "start_year": 1959,
+      "end_year": 1959,
+      "sources": [
+        "f1-drivers-1959"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "cooper-t53",
+      "predicate": "built-by",
+      "target": "cooper-climax",
+      "start_year": 1960,
+      "end_year": 1960,
+      "sources": [
+        "cooper-history"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "cooper-t53",
+      "predicate": "powered-by",
+      "target": "climax-25",
+      "start_year": 1960,
+      "end_year": 1960,
+      "sources": [
+        "sd-t53"
+      ],
+      "context": "Links to the selected nominal engine configurations; does not assert identical revision or physical unit."
+    },
+    {
+      "subject": "cooper-t53",
+      "predicate": "illustrates",
+      "target": "rear-engine-transition",
+      "start_year": 1960,
+      "end_year": 1960,
+      "sources": [
+        "brabham-history"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "jack-brabham",
+      "predicate": "raced-vehicle",
+      "target": "cooper-t53",
+      "start_year": 1960,
+      "end_year": 1960,
+      "sources": [
+        "silverstone-history"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "jack-brabham",
+      "predicate": "drove-for",
+      "target": "cooper-climax",
+      "start_year": 1960,
+      "end_year": 1960,
+      "sources": [
+        "f1-drivers-1960"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "cooper-t53",
+      "predicate": "developed-from",
+      "target": "cooper-t51",
+      "start_year": 1960,
+      "end_year": 1960,
+      "sources": [
+        "sd-t53"
+      ],
+      "context": "Museum account identifies T51 as predecessor. No shared dimensions or parts interchangeability inferred."
+    },
+    {
+      "subject": "bruce-mclaren",
+      "predicate": "drove-for",
+      "target": "cooper-climax",
+      "start_year": 1960,
+      "end_year": 1960,
+      "sources": [
+        "f1-drivers-1960"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "silverstone-1950",
+      "predicate": "layout-of",
+      "target": "silverstone",
+      "start_year": 1950,
+      "end_year": 1950,
+      "sources": [
+        "f1-race-1950"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "monaco-1959",
+      "predicate": "layout-of",
+      "target": "monaco",
+      "start_year": 1959,
+      "end_year": 1959,
+      "sources": [
+        "f1-monaco-1959"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "aintree-1959",
+      "predicate": "layout-of",
+      "target": "aintree",
+      "start_year": 1959,
+      "end_year": 1959,
+      "sources": [
+        "f1-british-1959"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "silverstone-1960",
+      "predicate": "layout-of",
+      "target": "silverstone",
+      "start_year": 1960,
+      "end_year": 1960,
+      "sources": [
+        "f1-british-1960"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "monaco-gp-1959",
+      "predicate": "part-of-season",
+      "target": "season-1959",
+      "start_year": 1959,
+      "end_year": 1959,
+      "sources": [
+        "f1-monaco-1959"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "monaco-gp-1959",
+      "predicate": "held-at",
+      "target": "monaco",
+      "start_year": 1959,
+      "end_year": 1959,
+      "sources": [
+        "f1-monaco-1959"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "monaco-gp-1959",
+      "predicate": "uses-layout",
+      "target": "monaco-1959",
+      "start_year": 1959,
+      "end_year": 1959,
+      "sources": [
+        "f1-monaco-1959"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "british-gp-1959",
+      "predicate": "part-of-season",
+      "target": "season-1959",
+      "start_year": 1959,
+      "end_year": 1959,
+      "sources": [
+        "f1-british-1959"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "british-gp-1959",
+      "predicate": "held-at",
+      "target": "aintree",
+      "start_year": 1959,
+      "end_year": 1959,
+      "sources": [
+        "f1-british-1959"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "british-gp-1959",
+      "predicate": "uses-layout",
+      "target": "aintree-1959",
+      "start_year": 1959,
+      "end_year": 1959,
+      "sources": [
+        "f1-british-1959"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "british-gp-1960",
+      "predicate": "part-of-season",
+      "target": "season-1960",
+      "start_year": 1960,
+      "end_year": 1960,
+      "sources": [
+        "f1-british-1960"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "british-gp-1960",
+      "predicate": "held-at",
+      "target": "silverstone",
+      "start_year": 1960,
+      "end_year": 1960,
+      "sources": [
+        "f1-british-1960"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    },
+    {
+      "subject": "british-gp-1960",
+      "predicate": "uses-layout",
+      "target": "silverstone-1960",
+      "start_year": 1960,
+      "end_year": 1960,
+      "sources": [
+        "f1-british-1960"
+      ],
+      "context": "Reviewed association only within the stated event/season scope."
+    }
+  ],
+  "classifications": [
+    {
+      "id": "1959-driver-standing-champion",
+      "category": "driver-standing",
+      "season_id": "season-1959",
+      "race_id": null,
+      "entry": "Selected championship winner",
+      "driver_ids": [
+        "jack-brabham"
+      ],
+      "constructor_id": "cooper-climax",
+      "position": 1,
+      "position_text": "1",
+      "laps": null,
+      "points": 31,
+      "time": null,
+      "sources": [
+        "f1-drivers-1959"
+      ],
+      "context": "Partial final classification: winner only. Published counted championship points."
+    },
+    {
+      "id": "1959-constructor-standing-champion",
+      "category": "constructor-standing",
+      "season_id": "season-1959",
+      "race_id": null,
+      "entry": "Selected championship winner",
+      "driver_ids": [],
+      "constructor_id": "cooper-climax",
+      "position": 1,
+      "position_text": "1",
+      "laps": null,
+      "points": 40,
+      "time": null,
+      "sources": [
+        "f1-constructors-1959"
+      ],
+      "context": "Partial final classification: winner only. Published counted championship points."
+    },
+    {
+      "id": "1960-driver-standing-champion",
+      "category": "driver-standing",
+      "season_id": "season-1960",
+      "race_id": null,
+      "entry": "Selected championship winner",
+      "driver_ids": [
+        "jack-brabham"
+      ],
+      "constructor_id": "cooper-climax",
+      "position": 1,
+      "position_text": "1",
+      "laps": null,
+      "points": 43,
+      "time": null,
+      "sources": [
+        "f1-drivers-1960"
+      ],
+      "context": "Partial final classification: winner only. Published counted championship points."
+    },
+    {
+      "id": "1960-constructor-standing-champion",
+      "category": "constructor-standing",
+      "season_id": "season-1960",
+      "race_id": null,
+      "entry": "Selected championship winner",
+      "driver_ids": [],
+      "constructor_id": "cooper-climax",
+      "position": 1,
+      "position_text": "1",
+      "laps": null,
+      "points": 48,
+      "time": null,
+      "sources": [
+        "f1-constructors-1960"
+      ],
+      "context": "Partial final classification: winner only. Published counted championship points."
+    },
+    {
+      "id": "monaco-gp-1959-brabham",
+      "category": "race",
+      "season_id": "season-1959",
+      "race_id": "monaco-gp-1959",
+      "entry": "Jack Brabham / Cooper Climax",
+      "driver_ids": [
+        "jack-brabham"
+      ],
+      "constructor_id": "cooper-climax",
+      "position": 1,
+      "position_text": "1",
+      "laps": 100,
+      "points": 9,
+      "time": "2:55:51.300",
+      "sources": [
+        "f1-monaco-1959"
+      ],
+      "context": "Selected winner row only. Points follow the published result, including fastest-lap rules where applicable."
+    },
+    {
+      "id": "british-gp-1959-brabham",
+      "category": "race",
+      "season_id": "season-1959",
+      "race_id": "british-gp-1959",
+      "entry": "Jack Brabham / Cooper Climax",
+      "driver_ids": [
+        "jack-brabham"
+      ],
+      "constructor_id": "cooper-climax",
+      "position": 1,
+      "position_text": "1",
+      "laps": 75,
+      "points": 8,
+      "time": "2:30:11.600",
+      "sources": [
+        "f1-british-1959"
+      ],
+      "context": "Selected winner row only. Points follow the published result, including fastest-lap rules where applicable."
+    },
+    {
+      "id": "british-gp-1960-brabham",
+      "category": "race",
+      "season_id": "season-1960",
+      "race_id": "british-gp-1960",
+      "entry": "Jack Brabham / Cooper Climax",
+      "driver_ids": [
+        "jack-brabham"
+      ],
+      "constructor_id": "cooper-climax",
+      "position": 1,
+      "position_text": "1",
+      "laps": 77,
+      "points": 8,
+      "time": "2:04:24.600",
+      "sources": [
+        "f1-british-1960"
+      ],
+      "context": "Selected winner row only. Points follow the published result, including fastest-lap rules where applicable."
+    },
+    {
+      "id": "aintree-1959-mclaren",
+      "category": "race",
+      "season_id": "season-1959",
+      "race_id": "british-gp-1959",
+      "entry": "Bruce McLaren / Cooper Climax",
+      "driver_ids": [
+        "bruce-mclaren"
+      ],
+      "constructor_id": "cooper-climax",
+      "position": 3,
+      "position_text": "3",
+      "laps": 75,
+      "points": 4.5,
+      "time": "+22.400s",
+      "sources": [
+        "f1-british-1959"
+      ],
+      "context": "Selected third-place row. Published fractional points retained rather than rounded."
+    }
+  ],
+  "exhibits": [
+    {
+      "vehicle_id": "cooper-t51",
+      "state": "not-supplied",
+      "asset": null,
+      "assembly_labels": [],
+      "notes": "Future Blender/GLB exhibit requires a separate licensed asset and fidelity review; current teaching diagrams are not this vehicle.",
+      "sources": [
+        "goodwood-t51"
+      ]
+    },
+    {
+      "vehicle_id": "cooper-t53",
+      "state": "not-supplied",
+      "asset": null,
+      "assembly_labels": [],
+      "notes": "Future Blender/GLB exhibit requires a separate licensed asset and fidelity review; current teaching diagrams are not this vehicle.",
+      "sources": [
+        "sd-t53"
+      ]
+    }
+  ]
+}

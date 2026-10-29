@@ -5,9 +5,11 @@ import sqlite3
 from pathlib import Path
 from threading import RLock
 from .models import Dataset, Entity, Source, Link, Classification
+from .exhibits import ExhibitPlan
 
 ROOT = Path(__file__).resolve().parent
 SEED = ROOT / 'data' / 'silverstone-1950.json'
+COLLECTIONS = {'silverstone-1950': SEED, 'cooper-1959-1960': ROOT / 'data' / 'cooper-1959-1960.json'}
 MAX_BYTES = 20 * 1024 * 1024
 
 
@@ -21,7 +23,9 @@ def read_dataset(path=SEED):
 
 
 def populate(connection, dataset):
-    connection.executescript((ROOT / 'migrations' / '001_catalog.sql').read_text())
+    # Fresh projections only. Offline ingestion refuses an existing output file.
+    for migration in sorted((ROOT / 'migrations').glob('*.sql')):
+        connection.executescript(migration.read_text())
     with connection:
         connection.executemany('INSERT INTO metadata VALUES (?,?)', [
             ('revision', dataset.revision), ('coverage', dataset.coverage), ('schema_version', '1')])
@@ -37,6 +41,7 @@ def populate(connection, dataset):
                                    [(e.id, c.key, s) for c in e.claims for s in c.sources])
         connection.executemany('INSERT INTO links(subject,target,predicate,payload) VALUES (?,?,?,?)',
                                [(l.subject, l.target, l.predicate, l.model_dump_json()) for l in dataset.links])
+        connection.executemany('INSERT INTO exhibits VALUES (?,?)', [(e.vehicle_id, e.model_dump_json()) for e in dataset.exhibits])
         for row in dataset.classifications:
             connection.execute('INSERT INTO classifications VALUES (?,?,?,?,?,?,?)',
                                (row.id, row.category, row.season_id, row.race_id, row.constructor_id, row.position, row.model_dump_json()))
@@ -105,3 +110,16 @@ class Store:
     def facets(self):
         return {'kinds': [row[0] for row in self.query('SELECT DISTINCT kind FROM entities ORDER BY kind')],
                 'years': sorted({y for start, end in self.query('SELECT coverage_start,coverage_end FROM entities') for y in range(start, end + 1)})}
+
+    def exhibit(self, identifier):
+        rows = self.query('SELECT payload FROM exhibits WHERE vehicle_id=?', (identifier,))
+        return ExhibitPlan.model_validate_json(rows[0][0]) if rows else None
+
+    def layouts(self, identifier):
+        # A layout identifies its venue; event identities do not imply shape differences.
+        venue = self.query("SELECT target FROM links WHERE subject=? AND predicate='layout-of'", (identifier,))
+        circuit = venue[0][0] if venue else identifier
+        rows = self.query("""SELECT e.payload FROM entities e JOIN links l ON e.id=l.subject
+            WHERE l.target=? AND l.predicate='layout-of' AND e.kind='layout'
+            ORDER BY e.coverage_start, e.id LIMIT 100""", (circuit,))
+        return [Entity.model_validate_json(row[0]) for row in rows]
