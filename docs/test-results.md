@@ -39,3 +39,15 @@ The browser runtime is installed in temporary environment storage, not added to 
 ## Reproduction
 
 See `heritage-integration.md` for commands. The full suites deliberately return non-zero here because of absent original assets. Do not replace these results with a blanket “all tests pass” statement.
+
+## Stage 2 executed validation (2026-10-29)
+
+- `python -m pytest -q tests/test_heritage.py tests/test_heritage_demo.py tests/test_museum.py tests/test_museum_resilience.py` (backend): **52 passed**, one existing Starlette/httpx deprecation warning.
+- `node --test tests/heritageCatalogue.test.mjs tests/heritage.test.mjs` (frontend): **8 passed**.
+- `npm run build`: **passed**; existing 500kB vendor chunk warning remains.
+- `BROWSER_EXECUTABLE_PATH=/tmp/fastone-chromium node tools/check_heritage_browser.mjs`: **13 check groups passed**, real local API. New groups exercise 1440/834/390px responsive columns and document overflow, circuit evidence expand/collapse with no fabricated map, existing Alfetta exhibit navigation and reduced-motion transitions. Original ten groups remain.
+- `git diff --check`: **passed**.
+
+The full asset-dependent suites are not rerun for these frontend-only changes. The earlier Stage 1 full-suite missing-asset results remain historical evidence, not a new Stage 2 execution claim. Google Fonts fail to load in this environment; visible typography uses fallbacks. The library reference route shows an existing error boundary and is explicitly recorded as blocked. The cloud browser cannot access the workspace loopback; local Chromium executes the actual screenshot checks.
+
+Responsive and before/after screenshots: `docs/previews/stage2/`. See `heritage-stage2-design.md` for captured steps, decisions and evidence limitations. Component screenshots hide the sticky header to prevent screenshot-only occlusion; `museum-context.png` retains the full shell. Source snapshots are captured without invented car images or track geometry.

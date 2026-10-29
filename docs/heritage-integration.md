@@ -62,3 +62,11 @@ The configured provider at `dd57d25` is Groq. See `MUSEUM_AI_SETUP.md`. Public h
 ## Review boundaries
 
 No simulator, race-state/replay animation, circuit geometry, camera, vehicle-model, dependency, top-level navigation or global-style change is included. Review the small existing-file integrations for concurrent edits. Merge only after the full-asset regression checks and rights review pass; no production deployment follows automatically from this PR.
+
+## Stage 2 presentation integration
+
+The catalogue retains the same API/storage contract. Open Museum → Origins; use the race/machine/circuit entry points or search. Within a record, museum links open the existing timeline, historical car exhibit, engineering experiments and historical race views through existing hash routes. The Alfetta link opens `#museum?section=collection&id=alfa-158`.
+
+Circuit and layout records render `HistoricalCircuit.tsx`; this component imports only React and heritage API types. It expands sourced layout evidence with native buttons and ARIA state. It does not load simulator modules, models, geographic calibration or modern circuit coordinates. The 1950 identity remains sourced, while surveyed geometry and lap length remain explicitly unverified. Future dated layouts use separate linked layout records; measured maps require a reviewed/licensed geometry contract first.
+
+Run the existing browser script to regenerate Stage 2 responsive captures and reference screenshots. The before captures are preserved from the initial Stage 2 baseline run and are not overwritten by the script. See `heritage-stage2-design.md` for visual decisions and the source-checkout limitations.

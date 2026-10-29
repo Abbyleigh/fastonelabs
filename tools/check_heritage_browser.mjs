@@ -18,6 +18,7 @@ const api=spawn(process.env.PYTHON||'python',['-m','uvicorn','main:app','--host'
 let server,browser;
 const checks=[],errors=[];
 const preview=path.join(root,'docs/previews');await mkdir(preview,{recursive:true});
+const stage2=path.join(preview,'stage2');await mkdir(stage2,{recursive:true});
 try{
  for(let i=0;i<100;i++){
   try{if((await fetch(`http://127.0.0.1:${port}/api/heritage/entities`)).ok)break;}catch{}
@@ -71,6 +72,53 @@ try{
  await gallery.getByRole('button',{name:/Explore Alfa Romeo GP/}).waitFor();checks.push('loading state and stale-search cancellation');
  await gallery.getByLabel('Search the collection').focus();
  await page.keyboard.press('Tab');assert.equal(await gallery.getByLabel('Record type').evaluate(el=>el===document.activeElement),true);checks.push('keyboard filter navigation');
+
+ await page.unroute('**/api/heritage/entities?**');
+ await gallery.getByRole('button',{name:'Clear filters',exact:true}).click();
+ await gallery.getByText('10 records match · silverstone-1950-v1',{exact:true}).waitFor();
+ for(const [name,width,height] of [['desktop',1440,1000],['tablet',834,1112],['mobile',390,844]]){
+  await page.setViewportSize({width,height});
+  assert.equal(await gallery.evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
+  assert.equal(await gallery.locator('.hc-grid').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length),name==='desktop'?3:name==='tablet'?2:1);
+  await gallery.screenshot({style:'.site-header {visibility:hidden !important}',path:path.join(stage2,'after-'+name+'.png')});
+  await gallery.getByRole('button',{name:'03 / The circuit →',exact:true}).click();
+  const circuit=gallery.getByRole('region',{name:'Historical circuit experience'});
+  await circuit.getByRole('button',{name:'Expand circuit study'}).click();
+  assert.equal(await circuit.getByRole('button',{name:'Collapse circuit study'}).getAttribute('aria-expanded'),'true');
+  assert.match(await circuit.innerText(),/No track outline is displayed/);
+  assert.equal(await circuit.locator('svg,canvas,img').count(),0);
+  assert.equal(await circuit.evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
+  await circuit.screenshot({style:'.site-header {visibility:hidden !important}',path:path.join(stage2,'circuit-'+name+'.png')});
+  await circuit.getByRole('button',{name:'Collapse circuit study'}).click();
+  assert.equal(await circuit.getByText('What this layout record supports',{exact:true}).isVisible(),false);
+  await gallery.getByRole('button',{name:'← Back to results',exact:true}).click();
+ }
+ checks.push('desktop/tablet/mobile catalogue and expandable circuit evidence; no invented geometry');
+ await page.setViewportSize({width:1440,height:1000});
+ await gallery.getByRole('button',{name:'02 / The machine →',exact:true}).click();
+ const exhibit=gallery.getByRole('link',{name:'Explore the Alfetta exhibit ↗'});
+ await exhibit.click();
+ await page.getByRole('heading',{name:'Documented specifications',exact:true}).waitFor();
+ assert.match(page.url(),/section=collection&id=alfa-158/);
+ checks.push('research record to existing Alfetta exhibit navigation');
+ await page.goto(url);await gallery.getByRole('button',{name:'Next',exact:true}).waitFor();
+ const card=gallery.locator('.hc-grid>li').first();
+ assert.equal(await card.evaluate(el=>getComputedStyle(el).transitionDuration),'0s');
+ await page.emulateMedia({reducedMotion:'no-preference'});
+ assert.notEqual(await card.evaluate(el=>getComputedStyle(el).transitionDuration),'0s');
+ await page.emulateMedia({reducedMotion:'reduce'});
+ checks.push('reduced-motion disables hover transitions');
+ await page.screenshot({path:path.join(stage2,'museum-context.png'),fullPage:true});
+ // Reference captures preserve the actual source-only site's visible states. Missing assets are documented.
+ for(const [name,hash,ready] of [['home','#home','.cinematic-heading'],['library','#library','.vehicle-library'],['engineering','#museum?section=innovations','.museum-force'],['race-centre','#replay?year=2025&round=1&name=Australian+Grand+Prix','main']]){
+  const reference=await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
+  await reference.addInitScript(()=>sessionStorage.setItem('fastone.pit-intro.seen.v1','1'));
+  await reference.goto(url.split('/#')[0]+'/'+hash);
+  try{await reference.locator(ready).first().waitFor({timeout:15000});await reference.locator(ready).first().scrollIntoViewIfNeeded();}catch{}
+  await reference.screenshot({path:path.join(stage2,'reference-'+name+'.png')});
+  await reference.close();
+ }
  assert.deepEqual(errors,[]);checks.push('no JavaScript page errors');
  console.log(JSON.stringify({status:'passed',checks,screenshots:['heritage-desktop.png','heritage-vehicle.png','heritage-mobile.png']},null,2));
 }catch(error){
