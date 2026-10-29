@@ -130,21 +130,77 @@ function ReplayCar({
   calibration?: SilverstoneCalibration | null;
   showLabel?: boolean;
 }) {
-  const pose = useMemo(() => replayPoseAt(car,coordinates,calibration),[car,coordinates,calibration]);
-  if (!pose) return null;
-  return (
+  const pose = useMemo(
+    () => replayPoseAt(car, coordinates, calibration),
+    [car, coordinates, calibration]
+  );
 
-    <group position={pose.position} rotation={[0, pose.rotationY, 0]}>
+  const group = useRef<THREE.Group>(null);
+  const initialized = useRef(false);
+
+  useFrame((_, delta) => {
+    const object = group.current;
+    if (!object || !pose) {
+      initialized.current = false;
+      return;
+    }
+
+    const distance = object.position.distanceTo(pose.position);
+
+    // Large discontinuities are treated as seeks or telemetry jumps.
+    // Do not visually drive a car across missing recorded positions.
+    const snapDistance = calibration ? 1.5 : 25;
+
+    if (!initialized.current || distance > snapDistance) {
+      object.position.copy(pose.position);
+      object.rotation.y = pose.rotationY;
+      initialized.current = true;
+      return;
+    }
+
+    // Frame-rate-independent visual smoothing.
+    const blend = 1 - Math.exp(-18 * Math.min(delta, 0.1));
+
+    object.position.lerp(pose.position, blend);
+
+    // Shortest-path angular interpolation avoids 360-degree spins.
+    const angle = Math.atan2(
+      Math.sin(pose.rotationY - object.rotation.y),
+      Math.cos(pose.rotationY - object.rotation.y)
+    );
+
+    object.rotation.y += angle * blend;
+  });
+
+  if (!pose) return null;
+
+  return (
+    <group ref={group}>
       <group scale={calibration ? 0.07 : 1}>
         <F1CarModel color={car.color} code={car.code} />
       </group>
-      {showLabel && <Html position={[0, calibration ? 0.38 : 1.45, 0]} center style={{ pointerEvents: 'none' }}>
-        <div style={{ background: '#0c1421e8', color: '#fff', border: `1px solid ${car.color}`,
-          borderRadius: 5, padding: '2px 5px', fontWeight: 800, fontSize: 11,
-          whiteSpace: 'nowrap', boxShadow: '0 2px 10px #0008' }}>
-          <span style={{ color: car.color }}>● </span>{car.code}
-        </div>
-      </Html>}
+      {showLabel && (
+        <Html
+          position={[0, calibration ? 0.38 : 1.45, 0]}
+          center
+          style={{ pointerEvents: 'none' }}
+        >
+          <div style={{
+            background: '#0c1421e8',
+            color: '#fff',
+            border: `1px solid ${car.color}`,
+            borderRadius: 5,
+            padding: '2px 5px',
+            fontWeight: 800,
+            fontSize: 11,
+            whiteSpace: 'nowrap',
+            boxShadow: '0 2px 10px #0008'
+          }}>
+            <span style={{ color: car.color }}>● </span>
+            {car.code}
+          </div>
+        </Html>
+      )}
     </group>
   );
 }
@@ -270,6 +326,15 @@ function RaceCamera({
   const controls = useRef<React.ComponentRef<typeof OrbitControls>>(null);
   const wasFollowing = useRef(false);
 
+  // Reuse Three.js objects rather than allocating them every frame.
+  const cameraMath = useMemo(() => ({
+    axis: new THREE.Vector3(0, 1, 0),
+    heading: new THREE.Quaternion(),
+    behind: new THREE.Vector3(),
+    ahead: new THREE.Vector3(),
+    destination: new THREE.Vector3()
+  }), []);
+
   useFrame((_, delta) => {
     const control = controls.current;
     if (!control) return;
@@ -289,36 +354,28 @@ function RaceCamera({
     // Stage 9B: physically calibrated Silverstone chase camera.
     // Geographic Silverstone uses approximately 0.069975 scene units
     // per real-world metre. The procedural car faces local +Z.
-    const heading = new THREE.Quaternion().setFromAxisAngle(
-      new THREE.Vector3(0, 1, 0),
+    cameraMath.heading.setFromAxisAngle(
+      cameraMath.axis,
       pose.rotationY
     );
 
     if (calibration) {
-      // Roughly 8.6 m behind and 2.9 m above the car reference.
-      const behind = new THREE.Vector3(0, 0.20, -0.60)
-        .applyQuaternion(heading);
+      // Preserve the existing physically calibrated chase offsets.
+      cameraMath.behind.set(0, 0.20, -0.60)
+        .applyQuaternion(cameraMath.heading)
+        .add(pose.position);
 
-      // Look ahead in the vehicle's local +Z direction.
-      const ahead = new THREE.Vector3(0, 0.08, 0.65)
-        .applyQuaternion(heading);
+      cameraMath.ahead.set(0, 0.08, 0.65)
+        .applyQuaternion(cameraMath.heading)
+        .add(pose.position);
 
-      camera.position.lerp(
-        pose.position.clone().add(behind),
-        damping
-      );
-
-      control.target.lerp(
-        pose.position.clone().add(ahead),
-        damping
-      );
+      camera.position.lerp(cameraMath.behind, damping);
+      control.target.lerp(cameraMath.ahead, damping);
     } else {
-      // Preserve existing camera behaviour on other circuits.
-      const destination = pose.position.clone().add(
-        new THREE.Vector3(0, 18, 28)
-      );
+      cameraMath.destination.copy(pose.position)
+        .add(cameraMath.behind.set(0, 18, 28));
 
-      camera.position.lerp(destination, damping);
+      camera.position.lerp(cameraMath.destination, damping);
       control.target.lerp(pose.position, damping);
     }
 

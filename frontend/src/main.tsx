@@ -110,10 +110,22 @@ function HistoricalReplay({ onBack,year,round,eventName }: { onBack: () => void;
     if (!playing || !tabVisible || replayDuration <= 0) return;
     let frame = 0;
     let previous = performance.now();
+    let accumulated = 0;
+
+    // Throttle React updates while preserving elapsed replay time.
     const tick = (now: number) => {
-      const elapsed = (now - previous) / 1000;
+      const elapsed = Math.max(0, (now - previous) / 1000);
       previous = now;
-      setReplayTime(current => advanceReplayClock(current,elapsed,playbackSpeed,replayDuration,false));
+      accumulated += elapsed;
+
+      if (accumulated >= 1 / 30) {
+        const step = accumulated;
+        accumulated = 0;
+        setReplayTime(current =>
+          advanceReplayClock(current, step, playbackSpeed, replayDuration, false)
+        );
+      }
+
       frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
