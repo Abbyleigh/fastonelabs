@@ -3,7 +3,7 @@ from pathlib import Path
 import os, sys
 root=Path(__file__).resolve().parents[1]
 config=root/'backend/.env.museum'
-allowed={'MUSEUM_AI_ENABLED','OPENAI_API_KEY','MUSEUM_AI_MODEL'}
+allowed={'MUSEUM_AI_ENABLED','GROQ_API_KEY','MUSEUM_AI_MODEL'}
 if config.exists():
  if config.stat().st_mode&0o077:raise SystemExit('Private AI config permissions must be 600.')
  for line in config.read_text().splitlines():

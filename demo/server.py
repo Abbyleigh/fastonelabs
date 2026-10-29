@@ -11,7 +11,7 @@ class Handler(SimpleHTTPRequestHandler):
  def do_GET(self):
   path=urlsplit(self.path).path
   if path.startswith('/api/'):
-   if not re.fullmatch(r'/api/(?:health|news|museum/historian|race-state(?:/(?:schema|verify))?|track|calendar|replay/(?:sample|multi)|archive/(?:season|drivers|race/\d{4}/\d{1,2}|driver/[a-zA-Z0-9_-]+))',path):self.send_error(404);return
+   if not re.fullmatch(r'/api/(?:health|news|museum/historian|race-state(?:/(?:schema|verify))?|track|calendar|replay/(?:sample|multi)|archive/(?:season|drivers|race/\d{4}/\d{1,2}|driver/[a-zA-Z0-9_-]+)|heritage/entities(?:/[a-z0-9][a-z0-9-]{0,79})?)',path):self.send_error(404);return
    try:
     with urlopen('http://127.0.0.1:8001'+self.path,timeout=90) as response:
      body=response.read(64*1024*1024);self.send_response(response.status);self.send_header('Content-Type',response.headers.get('Content-Type','application/json'));self.send_header('Content-Length',str(len(body)));self.end_headers();self.wfile.write(body)
@@ -26,4 +26,5 @@ class Handler(SimpleHTTPRequestHandler):
   resolved=(ROOT/unquote(path).lstrip('/')).resolve()
   if not resolved.is_relative_to(ROOT.resolve()) or not (path in ('/','/index.html','/favicon.ico') or path.startswith(('/assets/','/models/','/images/'))):self.send_error(404);return
   super().do_HEAD()
-ThreadingHTTPServer(('127.0.0.1',8765),Handler).serve_forever()
+if __name__ == '__main__':
+ ThreadingHTTPServer(('127.0.0.1',8765),Handler).serve_forever()
