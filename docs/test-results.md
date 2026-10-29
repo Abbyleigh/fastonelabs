@@ -51,3 +51,21 @@ See `heritage-integration.md` for commands. The full suites deliberately return 
 The full asset-dependent suites are not rerun for these frontend-only changes. The earlier Stage 1 full-suite missing-asset results remain historical evidence, not a new Stage 2 execution claim. Google Fonts fail to load in this environment; visible typography uses fallbacks. The library reference route shows an existing error boundary and is explicitly recorded as blocked. The cloud browser cannot access the workspace loopback; local Chromium executes the actual screenshot checks.
 
 Responsive and before/after screenshots: `docs/previews/stage2/`. See `heritage-stage2-design.md` for captured steps, decisions and evidence limitations. Component screenshots hide the sticky header to prevent screenshot-only occlusion; `museum-context.png` retains the full shell. Source snapshots are captured without invented car images or track geometry.
+
+## Integration-readiness validation (29 October 2026)
+
+Executed on the accepted Stage 2 source plus the isolated library wrapper and review tooling:
+
+- `python -m pytest -q backend/tests/test_review_assets.py backend/tests/test_heritage.py backend/tests/test_heritage_demo.py backend/tests/test_museum.py backend/tests/test_museum_resilience.py`: **57 passed**, one existing Starlette/httpx warning. Five new helper tests use disposable real Git worktrees; 52 existing heritage/museum tests remain passing.
+- `node --test tests/vehicleAssets.test.mjs tests/heritageCatalogue.test.mjs tests/heritage.test.mjs` from frontend: **12 passed**.
+- `npm run build`: **passed**, existing vendor chunk warning remains.
+- `tools/check_vehicle_library_browser.mjs` with a real local API and Chromium 153: **7 check groups passed**, including forced WebGL creation failure, preserved catalogue/profile/search/favourites, failed retry, actual procedural viewer recovery after WebGL returns, independent comparison failure, 390px layout and personal garage.
+- `tools/check_heritage_review_config.mjs`: **3 check groups passed** — frontend/API proxy, curated-only/disabled AI behaviour, strict-port collision rejection with the first frontend left operational.
+- `tools/generate_heritage_contracts.py --check` and `git diff --check`: **passed**.
+- Fresh unchanged-lock npm audit: **0 vulnerabilities**. Fresh requirements-based Python audit: **3 advisory entries in msgpack 1.1.2, 2 distinct advisory identities**; unresolved, no dependency update performed.
+
+Pre-fix diagnosis captures `WebGLRenderer` → `CanvasImpl` → `PageBoundary` with “Error creating WebGL context” and the original procedural car selected; missing GLBs are not required to reproduce the page failure. The Stage 2 inference about missing binaries is corrected in `vehicle-library-investigation.md`. The containment fix does not repair GPU availability or change renderer/model/camera logic.
+
+The temporary execution environment no longer has the previous Python/browser installations, so dependencies and Chromium are prepared again outside application manifests. Headless recovery tests use software WebGL; this does not certify Mac hardware/browser rendering. No new screenshots replace the accepted Stage 2 design captures.
+
+Not executed here: the Mac procedure on the user's machine, the full original-asset browser matrix, Safari/physical-mobile rendering, original-model integrity suites or a public edge/HTTPS deployment test. The original Stage 2 13-group catalogue run is prior evidence, not rerun or newly claimed in this stage. Full suites and the browser matrix remain merge-review blockers on the Mac.

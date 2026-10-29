@@ -70,3 +70,9 @@ The catalogue retains the same API/storage contract. Open Museum → Origins; us
 Circuit and layout records render `HistoricalCircuit.tsx`; this component imports only React and heritage API types. It expands sourced layout evidence with native buttons and ARIA state. It does not load simulator modules, models, geographic calibration or modern circuit coordinates. The 1950 identity remains sourced, while surveyed geometry and lap length remain explicitly unverified. Future dated layouts use separate linked layout records; measured maps require a reviewed/licensed geometry contract first.
 
 Run the existing browser script to regenerate Stage 2 responsive captures and reference screenshots. The before captures are preserved from the initial Stage 2 baseline run and are not overwritten by the script. See `heritage-stage2-design.md` for visual decisions and the source-checkout limitations.
+
+## Integration readiness after the accepted Stage 2 baseline
+
+Use the [detailed Mac procedure](heritage-mac-validation.md), [complete browser checklist](heritage-browser-regression.md) and [merge-readiness gates](heritage-merge-readiness.md). These supersede the short local-review commands above for full Mac validation: the dedicated review config uses loopback ports 15173/18001 and leaves the simulator's shared Vite configuration untouched.
+
+The isolated Vehicle Library fix adds a DOM error boundary around each preview only. See [exact diagnosis](vehicle-library-investigation.md); the reproduced page failure comes from WebGL context creation, even without an external model. The fix contains that failure and supports retry; it does not change graphics, models or simulator components. Original-asset validation remains required.

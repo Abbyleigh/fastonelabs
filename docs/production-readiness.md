@@ -47,3 +47,33 @@ These involve MessagePack parsing/memory safety or denial of service. The new he
 The bundled `demo/server.py` remains a local demo utility, not production hosting. This change only extends its GET allowlist to bounded catalogue paths; no share tunnel is run.
 
 Primary deployment guidance: https://vite.dev/guide/static-deploy.html and https://fastapi.tiangolo.com/deployment/https/ .
+
+## Integration-readiness re-review — 29 October 2026
+
+This review does not deploy or change runtime security/dependencies. [Private merge gates and public-release gates are tracked separately](heritage-merge-readiness.md). Local-only private review keeps both AI enable flags off and does not copy credentials. A successful Mac regression is not production security approval.
+
+### AI ingress: fail closed at the real public boundary
+
+Exact endpoints: `POST /api/museum/historian` and `POST /api/race-engineer/ask`. Both accept loopback clients with no Origin header; neither authenticates an end user, enforces per-user spending or implements account quotas. A reverse proxy can present requests as loopback depending on forwarded-header settings. Setting CORS origins is not a defence against server-to-server requests.
+
+Default release posture: keep AI flags disabled, keep keys server-only, and deny both public POST routes at the edge. Check canonical paths, trailing-slash redirects, decoded/normalised paths, any mounted prefix and every public ingress/alternative backend address. Explicitly allow reviewed GET retrieval; do not proxy arbitrary methods to the backend. Negative tests must run through the real edge with absent/spoofed Origin and forwarded-client headers and must prove zero provider calls. No edge configuration is installed by this work.
+
+If public AI is later approved, require authenticated/authorised accounts, server-enforced per-account and aggregate quotas, concurrency limits, maximum provider cost/token budgets and a kill switch, strict input/body bounds, timeouts, safe error logging and abuse monitoring. Add CSRF protections where cookie credentials apply. Trust forwarding headers only from the actual private proxy. Test 401/403, 413, 429, expired sessions, unauthorised users, forged headers and fail-closed provider outages without live paid calls.
+
+Two owner-coordinated concerns remain in the existing Race Engineer: it buffers `await request.body()` before the 2048-byte check, and its enabled path imports `openai` despite no such package in `backend/requirements.txt`. Museum streaming bounds and SDK-free transport do not repair that separate route. No Race Engineer/simulator code or shared dependency declaration changes here.
+
+### Fresh dependency audit
+
+Executed again in a new temporary Python environment and against the unchanged frontend lock:
+
+- `npm audit --json`: **0 vulnerabilities** in the locked frontend tree at this check.
+- `python -m pip_audit -r backend/requirements.txt --format json`: **three entries in one package**, resolved `msgpack==1.1.2`. The audit service repeats `PYSEC-2026-3625` twice (fix reported 1.2.1), plus `CVE-2026-114613` (fix reported 1.2.3).
+- The [maintainer advisory for GHSA-j586-36cw-2gc2](https://github.com/msgpack/msgpack-python/security/advisories/GHSA-j586-36cw-2gc2) reproduces 1.2.2, reports a fix in 1.2.3, and explicitly says the earliest affected range needs confirmation. Do not infer that the old resolved 1.1.2 is cleared merely from a narrower advisory metadata field. The public database flags versions before 1.2.3.
+
+Remediation proposal only: resolve a reviewed constraints set in an isolated dependency branch, evaluate a patched msgpack version against FastF1 3.9.0 and the Mac Python version, run the complete original-asset/replay regression, inspect transitive changes and rerun the audit. Do not run exploit payloads in the active simulator process, use `pip install --upgrade` there, or claim remediation without a new resolution and evidence. Main heritage endpoints use JSON/SQLite; no reachable MessagePack exploit is demonstrated here. The requirement finding remains open.
+
+### Remaining release evidence
+
+The current source-only library failure is now traced to missing WebGL context, not an inferred corrupt model. Per-preview failure containment is tested, but original models, packed chunks, engineering maps, fonts and photographs still need full Mac validation. Other direct viewer consumers remain outside this isolated fix. Asset hash/attribution tests and visual checks both matter: a successful build alone proves neither integrity nor rights.
+
+Before any production review, inventory all served models/images/video/fonts/embeds and their source/reuse rights, validate immutable build/rollback, cache permissions and disk bounds, and record tested HTTPS/security headers/CSP origins. Host only `frontend/dist`; do not expose Vite, source roots, private cache/evidence folders or environment files. There is no deployment or domain action in this assignment.

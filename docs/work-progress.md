@@ -83,3 +83,31 @@ Executed: **52 focused backend tests**, **8 relevant frontend tests**, **13 brow
 Limits: Google Fonts fall back in this environment; original model/photo binaries remain absent. The vehicle library route opens its existing error boundary during reference capture; it is not counted as a successful visual audit. Race Centre capture shows available dashboard state, not validated replay/model fidelity. No simulator changes, global styles, routing, dependency, backend/data edits, migration, source-rights changes, paid calls, merge or deployment.
 
 Next: inspect this branch on the complete local Mac checkout with real fonts and original assets, then source and license historically accurate layout coordinates before enabling a measured map. No bulk data expansion starts here. The earlier recommendation for a second era is superseded by this presentation/integration priority. No development-hours total is inferred from this session's wall-clock timestamps.
+
+## Integration readiness after accepted Stage 2 (2026-10-29)
+
+Stage 2 `81bca76` is accepted as the design baseline. Scope changes to safe integration, not another historical era, new graphics or a redesign. Work continues only on `work/heritage-platform`; PR #1 stays draft.
+
+### Diagnosis and isolated fix
+
+Exact reproduction: `#library`, fresh storage, `original-study`; headless Chromium cannot create WebGL context. React reports `CanvasImpl` / `WebGLRenderer` failure, caught by the outer `PageBoundary`. The model boundary inside the canvas cannot catch canvas creation. This corrects the earlier attribution to absent media: missing models are separate, not necessary for this failure.
+
+New `frontend/src/VehiclePreviewBoundary.tsx` contains each preview independently. Only the two preview call sites in `frontend/src/VehicleLibrary.tsx` change. Catalogue, profile, citations, filters and favourites survive; retry remounts the child. Seven real-browser regression groups cover failure, retry/recovery, independent comparison, mobile and personal garage. No viewer, Three.js renderer, camera, replay, geometry, model, protected file, global CSS/routing or shared dependency change.
+
+### Review tooling and documentation
+
+- `tools/copy_review_assets.py`: dry-run-first, detached-worktree-only, missing binary media copy, SHA-256 inventory, conflict/symlink/overlap refusal; no metadata, code, configuration or cache copying. Five tests in `backend/tests/test_review_assets.py` use disposable actual Git worktrees.
+- `tools/heritage-review.vite.config.mjs`: separate loopback review ports 15173/18001 and strict-port behaviour; shared Vite config untouched.
+- `tools/check_vehicle_library_browser.mjs`: real-app regression for preview containment/recovery, with test-only graphics injection/software rendering.
+- `tools/check_heritage_review_config.mjs`: local proxy and AI-disabled smoke checks plus occupied-port refusal.
+- `docs/vehicle-library-investigation.md`: exact component/error/reproduction and safe containment scope.
+- `docs/heritage-mac-validation.md`: pinned detached worktree, original-asset inventory/copy, separate dependencies/ports/private evidence and active-checkout comparison; no switch/reset/stash/rebase/clean/cleanup/merge/deploy.
+- `docs/heritage-browser-regression.md`: complete desktop/tablet/mobile/Safari matrix for homepage, Race Centre, 2024 British GP (round 12), museum, library and engineering.
+- `docs/heritage-merge-readiness.md`: completed checks, unresolved private merge gates and separate public release/AI/commercial blockers.
+- Existing integration, production, licensing and executed-results docs are updated with current scope, findings and primary-source rights/security review.
+
+Executed evidence: 57 focused Python tests, 12 relevant frontend tests, 7 library browser groups, 3 review-config smoke groups, frontend build, heritage contract drift and whitespace checks pass. Fresh npm audit reports 0 vulnerabilities; fresh requirements audit repeats two msgpack advisory identities in three entries. No dependency remediation is claimed or performed. Full Mac/original-asset tests remain unexecuted and explicitly block a merge-readiness recommendation.
+
+Remaining production findings include unauthenticated public AI ingress behind a proxy, Race Engineer buffering before its body limit and its undeclared optional SDK. They are documented for owner-coordinated work, not changed in simulator-owned code. Source/licensing verification remains distinct from commercial permission and historical fidelity. No new data/media acquisition, paid call, public publication or deployment occurs.
+
+The Mac guide is prepared and tools are tested in disposable environments; no claim is made to have accessed or modified the user's Mac. Next action is the complete original-asset validation at a recorded branch SHA, followed by owner review of blockers. No total development hours are invented.
