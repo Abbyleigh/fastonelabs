@@ -1,0 +1,242 @@
+.pit-intro { position:fixed; inset:0; z-index:99999; overflow:hidden; background:transparent; color:#fff; isolation:isolate; }
+.pit-intro__panel { position:absolute; top:0; bottom:0; width:50%; overflow:hidden; background:#05080c; transition:transform 950ms cubic-bezier(.65,0,.15,1); will-change:transform; }
+.pit-intro__panel--left { left:0; }
+.pit-intro__panel--right { right:0; }
+.pit-intro__video { position:absolute; top:0; width:100vw; height:100%; object-fit:cover; max-width:none; pointer-events:none; }
+.pit-intro__panel--left .pit-intro__video { left:0; }
+.pit-intro__panel--right .pit-intro__video { right:0; }
+.pit-intro__vignette { position:absolute; inset:0; pointer-events:none; background:linear-gradient(180deg,rgba(0,0,0,.65),transparent 22%,transparent 75%,rgba(0,0,0,.45)); transition:opacity 350ms; }
+.pit-intro__brand { position:absolute; left:clamp(18px,5vw,80px); top:clamp(22px,6vh,65px); display:flex; flex-direction:column; gap:3px; text-shadow:0 2px 18px #000; pointer-events:none; transition:opacity 250ms; }
+.pit-intro__brand strong { font:900 clamp(22px,3vw,48px)/1.05 system-ui,sans-serif; letter-spacing:.07em; }
+.pit-intro__brand strong span { color:#ff6c42; }
+.pit-intro__brand small { font:600 11px/1.3 system-ui,sans-serif; letter-spacing:.32em; }
+.pit-intro__skip { position:absolute; right:clamp(18px,5vw,80px); top:clamp(22px,6vh,65px); padding:10px 15px; border:1px solid rgba(255,255,255,.65); border-radius:6px; background:rgba(0,0,0,.45); color:#fff; font:600 13px system-ui,sans-serif; cursor:pointer; }
+.pit-intro__skip:focus-visible { outline:3px solid #ff6c42; outline-offset:3px; }
+.pit-intro--opening .pit-intro__panel--left { transform:translateX(-102%); }
+.pit-intro--opening .pit-intro__panel--right { transform:translateX(102%); }
+.pit-intro--opening .pit-intro__vignette,.pit-intro--opening .pit-intro__brand,.pit-intro--opening .pit-intro__skip { opacity:0; pointer-events:none; }
+.pit-intro__finish { position:absolute; width:1px; height:1px; animation:pit-intro-finish 1050ms linear forwards; }
+@keyframes pit-intro-finish { from { opacity:1; } to { opacity:0; } }
+@media (prefers-reduced-motion:reduce) { .pit-intro { display:none; } }
+
+/* FastOne Labs local prototype branding */
+.pit-intro::after {
+  content: "FASTONE LABS";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 175px;
+  height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    #0b111c 70%,
+    #172b3a
+  );
+  color: #ff7049;
+  font: 800 12px system-ui, sans-serif;
+  letter-spacing: 0.13em;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.pit-intro__skip {
+  z-index: 3;
+}
+
+.pit-intro--opening::after {
+  opacity: 0;
+  transition: opacity 350ms;
+}
+
+
+/* FASTONE CINEMATIC TEAR V1 */
+
+/*
+   The upper centre opens first.
+   The tear travels down the viewport,
+   then the two panels clear the screen.
+*/
+
+.pit-intro--opening .pit-intro__panel--left {
+  animation: fastone-tear-left 1150ms
+    cubic-bezier(.45,0,.15,1) forwards;
+  transition: none;
+}
+
+.pit-intro--opening .pit-intro__panel--right {
+  animation: fastone-tear-right 1150ms
+    cubic-bezier(.45,0,.15,1) forwards;
+  transition: none;
+}
+
+@keyframes fastone-tear-left {
+  0% {
+    clip-path: polygon(
+      0 0, 100% 0, 100% 100%, 0 100%
+    );
+    transform: translateX(0);
+  }
+
+  55% {
+    clip-path: polygon(
+      0 0, 0 0, 100% 100%, 0 100%
+    );
+    transform: translateX(-8%);
+  }
+
+  100% {
+    clip-path: polygon(
+      0 0, 0 0, 0 100%, 0 100%
+    );
+    transform: translateX(-102%);
+  }
+}
+
+@keyframes fastone-tear-right {
+  0% {
+    clip-path: polygon(
+      0 0, 100% 0, 100% 100%, 0 100%
+    );
+    transform: translateX(0);
+  }
+
+  55% {
+    clip-path: polygon(
+      100% 0, 100% 0, 0 100%, 100% 100%
+    );
+    transform: translateX(8%);
+  }
+
+  100% {
+    clip-path: polygon(
+      100% 0, 100% 0, 100% 100%, 100% 100%
+    );
+    transform: translateX(102%);
+  }
+}
+
+.pit-intro__finish {
+  animation-duration: 1250ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pit-intro--opening .pit-intro__panel {
+    animation: none;
+  }
+}
+
+
+/* FASTONE VIDEO FRAMING V2 */
+
+/* Maintain the original portrait framing on all screen sizes. */
+.pit-intro {
+  background: #080d15;
+}
+
+.pit-intro__panel {
+  background: #080d15;
+}
+
+.pit-intro__video {
+  width: 100vw;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+
+
+/* FASTONE WIDESCREEN PIT INTRO V3 */
+
+/* A blurred enlargement of the same video fills the screen. */
+.pit-intro__panel {
+  background: #080d15;
+}
+
+.pit-intro__video {
+  width: 100vw;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Keep the original video sharp in the middle. */
+.pit-intro__panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 200%;
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(10,15,25,.1),
+      rgba(5,8,15,.7)
+    ),
+    linear-gradient(
+      90deg,
+      #171f2d,
+      #341a20 40%,
+      #171f2d
+    );
+  pointer-events: none;
+}
+
+.pit-intro__panel--right::before {
+  right: 0;
+  left: auto;
+}
+
+/* Keep the video visible above the background. */
+.pit-intro__video {
+  z-index: 1;
+}
+
+.pit-intro__brand,
+.pit-intro__skip {
+  z-index: 5;
+}
+
+
+
+/* FASTONE MOVING CINEMATIC BACKGROUND V4 */
+
+.pit-intro__panel {
+  background: #080d15;
+}
+
+/* Disable the previous static gradient backdrop. */
+.pit-intro__panel::before {
+  display: none;
+}
+
+/* Original video: preserve the full pit-stop composition. */
+.pit-intro__video:not(.pit-intro__video--ambient) {
+  position: absolute;
+  z-index: 2;
+  width: 100vw;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Moving background: fill the empty widescreen areas. */
+.pit-intro__video--ambient {
+  position: absolute;
+  z-index: 1;
+  width: 100vw;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: blur(30px) brightness(.36) saturate(1.4);
+  transform: scale(1.12);
+  pointer-events: none;
+}
+
+/* Keep the existing foreground and reveal controls visible. */
+.pit-intro__brand,
+.pit-intro__skip {
+  z-index: 5;
+}

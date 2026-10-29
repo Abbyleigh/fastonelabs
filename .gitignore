@@ -16,3 +16,16 @@ backups/
 backend/.*-cache/
 backend/.news-cache.json
 .pytest_cache/
+
+.env
+backend/.env
+# Local development backups
+*.bak
+*.backup
+*.backup-*
+*.before-*
+.gitignore.backup-*
+# Local demo logs
+.fastone-demo-*.log
+# Original media backups
+frontend/public/intro/*backup*.mp4

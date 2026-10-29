@@ -1,33 +1,39 @@
-import HeritageMuseum from './HeritageMuseum';
-import VehicleLibrary from './VehicleLibrary';
-import DriverCareers from './DriverCareers';
+import CommentaryPanel from './commentary/CommentaryPanel';
+import PitStopIntro from './PitStopIntro';
+import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react';
+const HeritageMuseum=React.lazy(()=>import('./HeritageMuseum'));
+const VehicleLibrary=React.lazy(()=>import('./VehicleLibrary'));
+const DriverCareers=React.lazy(()=>import('./DriverCareers'));
 import SiteShell,{useWorkspace} from './SiteShell';
-import DriverShowcase from './DriverShowcase';
-import CinematicHome,{RaceEntryTransition} from './CinematicHome';
+const DriverShowcase=React.lazy(()=>import('./DriverShowcase'));
+const CinematicHome=React.lazy(()=>import('./CinematicHome'));
+const RaceEntryTransition=React.lazy(()=>import('./CinematicHome').then(m=>({default:m.RaceEntryTransition})));
+const RecordedScene=React.lazy(()=>import('./RaceScenes').then(m=>({default:m.RecordedScene})));
+const CircuitScene=React.lazy(()=>import('./RaceScenes').then(m=>({default:m.CircuitScene})));
+import DeferredExperience from './DeferredExperience';
 import {readScreen,screenUrl} from './navigation';
 import type {Screen} from './navigation';
 import {ReplaySource,advanceReplayClock} from './race/raceSources';
 import type {Channels} from './race/raceSources';
 import type {CarState} from './race/unifiedRaceState';
 import RaceStateStatus from './race/RaceStateStatus';
-import NewsDesk from './NewsDesk';
+const NewsDesk=React.lazy(()=>import('./NewsDesk'));
 import PitWall from './PitWall';
-import CircuitWorld from './CircuitWorld';
 import { matchGarageCar } from './GarageAssets';
 import RaceViewing from './RaceViewing';
-import DriverMedia from './DriverMedia';
-import ForecastPage from './ForecastPage';
+const DriverMedia=React.lazy(()=>import('./DriverMedia'));
+const ForecastPage=React.lazy(()=>import('./ForecastPage'));
 import { parseLapTime } from './strategyModel';
 import type { RaceContext } from './strategyModel';
-import StrategyWorkbench from './StrategyWorkbench';
-import EngineeringShowcase from './EngineeringShowcase';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+const StrategyWorkbench=React.lazy(()=>import('./StrategyWorkbench'));
+const EngineeringShowcase=React.lazy(()=>import('./EngineeringShowcase'));
 import { createRoot } from 'react-dom/client';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Html } from '@react-three/drei';
-import * as THREE from 'three';
 import './style.css';
 import './professional.css';
+import WeekendHub from './WeekendHub';
+import PageBoundary from './PageBoundary';
+import ReplayMoments from './ReplayMoments';
+const PitCallChallenge=React.lazy(()=>import('./PitCallChallenge'));
 
 type XY = [number, number];
 type TrackResponse = {
@@ -63,134 +69,6 @@ type ReplayResponse = {
   drivers: ReplayDriver[];
 };
 
-function getTransform(coordinates: XY[]) {
-  const xs = coordinates.map(p => p[0]);
-  const ys = coordinates.map(p => p[1]);
-  const minX = Math.min(...xs), maxX = Math.max(...xs);
-  const minY = Math.min(...ys), maxY = Math.max(...ys);
-  return {
-    cx: (minX + maxX) / 2,
-    cy: (minY + maxY) / 2,
-    scale: 120 / Math.max(maxX - minX, maxY - minY, 1),
-  };
-}
-
-function scenePosition(x: number, y: number, coordinates: XY[], height = .4) {
-  const { cx, cy, scale } = getTransform(coordinates);
-  return new THREE.Vector3((x - cx) * scale, height, -(y - cy) * scale);
-}
-
-// View-space transformation only; provider sampling lives in ReplaySource.
-function replayPoseAt(car: CarState | undefined, coordinates: XY[]) {
-  if (!car?.pose) return null;
-  return {position: scenePosition(car.pose.x,car.pose.y,coordinates),rotationY:car.pose.headingRad};
-}
-
-/** A stylised, lightweight F1-inspired model. All car parts are local to the replay pose. */
-function F1CarModel({ color, code }: { color: string; code: string }) {
-  return (
-    <group>
-      {/* Body, tapered nose and cockpit: forward is local +Z. */}
-      <mesh castShadow receiveShadow position={[0, 0.10, 0]}>
-        <boxGeometry args={[0.78, 0.30, 2.65]} />
-        <meshStandardMaterial color={color} metalness={0.35} roughness={0.4} />
-      </mesh>
-      <mesh castShadow receiveShadow position={[0, 0.10, 1.45]}>
-        <boxGeometry args={[0.34, 0.18, 1.2]} />
-        <meshStandardMaterial color={color} metalness={0.3} roughness={0.45} />
-      </mesh>
-      <mesh castShadow receiveShadow position={[0, 0.38, -0.22]}>
-        <boxGeometry args={[0.60, 0.38, 0.85]} />
-        <meshStandardMaterial color="#141820" roughness={0.35} />
-      </mesh>
-      <mesh castShadow receiveShadow position={[0, 0.53, -0.18]}>
-        <sphereGeometry args={[0.24, 10, 8]} />
-        <meshStandardMaterial color="#f4f6fb" roughness={0.4} />
-      </mesh>
-      {/* Front and rear wings. */}
-      <mesh castShadow receiveShadow position={[0, 0.03, 2.02]}>
-        <boxGeometry args={[1.95, 0.10, 0.34]} />
-        <meshStandardMaterial color="#151922" />
-      </mesh>
-      <mesh castShadow receiveShadow position={[0, 0.40, -1.48]}>
-        <boxGeometry args={[1.65, 0.10, 0.40]} />
-        <meshStandardMaterial color="#151922" />
-      </mesh>
-      <mesh castShadow receiveShadow position={[0, 0.21, -1.48]}>
-        <boxGeometry args={[0.12, 0.4, 0.25]} />
-        <meshStandardMaterial color="#151922" />
-      </mesh>
-      {/* Four tyres. Cylinder axle runs along the local X axis. */}
-      {([-1, 1] as const).flatMap(side =>
-        ([-1.03, 1.13] as const).map(z => (
-          <mesh castShadow receiveShadow key={`${side}:${z}`} position={[side * 0.90, 0.03, z]} rotation={[0, 0, Math.PI / 2]}>
-            <cylinderGeometry args={[0.32, 0.32, 0.25, 12]} />
-            <meshStandardMaterial color="#08090b" roughness={0.95} />
-          </mesh>
-        ))
-      )}
-      <Html position={[0, 1.45, 0]} center distanceFactor={35} style={{ pointerEvents: 'none' }}>
-        <div style={{ background: '#0c1421e8', color: '#fff', border: `1px solid ${color}`,
-          borderRadius: 5, padding: '3px 7px', fontWeight: 800, fontSize: 12,
-          whiteSpace: 'nowrap', boxShadow: '0 2px 10px #0008' }}>
-          <span style={{ color }}>● </span>{code}
-        </div>
-      </Html>
-    </group>
-  );
-}
-
-function ReplayCar({ car, coordinates }: {car:CarState;coordinates:XY[]}) {
-  const pose = useMemo(() => replayPoseAt(car,coordinates),[car,coordinates]);
-  if (!pose) return null;
-  return (
-    <group position={pose.position} rotation={[0, pose.rotationY, 0]}>
-      <F1CarModel color={car.color} code={car.code} />
-    </group>
-  );
-}
-
-function RaceCamera({ driver, coordinates }: {driver:CarState|null;coordinates:XY[]}) {
-  const { camera } = useThree();
-  const controls = useRef<React.ComponentRef<typeof OrbitControls>>(null);
-  const wasFollowing = useRef(false);
-
-  useFrame((_, delta) => {
-    const control = controls.current;
-    if (!control) return;
-    if (!driver) {
-      if (wasFollowing.current) {
-        camera.position.set(0, 145, 155);
-        control.target.set(0, 0, 0);
-        control.update();
-        wasFollowing.current = false;
-      }
-      return;
-    }
-    wasFollowing.current = true;
-    const pose = replayPoseAt(driver,coordinates);
-    if (!pose) return;
-    const damping = 1 - Math.exp(-4 * Math.min(delta, 0.1));
-    const destination = pose.position.clone().add(new THREE.Vector3(0, 18, 28));
-    camera.position.lerp(destination, damping);
-    control.target.lerp(pose.position, damping);
-    control.update();
-  });
-
-  return (
-    <OrbitControls
-      ref={controls}
-      makeDefault
-      target={[0, 0, 0]}
-      minDistance={8}
-      maxDistance={300}
-      maxPolarAngle={Math.PI / 2.05}
-      enableDamping
-      enabled={!driver}
-    />
-  );
-}
-
 function formatTime(seconds: number) {
   const whole = Math.max(0, Math.floor(seconds));
   return `${String(Math.floor(whole / 60)).padStart(2, '0')}:${String(whole % 60).padStart(2, '0')}`;
@@ -208,8 +86,10 @@ function HistoricalReplay({ onBack,year,round,eventName }: { onBack: () => void;
   const [loading, setLoading] = useState(true);
   const [followDriver, setFollowDriver] = useState<number | null>(null);
   const [replayTime, setReplayTime] = useState(0);
-  const [playing, setPlaying] = useState(true);
+  const [playing, setPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const [analyst,setAnalyst]=useState(false),[challengeOpen,setChallengeOpen]=useState(false),[tabVisible,setTabVisible]=useState(!document.hidden);
+  useEffect(()=>{const change=()=>setTabVisible(!document.hidden);document.addEventListener('visibilitychange',change);return()=>document.removeEventListener('visibilitychange',change);},[]);
   const replayDuration = replay?.duration ?? 0;
   const source=useMemo(()=>replay?new ReplaySource(replay,channels):null,[replay,channels]);
   const raceState=useMemo(()=>source?.frameAt(replayTime)??null,[source,replayTime]);
@@ -227,18 +107,20 @@ function HistoricalReplay({ onBack,year,round,eventName }: { onBack: () => void;
   },[year,round,windowOffset,loadRevision]);
 
   useEffect(() => {
-    if (!playing || replayDuration <= 0) return;
+    if (!playing || !tabVisible || replayDuration <= 0) return;
     let frame = 0;
     let previous = performance.now();
     const tick = (now: number) => {
       const elapsed = (now - previous) / 1000;
       previous = now;
-      setReplayTime(current => advanceReplayClock(current,elapsed,playbackSpeed,replayDuration));
+      setReplayTime(current => advanceReplayClock(current,elapsed,playbackSpeed,replayDuration,false));
       frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [playing, playbackSpeed, replayDuration]);
+  }, [playing, playbackSpeed, replayDuration,tabVisible]);
+
+  useEffect(()=>{if(replayDuration>0&&replayTime>=replayDuration)setPlaying(false);},[replayTime,replayDuration,playing]);
 
   const controlButton: React.CSSProperties = {
     padding: '8px 12px', borderRadius: 6, background: '#263343', color: '#fff',
@@ -263,12 +145,35 @@ function HistoricalReplay({ onBack,year,round,eventName }: { onBack: () => void;
           </div>
           <div className="tag">● THREE-DIMENSIONAL VIEW</div>
         </div>
-        <RaceViewing key={`${year}/${round}`} year={year} round={round} name={eventName} />
+        <details className="replay-analyst"><summary>Watch official footage ↗</summary><RaceViewing key={`${year}/${round}`} year={year} round={round} name={eventName} /></details>
         {sessionDuration>0&&<section style={{padding:16,background:'#151d28',border:'1px solid #35465f',borderRadius:10,marginBottom:18}}>
           <strong>Recorded window: {formatTime(windowOffset)}–{formatTime(Math.min(windowOffset+60,sessionDuration))}</strong><p style={{fontSize:13,color:'#aebed2'}}>Recorded timeline: {formatTime(sessionDuration)}. Each request loads up to 60 seconds for the drivers with available positions. Elapsed time is measured from the earliest recorded first-lap start (or the first usable lap if that timestamp is missing).</p>
           <div style={{display:'flex',gap:10,flexWrap:'wrap'}}><button style={controlButton} disabled={loading||windowOffset<=0} onClick={()=>setWindowOffset(t=>Math.max(0,t-60))}>← Previous minute</button><button style={controlButton} disabled={loading||windowOffset+60>=sessionDuration} onClick={()=>setWindowOffset(t=>t+60)}>Next minute →</button><label style={{fontSize:13,color:'#c5d4e8'}}>Jump to minute <select aria-label="Jump to recorded minute" style={controlButton} value={windowOffset} disabled={loading} onChange={event=>setWindowOffset(Number(event.target.value))}>{Array.from({length:Math.ceil(sessionDuration/60)},(_,i)=>i*60).map(offset=><option key={offset} value={offset}>{formatTime(offset)}–{formatTime(Math.min(offset+60,sessionDuration))}</option>)}</select></label></div>
         </section>}
         {replay && <button style={{...controlButton,marginBottom:16}} onClick={()=>document.getElementById('recorded-pitwall')?.scrollIntoView({behavior:'smooth',block:'start'})}>Open recorded pit wall ↓</button>}
+        {loading&&<div className="fan-panel" role="status">Loading recorded track positions… First retrieval can take a minute.</div>}
+        {error&&<div className="fan-panel" role="alert"><h2>This replay is unavailable.</h2><p>{error}</p><button onClick={()=>setLoadRevision(n=>n+1)}>Retry this event</button></div>}
+        <div className="replay-view-toggle" role="group" aria-label="Replay presentation"><button aria-pressed={!analyst} onClick={()=>setAnalyst(false)}>Fan view</button><button aria-pressed={analyst} onClick={()=>setAnalyst(true)}>Analyst view · 3D & source detail</button></div>
+        <div className={analyst?'replay-pro':'replay-fan'}>
+        {replay && data && raceState && <PitWall frame={raceState} onChannels={setChannels} key={`pitwall/${year}/${round}/${windowOffset}`} year={year} round={round} offset={windowOffset} time={replayTime} drivers={replay.drivers} coordinates={data.coordinates} selected={followDriver} onSelect={setFollowDriver} duration={replayDuration} playing={playing} onTime={setReplayTime} onToggle={()=>{if(replayTime>=replayDuration){setReplayTime(0);setPlaying(true);}else setPlaying(p=>!p);}} />}
+        </div>
+        {replayDuration>0&&replayTime>=replayDuration&&<p role="status" className="fan-notice">End of this recorded excerpt. Restart it or load the next minute.</p>}
+        {replay&&raceState&&
+            <CommentaryPanel
+              key={`${year}/${round}/${windowOffset}`}
+              frame={raceState}
+              time={replayTime}
+              windowOffset={windowOffset}
+              playing={playing&&tabVisible}
+              playbackSpeed={playbackSpeed}
+              selectedDriver={followDriver}
+              eventName={eventName}
+            />
+          }
+          {replay&&<ReplayMoments channels={channels} duration={replayDuration} offset={windowOffset} selected={followDriver??replay.drivers[0]?.driver_number??null} onSeek={time=>{setPlaying(false);setReplayTime(time);}}/>}
+        {replay&&<div className="fan-panel"><span className="fan-kicker">YOUR TURN</span><h2>What would you call from the pit wall?</h2><p className="fan-muted">Pause the replay and try a separate educational strategy challenge.</p><button onClick={()=>{setPlaying(false);setChallengeOpen(v=>!v);}}>{challengeOpen?'Close challenge':'Pause & make a call →'}</button></div>}
+        {challengeOpen&&<Suspense fallback={<p role="status">Loading challenge…</p>}><PitCallChallenge compact context={`${formatTime(windowOffset+replayTime)} in ${eventName} ${year}`}/></Suspense>}
+        {analyst&&<>
         {raceState&&replay&&<RaceStateStatus key={`state/${year}/${round}/${windowOffset}`} frame={raceState} year={year} round={round} time={replayTime} driver={followDriver??replay.drivers[0]?.driver_number}/>}
         <div className="layout">
           <section className="panel track-panel">
@@ -280,16 +185,7 @@ function HistoricalReplay({ onBack,year,round,eventName }: { onBack: () => void;
             {error && <div className="message error"><p>{error}</p><button style={controlButton} onClick={()=>setLoadRevision(n=>n+1)}>Retry this event</button></div>}
             {data && (
               <div className="scene" aria-label="Interactive 3D circuit">
-                <Canvas shadows camera={{ position: [0, 145, 155], fov: 50, near: 0.1, far: 1500 }}>
-                  <color attach="background" args={['#0d141c']} />
-                  <ambientLight intensity={1} />
-                  <directionalLight position={[45, 90, 30]} intensity={2} />
-                  <CircuitWorld coordinates={data.coordinates} />
-                  {raceState?.cars.map(car => (
-                    <ReplayCar key={car.id} car={car} coordinates={data.coordinates} />
-                  ))}
-                  <RaceCamera driver={selectedDriver} coordinates={data.coordinates} />
-                </Canvas>
+                {raceState&&<Suspense fallback={<p role="status">Loading the circuit renderer…</p>}><RecordedScene coordinates={data.coordinates} eventName={eventName} year={year} frame={raceState} selected={selectedDriver}/></Suspense>}
               </div>
             )}
             {replayError && <div className="message error">{replayError}</div>}
@@ -347,7 +243,7 @@ function HistoricalReplay({ onBack,year,round,eventName }: { onBack: () => void;
                   <span>DRIVER</span><span>TELEMETRY</span>
                 </div>
                 {replay.drivers.map(driver => {
-                  const active = data ? replayPoseAt(raceState?.cars.find(c=>c.driverNumber===driver.driver_number),data.coordinates) !== null : false;
+                  const active = !!raceState?.cars.find(c=>c.driverNumber===driver.driver_number)?.pose;
                   return (
                     <button key={driver.driver_number} onClick={() => setFollowDriver(driver.driver_number)}
                       style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '12px 8px',
@@ -375,7 +271,8 @@ function HistoricalReplay({ onBack,year,round,eventName }: { onBack: () => void;
               Position samples are approximate; lateral racing lines and real track elevation are not reconstructed. Road width, lighting and stylised car models are illustrative; the driver list is tracking status, not official race order.</div>
           </aside>
         </div>
-        {replay && data && raceState && <PitWall frame={raceState} onChannels={setChannels} key={`pitwall/${year}/${round}/${windowOffset}`} year={year} round={round} offset={windowOffset} time={replayTime} drivers={replay.drivers} coordinates={data.coordinates} selected={followDriver} onSelect={setFollowDriver} duration={replayDuration} playing={playing} onTime={setReplayTime} onToggle={()=>setPlaying(p=>!p)} />}
+
+        </>}
       </main>
     </div>
   );
@@ -606,13 +503,13 @@ function CircuitPreviewPage({year,round,name,onBack,onPlan}:{year:number;round:n
    <div style={{...panelStyle,marginBottom:14}}><strong>Layout reference: {data.reference_event}, {data.reference_year}</strong><p style={{color:'#b8c8db'}}>Recorded {data.reference_date} · {data.circuit} · source: OpenF1 lap positions. {data.limitations}</p></div>
    <section style={expanded?{position:'fixed',inset:12,zIndex:10000,background:'#101923',padding:16,borderRadius:12,overflowY:'auto'}:{}}>{expanded&&<><h2 style={{margin:'0 0 8px'}}>{name} · circuit preview</h2><p style={{fontSize:12}}>Historical reference: {data.reference_year}. Flat terrain and illustrative surroundings.</p></>}
    <div style={{display:'flex',gap:10,flexWrap:'wrap',marginBottom:12}}><button style={navigationButton} aria-expanded={expanded} onClick={()=>setExpanded(v=>!v)}>{expanded?'Close expanded circuit':'Expand circuit viewer'}</button><button style={navigationButton} onClick={()=>setDaylight(v=>!v)}>{daylight?'Daylight study':'Dusk study'}</button><button aria-pressed={rotation} style={navigationButton} onClick={()=>setRotation(v=>!v)}>Auto orbit: {rotation?'On':'Off'}</button><button style={navigationButton} onClick={()=>{setCameraView('overview');setCameraRevision(n=>n+1);}}>Circuit overview</button><button style={navigationButton} onClick={()=>{setCameraView('low');setCameraRevision(n=>n+1);}}>Low inspection view</button><button style={navigationButton} onClick={()=>onPlan({season:year,round,name,circuit:data.circuit||name,date:data.requested_date})}>Plan this event →</button></div>
-   <div style={{height:expanded?'calc(100vh - 175px)':'min(70vh,650px)',minHeight:360,borderRadius:14,overflow:'hidden'}} aria-label="Historical circuit layout preview"><Canvas shadows camera={{position:[0,125,135],fov:45,near:.1,far:2500}}><ambientLight intensity={.25}/><CircuitWorld coordinates={data.coordinates} daylight={daylight}/><PreviewCamera key={`${cameraView}-${cameraRevision}`} low={cameraView==='low'}/><OrbitControls makeDefault autoRotate={rotation} autoRotateSpeed={.5} target={[0,0,0]} minDistance={5} maxDistance={350} maxPolarAngle={Math.PI/2-.025}/></Canvas></div>
+   <div style={{height:expanded?'calc(100vh - 175px)':'min(70vh,650px)',minHeight:360,borderRadius:14,overflow:'hidden'}} aria-label="Historical circuit layout preview"><Suspense fallback={<p role="status">Loading circuit renderer…</p>}><CircuitScene coordinates={data.coordinates} eventName={name} year={year} daylight={daylight} low={cameraView==='low'} revision={cameraRevision} rotation={rotation}/></Suspense></div>
    </section>
    <p style={{fontSize:13,color:'#aebed2'}}>Drag to orbit and scroll to zoom. Lighting is a visual study, not a weather forecast. The lap outline is recorded; terrain is flat and safety furniture is illustrative. This is not a surveyed or photorealistic model of the venue.</p>
   </>}
  </ContentShell>;
 }
-function PreviewCamera({low}:{low:boolean}){const {camera}=useThree();useEffect(()=>{camera.position.set(...(low?[55,16,55]:[0,125,135]) as [number,number,number]);camera.lookAt(0,0,0);},[camera,low]);return null;}
+
 
 function RaceGarage({year,round,initialDriver,onBack,onDriver}:{year:number;round:number;initialDriver?:string;onBack:()=>void;onDriver:(id:string)=>void}) {
  const {data,loading,error}=useRemote<RaceDetail>(`/api/archive/race/${year}/${round}`);
@@ -632,7 +529,10 @@ function RaceGarage({year,round,initialDriver,onBack,onDriver}:{year:number;roun
  </ContentShell>;
 }
 
-function DriverDirectoryPage({ onBack, onDriver }: { onBack: () => void; onDriver: (id: string) => void }) {
+function DriverDirectoryPage({onBack,onDriver}:{onBack:()=>void;onDriver:(id:string)=>void}){const [scope,setScope]=useState<'grid'|'all'>('grid');const w=useWorkspace();return <><div className="directory-switch" role="group" aria-label="Driver directory collection"><button aria-pressed={scope==='grid'} onClick={()=>setScope('grid')}>{w.year} recorded grid</button><button aria-pressed={scope==='all'} onClick={()=>setScope('all')}>All-time archive</button></div>{scope==='all'?<AllTimeDriverDirectoryPage onBack={onBack} onDriver={onDriver}/>:<ContentShell title={`${w.year} · Meet the grid`} caption="DRIVER DIRECTORY / SELECTED SEASON" onBack={onBack}>{w.loading?<p role="status">Finding the latest recorded grid…</p>:w.latest?<RecordedGrid key={`${w.year}/${w.latest.round}`} year={w.year} round={w.latest.round} onDriver={onDriver}/>:<p className="fan-muted">No completed race entries are available for this season yet. Choose the all-time archive or another season.</p>}</ContentShell>}</>;}
+function RecordedGrid({year,round,onDriver}:{year:number;round:number;onDriver:(id:string)=>void}){const {data,loading,error}=useRemote<RaceDetail>(`/api/archive/race/${year}/${round}`);return <>{loading&&<p role="status">Loading the race entry list…</p>}{error&&<p role="alert">{error}</p>}{data&&<><p className="fan-muted">Entries from {data.name}, {data.date}. A recorded grid, not a claim about future seats.</p><div className="directory-grid">{data.results.map(row=><button key={row.driver.id} onClick={()=>onDriver(row.driver.id)}><span>{row.constructor}</span><strong>{row.driver.name}</strong><small>#{row.driver.number||'—'} · {row.driver.nationality} ↗</small></button>)}</div></>}</>;}
+
+function AllTimeDriverDirectoryPage({ onBack, onDriver }: { onBack: () => void; onDriver: (id: string) => void }) {
   const [search, setSearch] = useState('');
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(0);
@@ -715,7 +615,8 @@ function App() {
   const finishEntry=()=>{if(entryTarget)setScreen(entryTarget);setEntryTarget(null);};
   const back = () => setScreen(previous.type === screen.type ? { type: 'calendar' } : previous);
   function renderScreen(){
-  if(screen.type==='home')return <><CinematicHome onNavigate={open} effects={effects} onEffects={value=>{setEffects(value);localStorage.setItem('ri-effects',value?'on':'off');}}/><DriverShowcase onNavigate={open}/></>;
+  if(screen.type==='challenge')return <PitCallChallenge onNavigate={open}/>;
+  if(screen.type==='home')return <main className="homepage"><WeekendHub onNavigate={open}/><DeferredExperience title="Explore the machine"><Suspense fallback={<div className="page-loading" role="status">Preparing the interactive car…</div>}><CinematicHome onNavigate={open} effects={effects} onEffects={value=>{setEffects(value);localStorage.setItem('ri-effects',value?'on':'off');}}/></Suspense></DeferredExperience><DeferredExperience title="Meet the grid"><Suspense fallback={<div className="page-loading" role="status">Preparing the driver showcase…</div>}><DriverShowcase onNavigate={open}/></Suspense></DeferredExperience></main>;
   if(screen.type==='library'||screen.type==='personal-garage')return <VehicleLibrary key={screen.type} personal={screen.type==='personal-garage'}/>;
   if(screen.type==='museum')return <HeritageMuseum key={`${screen.section}/${screen.id}`} section={screen.section} initialCar={screen.id} onNavigate={open}/>;
   if(screen.type==='careers')return <DriverCareers initialId={screen.id} onNavigate={open}/>;
@@ -730,6 +631,6 @@ function App() {
   if (screen.type === 'driver') return <DriverProfilePage id={screen.id} onBack={back} onRace={(year, round) => open({ type: 'race', year, round })}/>;
   return <RaceBrowser onCircuit={(year,round,name)=>open({type:'circuit',year,round,name})} onGarage={(year,round)=>open({type:'garage',year,round})} onForecast={(year,round,name)=>open({type:'forecast',year,round,name})} onPlanRace={race=>open({type:'strategy',race})} onStrategy={() => open({ type: 'strategy' })} onReplay={(year,round,name)=>open({type:'replay',year,round,name})} onRace={(year, round) => open({ type: 'race', year, round })} onDrivers={() => open({ type: 'drivers' })}/>;
   }
-  return <SiteShell screen={screen} onSelectRace={next=>{setPrevious(screen);setScreen(next);}} onNavigate={open} blocked={!!entryTarget}><div inert={!!entryTarget}>{renderScreen()}</div>{entryTarget&&<RaceEntryTransition onDone={finishEntry}/>}</SiteShell>;
+  return <SiteShell screen={screen} onSelectRace={next=>{setPrevious(screen);setScreen(next);}} onNavigate={open} blocked={!!entryTarget}><div inert={!!entryTarget}><PageBoundary key={screen.type}><Suspense fallback={<div className="page-loading" role="status"><span className="fan-kicker">FASTONE LABS</span><h1>Opening your next experience…</h1><p>Loading the page’s tools. Your race selection is preserved.</p></div>}>{renderScreen()}</Suspense></PageBoundary></div>{entryTarget&&<Suspense fallback={<div className="page-loading" role="status">Opening Race Centre…</div>}><RaceEntryTransition onDone={finishEntry}/></Suspense>}{screen.type==='home'&&<PitStopIntro/>}</SiteShell>;
 }
 createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);

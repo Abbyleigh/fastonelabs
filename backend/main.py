@@ -1,3 +1,4 @@
+from weekend_schedule import sessions_for_race
 """F1 Strategy Lab API - OpenF1 historical race data."""
 
 from datetime import datetime, timedelta
@@ -15,6 +16,10 @@ from fastapi import FastAPI, HTTPException, Request as FastAPIRequest
 from fastapi.middleware.cors import CORSMiddleware
 
 logger = logging.getLogger(__name__)
+
+
+from dotenv import load_dotenv
+load_dotenv(Path(__file__).resolve().parent / ".env")
 
 ROOT = Path(__file__).resolve().parent
 CACHE_DIR = ROOT / ".openf1-cache"
@@ -34,7 +39,7 @@ app.add_middleware(
         "http://127.0.0.1:5173"
     ],
     allow_credentials=False,
-    allow_methods=["GET"],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"]
 )
 
@@ -524,8 +529,9 @@ def archive_season(year: int = 2026):
                       "location": location.get("locality", ""), "country": location.get("country", ""),
                       "start": date.isoformat(), "end": date.isoformat(),
                       "status": "completed" if date < today else "upcoming",
-                      "replay_ready": year == 2024 and round_num == 12,"replay_supported":year>=2023})
-    return {"season": year, "races": races}
+                      "replay_ready": year == 2024 and round_num == 12,"replay_supported":year>=2023,
+                      "sessions": sessions_for_race(race), "time_confirmed": bool(race.get("time"))})
+    return {"season": year, "races": races, "retrieved_at": today.isoformat(), "source": "Jolpica", "cache_max_age_seconds": 21600 if year == today.year else 2592000}
 
 
 @app.get("/api/archive/race/{year}/{round_num}")
@@ -667,6 +673,97 @@ def race_state_verify(year:int,round:int,start:float=0,time:float=0,driver:int|N
     state=read_race_state(year,round,start,time,driver)
     second=read_race_state(year,round,start,time,driver)
     return {**verify(state),'repeatSeekIdentical':fingerprint(state)==fingerprint(second)}
+
+
+@app.post('/api/race-engineer/ask')
+async def race_engineer_ask(request: FastAPIRequest):
+    """Local-only AI analysis of a recorded race-state snapshot."""
+    import math
+    import os
+    from starlette.concurrency import run_in_threadpool
+
+    if request.client is None or request.client.host not in ('127.0.0.1', '::1'):
+        raise HTTPException(
+            status_code=403,
+            detail='Race Engineer AI is available locally only.'
+        )
+
+    origin = request.headers.get('origin')
+    if origin and origin not in (
+        'http://127.0.0.1:5173',
+        'http://localhost:5173',
+    ):
+        raise HTTPException(
+            status_code=403,
+            detail='Use the local FastOne Labs development app.'
+        )
+
+    if request.headers.get('content-type', '').split(';')[0].strip().lower() != 'application/json':
+        raise HTTPException(status_code=415, detail='JSON required.')
+
+    if os.getenv('RACE_ENGINEER_AI_ENABLED') != '1':
+        raise HTTPException(status_code=503, detail='Race Engineer is disabled.')
+
+    body = await request.body()
+    if len(body) > 2048:
+        raise HTTPException(status_code=413, detail='Request is too large.')
+
+    try:
+        data = json.loads(body)
+    except (ValueError, UnicodeDecodeError):
+        raise HTTPException(status_code=422, detail='Invalid JSON.')
+
+    if not isinstance(data, dict):
+        raise HTTPException(status_code=422, detail='Expected a JSON object.')
+
+    question = data.get('question')
+    year = data.get('year')
+    round_num = data.get('round')
+    start = data.get('start', 0)
+    time = data.get('time', 0)
+    driver = data.get('driver')
+
+    if not isinstance(question, str) or not 1 <= len(question.strip()) <= 500:
+        raise HTTPException(status_code=422, detail='Question must be 1–500 characters.')
+
+    if type(year) is not int or not 2018 <= year <= datetime.now().year:
+        raise HTTPException(status_code=422, detail='Invalid recorded season.')
+
+    if type(round_num) is not int or not 1 <= round_num <= 30:
+        raise HTTPException(status_code=422, detail='Invalid race round.')
+
+    if (
+        type(start) not in (int, float)
+        or type(time) not in (int, float)
+        or not math.isfinite(start)
+        or not math.isfinite(time)
+        or start < 0
+        or not 0 <= time <= 60
+    ):
+        raise HTTPException(status_code=422, detail='Invalid replay time.')
+
+    if driver is not None and (
+        type(driver) is not int or not 1 <= driver <= 99
+    ):
+        raise HTTPException(status_code=422, detail='Invalid driver number.')
+
+    from race_engineer import ask_race_engineer
+
+    state = await run_in_threadpool(
+        read_race_state, year, round_num, start, time, driver
+    )
+
+    try:
+        return await run_in_threadpool(ask_race_engineer, question, state)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    except Exception:
+        logger.exception('Race Engineer AI request failed')
+        raise HTTPException(
+            status_code=503,
+            detail='Race Engineer AI is temporarily unavailable.'
+        )
+
 
 @app.get('/api/museum/historian')
 def museum_historian(question: str = ''):

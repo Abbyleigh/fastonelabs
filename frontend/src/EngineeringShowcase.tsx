@@ -326,7 +326,7 @@ export default function EngineeringShowcase({driverName,driverId,teamName='',dri
  const [carCredit,setCarCredit]=useState<{name:string;author:string;source:string;license:string;licenseUrl:string;note:string}|null>(null);
  useEffect(()=>{const controller=new AbortController();fetch('/models/cars/model-info.json',{signal:controller.signal}).then(r=>r.ok?r.json():null).then(info=>{if(info&&typeof info.name==='string'&&typeof info.author==='string')setCarCredit(info);}).catch(()=>{});return()=>controller.abort();},[]);
  const hasDriver=useLocalAsset(driverPath);
- const [mode,setMode]=useState<'car'|'driver'|'garage'|'portrait'>('garage');
+ const [mode,setMode]=useState<'car'|'driver'|'garage'|'portrait'>('car');
  const [exploded,setExploded]=useState(0);
  const [autoRotate,setAutoRotate]=useState(false);
  const [wireframe,setWireframe]=useState(false);
@@ -353,12 +353,12 @@ export default function EngineeringShowcase({driverName,driverId,teamName='',dri
  useEffect(()=>{if(archiveCar&&selected&&!separatedSelection)setIsolate(false);},[archiveCar,selected,separatedSelection]);
  const archiveView=archiveCar&&!archiveFailure?<ModelBoundary key={`${archiveCar.path}-${!!engineeringMap}`} onFailure={()=>setArchiveFailure(true)} fallback={<group/>}><React.Suspense fallback={<ModelLoading/>}>{engineeringMap?<EngineeringCar path={archiveCar.path} mapping={engineeringMap} exploded={mode==='car'?exploded:0} selected={mode==='car'?separatedSelection:null} isolate={mode==='car'&&isolate&&!!separatedSelection} onSelect={part=>{setSelected(part);setMode('car');}}/>:<ArchiveCar path={archiveCar.path}/>}</React.Suspense></ModelBoundary>:null;
  return <Identity.Provider value={identity}><section style={{border:'1px solid #314158',background:'#151c28',borderRadius:16,padding:18,marginBottom:18,color:'#f5f8fc',...(expanded?{position:'fixed' as const,inset:12,zIndex:10000,overflowY:'auto' as const,marginBottom:0}: {})}}>
-  <h2 style={{margin:'0 0 6px'}}>{driverName} · 3D garage {driverNumber?`#${driverNumber}`:''}</h2><p style={{color:'#b5e3db',fontSize:13}}>{teamName?`${teamName}${season?` · ${season}`:''} · selected team and season`:'Interactive engineering study'} · car and driver studies</p>
+  <h2 style={{margin:'0 0 6px'}}>{driverName} · 3D garage {driverNumber?`#${driverNumber}`:''}</h2><p style={{color:'#b5e3db',fontSize:13}}>{teamName?`${teamName}${season?` · ${season}`:''} · selected team and season`:'Interactive engineering study'} · exterior engineering and optional driver studies</p>
   <p style={{fontSize:13,color:'#b4c3d6',marginTop:0}}>Drag to orbit · scroll to zoom · inspect parts in Engineering. A blue wireframe placeholder appears while a model loads.</p>
   <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:10}}>
-   <button style={{...buttonStyle,background:mode==='garage'?'#a92540':'#243249'}} onClick={()=>{setMode('garage');setExploded(0);setIsolate(false);setSelected(null);}}>🏁 Car & driver</button>
+   <button style={{...buttonStyle,background:mode==='garage'?'#a92540':'#243249'}} onClick={()=>{setMode('garage');setExploded(0);setIsolate(false);setSelected(null);}}>Car & study figure</button>
    <button style={{...buttonStyle,background:mode==='car'?'#a92540':'#243249'}} onClick={()=>setMode('car')}>🏎️ Engineering</button>
-   <button style={{...buttonStyle,background:mode==='driver'?'#a92540':'#243249'}} onClick={()=>setMode('driver')}>🧍 Driver model</button>
+   <button style={{...buttonStyle,background:mode==='driver'?'#a92540':'#243249'}} onClick={()=>setMode('driver')}>Driver study</button>
    {driverId==='hamilton'&&<button style={{...buttonStyle,background:mode==='portrait'?'#a92540':'#243249'}} onClick={()=>setMode('portrait')}>Hamilton head study</button>}
    {mode==='car'&&<><button style={buttonStyle} disabled={!canInspect} aria-pressed={exploded>0} onClick={()=>setExploded(x=>x>0?0:1)}>{exploded?'↘ Assemble':'↗ Animate disassembly'}</button><button disabled={!canInspect||!!selected&&!separatedSelection} style={{...buttonStyle,background:isolate?'#a92540':'#243249'}} onClick={()=>setIsolate(x=>!x)}>{isolate?'Show all parts':'Isolate selected part'}</button></>}
    <button style={buttonStyle} onClick={()=>{setView('threeQuarter');setExploded(0);setSelected(null);setIsolate(false);setAutoRotate(false);setWireframe(false);setLighting('studio');setBackground('photo');setPhotoError(false);setCameraDistance(1);setHelmetOverride('');setQuery('');setCameraRevision(x=>x+1);}}>Reset</button>

@@ -1,6 +1,7 @@
-import StrategyTools from './StrategyTools';
+import RaceEngineer from './RaceEngineer';
 import React, { useRef, useState } from 'react';
-import EngineeringShowcase from './EngineeringShowcase';
+import StrategyTools from './StrategyTools';
+const EngineeringShowcase=React.lazy(()=>import('./EngineeringShowcase'));
 import { ASSUMPTION_PROFILES, baselineComparison, scenarioForRace, COMPOUNDS, DEFAULT_SCENARIO, briefing, duration, planWarnings, simulate, validateScenario } from './strategyModel';
 import type { Compound, Conditions, Plan, Scenario, RaceContext } from './strategyModel';
 const STORAGE='f1-strategy-lab.scenarios.v1';
@@ -61,7 +62,14 @@ export default function StrategyWorkbench({onBack,race}:{onBack:()=>void;race?:R
    <p role="status">{message}</p><p className="strategy-muted">Up to 30 named scenarios are kept in this browser. JSON exports let you transfer them or keep a separate copy.</p>
    {saved.map(s=><div key={s.name} className="strategy-saved"><span>{s.name}{s.race&&<small style={{display:'block'}}>{s.race.season} · {s.race.circuit}</small>}</span><button onClick={()=>apply(s)}>Load</button><button onClick={()=>{if(persist(saved.filter(v=>v.name!==s.name)))setMessage(`Deleted saved scenario “${s.name}”.`);}}>Delete</button></div>)}
   </section>
-  <section className="strategy-card"><h2>Engineering → strategy</h2><p>Inspect tyres, wings and the power unit to see how their behaviour informs race decisions.</p><button aria-expanded={showEngineering} onClick={()=>setShowEngineering(v=>!v)}>{showEngineering?'Hide':'Open'} engineering viewer</button>{showEngineering&&<div style={{marginTop:16}}><EngineeringShowcase driverName="Strategy driver"/></div>}</section>
+
+   <details className="strategy-card">
+     <summary>AI Race Engineer · Recorded race analysis</summary>
+     <div style={{marginTop:20}}>
+       <RaceEngineer race={race} />
+     </div>
+   </details>
+   <section className="strategy-card"><h2>Engineering → strategy</h2><p>Inspect tyres, wings and the power unit to see how their behaviour informs race decisions.</p><button aria-expanded={showEngineering} onClick={()=>setShowEngineering(v=>!v)}>{showEngineering?'Hide':'Open'} engineering viewer</button>{showEngineering&&<div style={{marginTop:16}}><React.Suspense fallback={<p role="status">Loading engineering viewer…</p>}><EngineeringShowcase driverName="Strategy driver"/></React.Suspense></div>}</section>
   <details className="strategy-card"><summary>Model assumptions</summary><p>Tyre age adds a linear time penalty; new tyres reset age. No traffic, overtaking, fuel burn, temperature, track evolution, red flags are simulated. Pit-lap optimisation searches only the compound sequences and stop counts you supply. Slick rain penalties scale with intensity. Intermediate and wet tyres carry dry-track penalties. These example coefficients are not calibrated to any circuit, season or driver.</p><p>Changing race length may require you to update pit laps. Tyre-rule notes prompt a check of event rules; they do not validate regulatory eligibility.</p></details>
  </main></div>;
 }

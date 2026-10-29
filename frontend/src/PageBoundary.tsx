@@ -1,0 +1,2 @@
+import React from 'react';
+export default class PageBoundary extends React.Component<{children:React.ReactNode},{failed:boolean}>{state={failed:false};static getDerivedStateFromError(){return {failed:true};}render(){return this.state.failed?<div className="page-failure" role="alert"><h1>This page could not open.</h1><p>Check your connection and reload the page. Your saved garage and scenarios stay in this browser.</p><button onClick={()=>window.location.reload()}>Reload page</button><a href="#home">Return home</a></div>:this.props.children;}}

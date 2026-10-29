@@ -19,16 +19,102 @@ export function samplePose(samples:readonly PositionSample[],time:number):Pose|n
  return {x:a.x+(b.x-a.x)*f,y:a.y+(b.y-a.y)*f,z:(a.z??0)+((b.z??0)-(a.z??0))*f,headingRad:Math.atan2(b.x-a.x,-(b.y-a.y)),quality:f===0||f===1?'sampled':'interpolated'};
 }
 const blankTelemetry=():Telemetry=>({speedMps:null,rpm:null,gear:null,throttlePercent:null,brakePressed:null,legacyDrsCode:null,sampleAgeS:null});
+
+// FASTONE_REPLAY_QUALITY_V1
+// Diagnostic only: preserve all recorded coordinates.
+export function assessReplayPositionQuality(
+  samples: readonly PositionSample[]
+) {
+  const valid = samples.filter(
+    s => Number.isFinite(s.time) &&
+         Number.isFinite(s.x) &&
+         Number.isFinite(s.y)
+  );
+
+  let repeatedTransitions = 0;
+  let consecutiveRepeats = 0;
+  let longestRepeatedRun = 0;
+  let largestStep = 0;
+  let largestTimeGap = 0;
+
+  for (let i = 1; i < valid.length; i++) {
+    const a = valid[i - 1];
+    const b = valid[i];
+
+    const step = Math.hypot(b.x - a.x, b.y - a.y);
+    const gap = b.time - a.time;
+
+    largestStep = Math.max(largestStep, step);
+    largestTimeGap = Math.max(largestTimeGap, gap);
+
+    if (step === 0) {
+      repeatedTransitions++;
+      consecutiveRepeats++;
+      longestRepeatedRun = Math.max(
+        longestRepeatedRun,
+        consecutiveRepeats
+      );
+    } else {
+      consecutiveRepeats = 0;
+    }
+  }
+
+  const uniquePositions = new Set(
+    valid.map(s => `${s.x},${s.y}`)
+  ).size;
+
+  return {
+    totalSamples: samples.length,
+    validSamples: valid.length,
+    uniquePositions,
+    repeatedTransitions,
+    longestRepeatedRun,
+    largestStepProviderUnits: largestStep,
+    largestTimeGapSeconds: largestTimeGap,
+    positionFeedUnchanged:
+      valid.length >= 2 && uniquePositions === 1,
+    prolongedRepeatedPosition:
+      longestRepeatedRun >= 10
+  };
+}
+
 export class ReplaySource implements RaceSource{
  readonly kind='recorded' as const;private readonly replay:ReplayInput;private readonly channels:Channels;
- constructor(replay:ReplayInput,channels:Channels={}){this.replay=freeze(clone(replay));this.channels=freeze(clone(channels));}
+ private readonly unchangedPositionDrivers:ReadonlySet<number>;
+ constructor(replay:ReplayInput,channels:Channels={}){
+  this.replay=freeze(clone(replay));
+  this.channels=freeze(clone(channels));
+
+  this.unchangedPositionDrivers = new Set(
+    this.replay.drivers
+      .filter(driver =>
+        assessReplayPositionQuality(driver.samples).positionFeedUnchanged
+      )
+      .map(driver => driver.driver_number)
+  );
+
+  for (const driver of this.replay.drivers) {
+    const quality = assessReplayPositionQuality(driver.samples);
+
+    if (
+      quality.positionFeedUnchanged ||
+      quality.prolongedRepeatedPosition
+    ) {
+      console.warn(
+        '[FastOne Labs] Replay position quality:',
+        driver.code,
+        quality
+      );
+    }
+  }
+}
  frameAt(time:number):UnifiedRaceState{
   const r=this.replay;if(!Number.isFinite(time)||time<0||time>r.duration)throw Error('Seek within the loaded recorded window.');
   const cars:CarState[]=r.drivers.map<CarState>(d=>{
    const position=latest(this.channels.position||[],time,d.driver_number),interval=latest(this.channels.intervals||[],time,d.driver_number);
    let car=latest(this.channels.car_data||[],time,d.driver_number);if(car&&time-car.time>2)car=undefined;
    const speed=number(car,'speed'),gear=number(car,'n_gear'),brake=number(car,'brake'),gap=number(interval,'gap_to_leader');
-   return {id:String(d.driver_number),driverNumber:d.driver_number,code:d.code,name:d.name,color:d.color,position:number(position,'position'),classificationQuality:position?'recorded':'missing',classificationAgeS:position?time-position.time:null,pose:samplePose(d.samples,time),lap:null,trackDistanceM:null,lateralOffsetM:null,gapToLeaderS:gap!==null&&gap>=0?gap:null,gapLabel:typeof interval?.gap_to_leader==='string'?interval.gap_to_leader:null,telemetry:{speedMps:speed===null?null:speed/3.6,rpm:number(car,'rpm'),gear,throttlePercent:number(car,'throttle'),brakePressed:brake===null?null:brake>0,legacyDrsCode:number(car,'drs'),sampleAgeS:car?time-car.time:null},tyre:null,pitPhase:'unknown',energy:null};
+   return {id:String(d.driver_number),driverNumber:d.driver_number,code:d.code,name:d.name,color:d.color,position:number(position,'position'),classificationQuality:position?'recorded':'missing',classificationAgeS:position?time-position.time:null,pose:this.unchangedPositionDrivers.has(d.driver_number)?null:samplePose(d.samples,time),lap:null,trackDistanceM:null,lateralOffsetM:null,gapToLeaderS:gap!==null&&gap>=0?gap:null,gapLabel:typeof interval?.gap_to_leader==='string'?interval.gap_to_leader:null,telemetry:{speedMps:speed===null?null:speed/3.6,rpm:number(car,'rpm'),gear,throttlePercent:number(car,'throttle'),brakePressed:brake===null?null:brake>0,legacyDrsCode:number(car,'drs'),sampleAgeS:car?time-car.time:null},tyre:null,pitPhase:'unknown',energy:null};
   }).sort((a,b)=>(a.position??99999)-(b.position??99999)||(a.driverNumber??0)-(b.driverNumber??0));
   return freeze({schemaVersion:1,sourceKind:'recorded',raceId:`${r.year}:${r.round}`,sessionId:`OpenF1:${r.session_key}`,event:r.event,timestampS:r.window_start+time,timestampUtc:new Date(Date.parse(r.window_start_utc)+time*1000).toISOString(),windowStartS:r.window_start,trackLengthM:null,totalLaps:null,status:'recorded',cars,flags:null,events:null,provenance:{provider:'OpenF1',adapterVersion:'race-state-v1',coordinateUnits:'provider_units',maxInterpolationGapS:2,elevationVerified:false,limitations:[...limitations]}});
  }
@@ -48,10 +134,10 @@ export class SimulationSource implements RaceSource{
  }
 }
 /** Animation callbacks can carry a frame timestamp earlier than setup time. */
-export function advanceReplayClock(current:number,elapsed:number,speed:number,duration:number){
+export function advanceReplayClock(current:number,elapsed:number,speed:number,duration:number,loop=true){
  if(!Number.isFinite(duration)||duration<=0)return 0;
  const safeCurrent=Number.isFinite(current)?Math.max(0,Math.min(duration,current)):0;
  const dt=Number.isFinite(elapsed)?Math.max(0,Math.min(.1,elapsed)):0;
  const rate=Number.isFinite(speed)?Math.max(0,speed):0;
- return (safeCurrent+dt*rate)%duration;
+ const next=safeCurrent+dt*rate;return loop?next%duration:Math.min(duration,next);
 }

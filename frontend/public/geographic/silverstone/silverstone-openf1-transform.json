@@ -1,0 +1,23 @@
+{
+  "circuit": "Silverstone",
+  "year": 2024,
+  "source": "OpenF1",
+  "target": "OSM geographic scene reference",
+  "status": "provisional; visual validation required",
+  "transform": {
+    "mirror_y": true,
+    "real": 0.006982621139047826,
+    "imag": 0.00010178430257131604,
+    "offset_x": -19.096397771646426,
+    "offset_y": 30.856236753979548,
+    "scale": 0.006983362944579602,
+    "rotation_degrees": 0.8351302241013824
+  },
+  "validation": {
+    "rms_scene_units": 0.8588411381869123,
+    "rms_metres": 12.273582448624367,
+    "sample_count": 160,
+    "cyclic_shift_for_fitting_only": 158,
+    "direction_for_fitting": "forward"
+  }
+}
