@@ -1,15 +1,12 @@
 """Versioned, bounded input contracts for the curated heritage collection."""
 from datetime import date
-from typing import Annotated, Literal
-from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator, model_validator
+from typing import Literal
+from pydantic import Field, HttpUrl, field_validator, model_validator
 
-Identifier = Annotated[str, Field(pattern=r'^[a-z0-9][a-z0-9-]{0,79}$')]
-Kind = Literal['season', 'circuit', 'layout', 'constructor', 'driver', 'vehicle', 'race', 'regulation', 'development']
+from .base import Contract, Identifier
+from .exhibits import ExhibitPlan
+Kind = Literal['season', 'circuit', 'layout', 'constructor', 'driver', 'vehicle', 'race', 'regulation', 'development', 'engine']
 Status = Literal['verified', 'estimated', 'missing', 'simulated']
-
-
-class Contract(BaseModel):
-    model_config = ConfigDict(extra='forbid', allow_inf_nan=False)
 
 
 class Source(Contract):
@@ -79,6 +76,8 @@ LINK_KINDS = {
     'built-by': ({'vehicle'}, {'constructor'}),
     'drove-for': ({'driver'}, {'constructor'}),
     'raced-vehicle': ({'driver'}, {'vehicle'}),
+    'powered-by': ({'vehicle'}, {'engine'}),
+    'developed-from': ({'vehicle'}, {'vehicle'}),
     'illustrates': ({'vehicle'}, {'development', 'regulation'}),
 }
 
@@ -118,6 +117,7 @@ class Dataset(Contract):
     entities: list[Entity] = Field(min_length=1, max_length=100000)
     links: list[Link] = Field(max_length=500000)
     classifications: list[Classification] = Field(max_length=1000000)
+    exhibits: list[ExhibitPlan] = Field(default_factory=list, max_length=100000)
 
     @model_validator(mode='after')
     def references(self):
@@ -176,4 +176,17 @@ class Dataset(Contract):
             if row.category == 'constructor-standing' and row.driver_ids:
                 raise ValueError('Constructor standings cannot have drivers')
             refs(row.sources)
+        seen_exhibits = set()
+        source_map = {s.id: s for s in self.sources}
+        for exhibit in self.exhibits:
+            entity(exhibit.vehicle_id, {'vehicle'})
+            if exhibit.vehicle_id in seen_exhibits:
+                raise ValueError('Duplicate exhibit vehicle')
+            seen_exhibits.add(exhibit.vehicle_id)
+            refs(exhibit.sources)
+            if exhibit.asset:
+                refs(exhibit.asset.sources)
+                refs(exhibit.asset.measurement_sources)
+                if any(source_map[i].reuse != 'permitted' for i in exhibit.asset.sources):
+                    raise ValueError('Asset sources require explicit permitted reuse')
         return self

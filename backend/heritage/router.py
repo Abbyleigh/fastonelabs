@@ -3,7 +3,10 @@ from functools import lru_cache
 from typing import Annotated, Literal
 from fastapi import APIRouter, HTTPException, Path, Query, Request, Response
 from .models import Contract, Entity, Source, Link, Classification, Kind
-from .store import Store, read_dataset
+from .store import Store, read_dataset, COLLECTIONS
+from .exhibits import ExhibitPlan
+from pydantic import Field
+CollectionId = Literal['silverstone-1950', 'cooper-1959-1960']
 
 router = APIRouter(prefix='/api/heritage', tags=['Heritage'])
 
@@ -35,11 +38,13 @@ class DetailResponse(Contract):
     links_total: int
     classifications_total: int
     sources: list[Source]
+    layouts: list[Entity] = Field(default_factory=list)
+    exhibit: ExhibitPlan | None = None
 
 
-@lru_cache(maxsize=1)
-def get_store():
-    return Store(read_dataset())
+@lru_cache(maxsize=2)
+def get_store(collection: CollectionId = 'silverstone-1950'):
+    return Store(read_dataset(COLLECTIONS[collection]))
 
 
 def cached_headers(request, response, store):
@@ -60,8 +65,9 @@ def search(request: Request, response: Response,
            kind: Kind | None = None,
            year: Annotated[int | None, Query(ge=1950, le=2100)] = None,
            limit: Annotated[int, Query(ge=1, le=50)] = 20,
-           offset: Annotated[int, Query(ge=0, le=100000)] = 0):
-    store = get_store()
+           offset: Annotated[int, Query(ge=0, le=100000)] = 0,
+           collection: CollectionId = 'silverstone-1950'):
+    store = get_store(collection)
     cached = cached_headers(request, response, store)
     if cached is not None:
         return cached
@@ -72,8 +78,9 @@ def search(request: Request, response: Response,
 
 @router.get('/entities/{identifier}', response_model=DetailResponse)
 def detail(request: Request, response: Response,
-           identifier: Annotated[str, Path(pattern=r'^[a-z0-9][a-z0-9-]{0,79}$')]):
-    store = get_store()
+           identifier: Annotated[str, Path(pattern=r'^[a-z0-9][a-z0-9-]{0,79}$')],
+           collection: CollectionId = 'silverstone-1950'):
+    store = get_store(collection)
     found = store.detail(identifier)
     if found is None:
         raise HTTPException(404, detail='No reviewed heritage record has this identifier')
@@ -82,5 +89,5 @@ def detail(request: Request, response: Response,
         return cached
     entity, links, related, classifications, names, links_total, classifications_total = found
     return DetailResponse(revision=store.revision, entity=entity, links=links, related=related,
-                          classifications=classifications, names=names, sources=store.sources(),
+                          classifications=classifications, names=names, sources=store.sources(), layouts=store.layouts(identifier), exhibit=store.exhibit(identifier),
                           links_total=links_total, classifications_total=classifications_total)

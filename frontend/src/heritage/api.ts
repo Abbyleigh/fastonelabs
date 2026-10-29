@@ -1,6 +1,7 @@
 import type {DetailResponse, Entity, SearchResponse, Source, Claim, Classification, Link} from './contracts.ts';
 
-const kinds = new Set(['season','circuit','layout','constructor','driver','vehicle','race','regulation','development']);
+import {parseExhibit} from './exhibitContracts.ts';
+const kinds = new Set(['season','circuit','layout','constructor','driver','vehicle','race','regulation','development','engine']);
 const statuses = new Set(['verified','estimated','missing','simulated']);
 const object = (v:unknown):v is Record<string,unknown> => typeof v==='object' && v!==null && !Array.isArray(v);
 const strings = (v:unknown):v is string[] => Array.isArray(v) && v.every(s=>typeof s==='string');
@@ -43,6 +44,8 @@ export function parseDetail(v:unknown):DetailResponse {
     ||!Array.isArray(v.sources)||!v.sources.every(source)||!Array.isArray(v.links)||!v.links.every(link)
     ||!Array.isArray(v.related)||!v.related.every(entity)||!Array.isArray(v.classifications)||!v.classifications.every(classification)
     ||!number(v.links_total)||!number(v.classifications_total)||!object(v.names)||!Object.values(v.names).every(n=>typeof n==='string')) throw Error('The heritage record has an unsupported data contract.');
+  if(v.layouts!==undefined&&(!Array.isArray(v.layouts)||!v.layouts.every(e=>entity(e)&&e.kind==='layout')))throw Error('Unsupported historical layout family.');
+  if(v.exhibit!==undefined&&v.exhibit!==null){const exhibit=parseExhibit(v.exhibit,v.sources as Source[]);if(exhibit.vehicle_id!==(v.entity as Entity).id)throw Error('Exhibit identity mismatch.');}
   return v as DetailResponse;
 }
 export async function fetchHeritage<T>(path:string, parse:(value:unknown)=>T, signal:AbortSignal):Promise<T> {

@@ -99,7 +99,8 @@ def test_atomic_ingestion_foreign_keys_and_no_overwrite(tmp_path):
     with pytest.raises(FileExistsError): ingest(SEED, target)
     assert target.read_bytes() == before
     with sqlite3.connect(target) as db:
-        assert db.execute('PRAGMA user_version').fetchone()[0] == 1
+        # Fresh projections include the new exhibit table even for the unchanged 1950 batch.
+        assert db.execute('PRAGMA user_version').fetchone()[0] == 2
         assert db.execute('PRAGMA foreign_key_check').fetchall() == []
         assert db.execute('SELECT count(*) FROM claim_sources').fetchone()[0] > 0
 

@@ -4,7 +4,7 @@ CREATE TABLE metadata (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 CREATE TABLE sources (id TEXT PRIMARY KEY, payload TEXT NOT NULL CHECK(json_valid(payload)));
 CREATE TABLE entities (
   id TEXT PRIMARY KEY,
-  kind TEXT NOT NULL CHECK(kind IN ('season','circuit','layout','constructor','driver','vehicle','race','regulation','development')),
+  kind TEXT NOT NULL CHECK(kind IN ('season','circuit','layout','constructor','driver','vehicle','race','regulation','development','engine')),
   name TEXT NOT NULL,
   coverage_start INTEGER NOT NULL CHECK(coverage_start >= 1950),
   coverage_end INTEGER NOT NULL CHECK(coverage_end >= coverage_start),

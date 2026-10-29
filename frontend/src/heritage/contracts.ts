@@ -37,11 +37,13 @@ export type DetailResponse = {
   links_total: number;
   classifications_total: number;
   sources: Array<Source>;
+  layouts?: Array<Entity>;
+  exhibit?: ExhibitPlan | null;
 };
 
 export type Entity = {
   id: string;
-  kind: "season" | "circuit" | "layout" | "constructor" | "driver" | "vehicle" | "race" | "regulation" | "development";
+  kind: "season" | "circuit" | "layout" | "constructor" | "driver" | "vehicle" | "race" | "regulation" | "development" | "engine";
   name: string;
   coverage_start: number;
   coverage_end: number;
@@ -51,9 +53,40 @@ export type Entity = {
   claims: Array<Claim>;
 };
 
+export type ExhibitPlan = {
+  vehicle_id: string;
+  state: "not-supplied" | "supplied";
+  asset?: HistoricAsset | null;
+  assembly_labels?: Array<string>;
+  sources: Array<string>;
+  notes: string;
+};
+
 export type Facets = {
-  kinds: Array<"season" | "circuit" | "layout" | "constructor" | "driver" | "vehicle" | "race" | "regulation" | "development">;
+  kinds: Array<"season" | "circuit" | "layout" | "constructor" | "driver" | "vehicle" | "race" | "regulation" | "development" | "engine">;
   years: Array<number>;
+};
+
+export type HistoricAsset = {
+  path: string;
+  format?: "glb";
+  sha256: string;
+  bytes: number;
+  creator: string;
+  attribution: string;
+  licence: string;
+  reuse: "permitted";
+  sources: Array<string>;
+  fidelity: "illustrative" | "approximate" | "validated";
+  units?: "m";
+  up_axis?: "Y";
+  measurement_sources?: Array<string>;
+  modifications: string;
+  supports_exploded?: boolean;
+  assembly_mapping_sha256?: string | null;
+  vehicle_library_id?: string | null;
+  permitted_uses: Array<"private-exhibit" | "public-exhibit" | "commercial">;
+  commercial_reviewed?: boolean;
 };
 
 export type Link = {
