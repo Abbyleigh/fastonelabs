@@ -170,12 +170,12 @@ function ReplayCar({
     );
 
     object.rotation.y += angle * blend;
-  });
+  }, -1);
 
   if (!pose) return null;
 
   return (
-    <group ref={group}>
+    <group ref={group} name={"replay-car-" + car.id}>
       <group scale={calibration ? 0.07 : 1}>
         <F1CarModel color={car.color} code={car.code} />
       </group>
@@ -322,7 +322,7 @@ function RaceCamera({
   coordinates: XY[];
   calibration?: SilverstoneCalibration | null;
 }) {
-  const { camera } = useThree();
+  const { camera, scene } = useThree();
   const controls = useRef<React.ComponentRef<typeof OrbitControls>>(null);
   const wasFollowing = useRef(false);
 
@@ -348,35 +348,38 @@ function RaceCamera({
       return;
     }
     wasFollowing.current = true;
-    const pose = replayPoseAt(driver,coordinates,calibration);
-    if (!pose) return;
+    const renderedCar = scene.getObjectByName("replay-car-" + driver.id);
+    const pose = renderedCar ? null : replayPoseAt(driver, coordinates, calibration);
+    if (!renderedCar && !pose) return;
+    const targetPosition = renderedCar ? renderedCar.position : pose!.position;
+    const targetHeading = renderedCar ? renderedCar.rotation.y : pose!.rotationY;
     const damping = 1 - Math.exp(-4 * Math.min(delta, 0.1));
     // Stage 9B: physically calibrated Silverstone chase camera.
     // Geographic Silverstone uses approximately 0.069975 scene units
     // per real-world metre. The procedural car faces local +Z.
     cameraMath.heading.setFromAxisAngle(
       cameraMath.axis,
-      pose.rotationY
+      targetHeading
     );
 
     if (calibration) {
       // Preserve the existing physically calibrated chase offsets.
       cameraMath.behind.set(0, 0.20, -0.60)
         .applyQuaternion(cameraMath.heading)
-        .add(pose.position);
+        .add(targetPosition);
 
       cameraMath.ahead.set(0, 0.08, 0.65)
         .applyQuaternion(cameraMath.heading)
-        .add(pose.position);
+        .add(targetPosition);
 
       camera.position.lerp(cameraMath.behind, damping);
       control.target.lerp(cameraMath.ahead, damping);
     } else {
-      cameraMath.destination.copy(pose.position)
+      cameraMath.destination.copy(targetPosition)
         .add(cameraMath.behind.set(0, 18, 28));
 
       camera.position.lerp(cameraMath.destination, damping);
-      control.target.lerp(pose.position, damping);
+      control.target.lerp(targetPosition, damping);
     }
 
     control.update();
