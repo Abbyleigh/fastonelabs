@@ -1,0 +1,39 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> f1-strategy-lab-frontend@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 667 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                0.38 kB │ gzip:   0.28 kB
+dist/assets/NewsDesk-DOTlHjaH.css              1.89 kB │ gzip:   0.77 kB
+dist/assets/VehicleLibrary-C7SX6zzE.css        3.71 kB │ gzip:   1.20 kB
+dist/assets/HeritageMuseum-DkvjP_xI.css        6.36 kB │ gzip:   1.95 kB
+dist/assets/HeritageCatalogue-DH4VKi_v.css    11.62 kB │ gzip:   2.83 kB
+dist/assets/index-appH3MNp.css                54.22 kB │ gzip:  12.13 kB
+dist/assets/DriverMedia-Cx-hzuVS.js            2.23 kB │ gzip:   1.19 kB
+dist/assets/ForecastPage-DITQ3c5C.js           3.61 kB │ gzip:   1.47 kB
+dist/assets/NewsDesk-BbTPx_jg.js               4.85 kB │ gzip:   1.98 kB
+dist/assets/PitCallChallenge-4HhzS3oB.js       6.37 kB │ gzip:   2.74 kB
+dist/assets/VehicleLibrary-BkAICjvw.js         9.11 kB │ gzip:   3.45 kB
+dist/assets/driverPortraits-D6j-XU4k.js       10.44 kB │ gzip:   2.16 kB
+dist/assets/CinematicHome-CcbNF_4-.js         10.63 kB │ gzip:   4.36 kB
+dist/assets/DriverCareers-DJN05nx4.js         10.76 kB │ gzip:   3.82 kB
+dist/assets/DriverShowcase-DoOge5-W.js        13.78 kB │ gzip:   4.93 kB
+dist/assets/HeritageCatalogue-DDn4pWcC.js     22.85 kB │ gzip:   7.61 kB
+dist/assets/StrategyWorkbench-NEw6u1x2.js     24.24 kB │ gzip:   8.44 kB
+dist/assets/VehicleViewer-QLHxJJ_5.js         34.67 kB │ gzip:  11.88 kB
+dist/assets/HeritageMuseum-CD9VB0Tm.js        38.86 kB │ gzip:  13.49 kB
+dist/assets/RaceScenes-zUDt9EB4.js            41.80 kB │ gzip:  14.59 kB
+dist/assets/EngineeringShowcase-DPUG8ZhI.js  135.78 kB │ gzip:  43.61 kB
+dist/assets/index-D890Xzrv.js                355.30 kB │ gzip: 113.62 kB
+dist/assets/OrbitControls-C_7wqfHs.js        900.82 kB │ gzip: 243.58 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 5.35s

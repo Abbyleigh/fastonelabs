@@ -1,0 +1,719 @@
+...............F..............................FFFF.... [ 47%]
+...........................................................              [100%]
+=================================== FAILURES ===================================
+_ EngineeringParts.test_every_source_triangle_has_one_valid_inspection_group (model='<BASELINE>/frontend/public/models/cars/aston-martin/2026') _
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_every_source_triangle_has_one_valid_inspection_group>
+
+    def test_every_source_triangle_has_one_valid_inspection_group(self):
+     manifests=list(ROOT.glob('*/*/engineering-parts.json'));self.assertEqual(len(manifests),9)
+     for path in manifests:
+      with self.subTest(model=str(path.parent)):
+>      mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = PosixPath('<BASELINE>/frontend/public/models/cars/aston-martin/2026/car.glb')
+
+    def read_model_bytes(path):
+     path=Path(path)
+     if path.exists():return path.read_bytes()
+     logical='/'+str(path.resolve().relative_to(PUBLIC.resolve()))
+>    manifest=json.loads((PUBLIC/'models/packed-models.json').read_text())['models'][logical]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    KeyError: '/models/cars/aston-martin/2026/car.glb'
+
+backend/model_assets.py:9: KeyError
+_ EngineeringParts.test_every_source_triangle_has_one_valid_inspection_group (model='<BASELINE>/frontend/public/models/cars/cadillac/2026') _
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_every_source_triangle_has_one_valid_inspection_group>
+
+    def test_every_source_triangle_has_one_valid_inspection_group(self):
+     manifests=list(ROOT.glob('*/*/engineering-parts.json'));self.assertEqual(len(manifests),9)
+     for path in manifests:
+      with self.subTest(model=str(path.parent)):
+>      mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = PosixPath('<BASELINE>/frontend/public/models/cars/cadillac/2026/car.glb')
+
+    def read_model_bytes(path):
+     path=Path(path)
+     if path.exists():return path.read_bytes()
+     logical='/'+str(path.resolve().relative_to(PUBLIC.resolve()))
+>    manifest=json.loads((PUBLIC/'models/packed-models.json').read_text())['models'][logical]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    KeyError: '/models/cars/cadillac/2026/car.glb'
+
+backend/model_assets.py:9: KeyError
+_ EngineeringParts.test_every_source_triangle_has_one_valid_inspection_group (model='<BASELINE>/frontend/public/models/cars/mclaren/2026') _
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_every_source_triangle_has_one_valid_inspection_group>
+
+    def test_every_source_triangle_has_one_valid_inspection_group(self):
+     manifests=list(ROOT.glob('*/*/engineering-parts.json'));self.assertEqual(len(manifests),9)
+     for path in manifests:
+      with self.subTest(model=str(path.parent)):
+>      mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = PosixPath('<BASELINE>/frontend/public/models/cars/mclaren/2026/car.glb')
+
+    def read_model_bytes(path):
+     path=Path(path)
+     if path.exists():return path.read_bytes()
+     logical='/'+str(path.resolve().relative_to(PUBLIC.resolve()))
+>    manifest=json.loads((PUBLIC/'models/packed-models.json').read_text())['models'][logical]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    KeyError: '/models/cars/mclaren/2026/car.glb'
+
+backend/model_assets.py:9: KeyError
+_ EngineeringParts.test_every_source_triangle_has_one_valid_inspection_group (model='<BASELINE>/frontend/public/models/cars/mercedes/2026') _
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_every_source_triangle_has_one_valid_inspection_group>
+
+    def test_every_source_triangle_has_one_valid_inspection_group(self):
+     manifests=list(ROOT.glob('*/*/engineering-parts.json'));self.assertEqual(len(manifests),9)
+     for path in manifests:
+      with self.subTest(model=str(path.parent)):
+>      mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = PosixPath('<BASELINE>/frontend/public/models/cars/mercedes/2026/car.glb')
+
+    def read_model_bytes(path):
+     path=Path(path)
+     if path.exists():return path.read_bytes()
+     logical='/'+str(path.resolve().relative_to(PUBLIC.resolve()))
+>    manifest=json.loads((PUBLIC/'models/packed-models.json').read_text())['models'][logical]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    KeyError: '/models/cars/mercedes/2026/car.glb'
+
+backend/model_assets.py:9: KeyError
+_ EngineeringParts.test_every_source_triangle_has_one_valid_inspection_group (model='<BASELINE>/frontend/public/models/cars/ferrari/2023') _
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_every_source_triangle_has_one_valid_inspection_group>
+
+    def test_every_source_triangle_has_one_valid_inspection_group(self):
+     manifests=list(ROOT.glob('*/*/engineering-parts.json'));self.assertEqual(len(manifests),9)
+     for path in manifests:
+      with self.subTest(model=str(path.parent)):
+>      mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/model_assets.py:12: in read_model_bytes
+    raw=(PUBLIC/part['path'].lstrip('/')).read_bytes()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = PosixPath('<BASELINE>/frontend/public/models/cars/packed/sf23.glb.gz.part0.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '<BASELINE>/frontend/public/models/cars/packed/sf23.glb.gz.part0.bin'
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1013: FileNotFoundError
+_ EngineeringParts.test_every_source_triangle_has_one_valid_inspection_group (model='<BASELINE>/frontend/public/models/cars/ferrari/2026') _
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_every_source_triangle_has_one_valid_inspection_group>
+
+    def test_every_source_triangle_has_one_valid_inspection_group(self):
+     manifests=list(ROOT.glob('*/*/engineering-parts.json'));self.assertEqual(len(manifests),9)
+     for path in manifests:
+      with self.subTest(model=str(path.parent)):
+>      mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = PosixPath('<BASELINE>/frontend/public/models/cars/ferrari/2026/car.glb')
+
+    def read_model_bytes(path):
+     path=Path(path)
+     if path.exists():return path.read_bytes()
+     logical='/'+str(path.resolve().relative_to(PUBLIC.resolve()))
+>    manifest=json.loads((PUBLIC/'models/packed-models.json').read_text())['models'][logical]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    KeyError: '/models/cars/ferrari/2026/car.glb'
+
+backend/model_assets.py:9: KeyError
+_ EngineeringParts.test_every_source_triangle_has_one_valid_inspection_group (model='<BASELINE>/frontend/public/models/cars/audi/2026') _
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_every_source_triangle_has_one_valid_inspection_group>
+
+    def test_every_source_triangle_has_one_valid_inspection_group(self):
+     manifests=list(ROOT.glob('*/*/engineering-parts.json'));self.assertEqual(len(manifests),9)
+     for path in manifests:
+      with self.subTest(model=str(path.parent)):
+>      mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = PosixPath('<BASELINE>/frontend/public/models/cars/audi/2026/car.glb')
+
+    def read_model_bytes(path):
+     path=Path(path)
+     if path.exists():return path.read_bytes()
+     logical='/'+str(path.resolve().relative_to(PUBLIC.resolve()))
+>    manifest=json.loads((PUBLIC/'models/packed-models.json').read_text())['models'][logical]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    KeyError: '/models/cars/audi/2026/car.glb'
+
+backend/model_assets.py:9: KeyError
+_ EngineeringParts.test_every_source_triangle_has_one_valid_inspection_group (model='<BASELINE>/frontend/public/models/cars/haas/2026') _
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_every_source_triangle_has_one_valid_inspection_group>
+
+    def test_every_source_triangle_has_one_valid_inspection_group(self):
+     manifests=list(ROOT.glob('*/*/engineering-parts.json'));self.assertEqual(len(manifests),9)
+     for path in manifests:
+      with self.subTest(model=str(path.parent)):
+>      mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = PosixPath('<BASELINE>/frontend/public/models/cars/haas/2026/car.glb')
+
+    def read_model_bytes(path):
+     path=Path(path)
+     if path.exists():return path.read_bytes()
+     logical='/'+str(path.resolve().relative_to(PUBLIC.resolve()))
+>    manifest=json.loads((PUBLIC/'models/packed-models.json').read_text())['models'][logical]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    KeyError: '/models/cars/haas/2026/car.glb'
+
+backend/model_assets.py:9: KeyError
+_ EngineeringParts.test_every_source_triangle_has_one_valid_inspection_group (model='<BASELINE>/frontend/public/models/cars/red-bull/2026') _
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_every_source_triangle_has_one_valid_inspection_group>
+
+    def test_every_source_triangle_has_one_valid_inspection_group(self):
+     manifests=list(ROOT.glob('*/*/engineering-parts.json'));self.assertEqual(len(manifests),9)
+     for path in manifests:
+      with self.subTest(model=str(path.parent)):
+>      mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = PosixPath('<BASELINE>/frontend/public/models/cars/red-bull/2026/car.glb')
+
+    def read_model_bytes(path):
+     path=Path(path)
+     if path.exists():return path.read_bytes()
+     logical='/'+str(path.resolve().relative_to(PUBLIC.resolve()))
+>    manifest=json.loads((PUBLIC/'models/packed-models.json').read_text())['models'][logical]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    KeyError: '/models/cars/red-bull/2026/car.glb'
+
+backend/model_assets.py:9: KeyError
+_ EngineeringParts.test_groups_match_counts_and_keep_four_wheel_regions (model='<BASELINE>/frontend/public/models/cars/aston-martin/2026') _
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_groups_match_counts_and_keep_four_wheel_regions>
+
+    def test_groups_match_counts_and_keep_four_wheel_regions(self):
+     for path in ROOT.glob('*/*/engineering-parts.json'):
+      with self.subTest(model=str(path.parent)):
+>      mapping=json.loads(path.read_text());labels=(path.parent/'engineering-parts.bin').read_bytes();actual=Counter(PARTS[code]for code in labels)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = PosixPath('<BASELINE>/frontend/public/models/cars/aston-martin/2026/engineering-parts.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '<BASELINE>/frontend/public/models/cars/aston-martin/2026/engineering-parts.bin'
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1013: FileNotFoundError
+_ EngineeringParts.test_groups_match_counts_and_keep_four_wheel_regions (model='<BASELINE>/frontend/public/models/cars/cadillac/2026') _
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_groups_match_counts_and_keep_four_wheel_regions>
+
+    def test_groups_match_counts_and_keep_four_wheel_regions(self):
+     for path in ROOT.glob('*/*/engineering-parts.json'):
+      with self.subTest(model=str(path.parent)):
+>      mapping=json.loads(path.read_text());labels=(path.parent/'engineering-parts.bin').read_bytes();actual=Counter(PARTS[code]for code in labels)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = PosixPath('<BASELINE>/frontend/public/models/cars/cadillac/2026/engineering-parts.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '<BASELINE>/frontend/public/models/cars/cadillac/2026/engineering-parts.bin'
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1013: FileNotFoundError
+_ EngineeringParts.test_groups_match_counts_and_keep_four_wheel_regions (model='<BASELINE>/frontend/public/models/cars/mclaren/2026') _
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_groups_match_counts_and_keep_four_wheel_regions>
+
+    def test_groups_match_counts_and_keep_four_wheel_regions(self):
+     for path in ROOT.glob('*/*/engineering-parts.json'):
+      with self.subTest(model=str(path.parent)):
+>      mapping=json.loads(path.read_text());labels=(path.parent/'engineering-parts.bin').read_bytes();actual=Counter(PARTS[code]for code in labels)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = PosixPath('<BASELINE>/frontend/public/models/cars/mclaren/2026/engineering-parts.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '<BASELINE>/frontend/public/models/cars/mclaren/2026/engineering-parts.bin'
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1013: FileNotFoundError
+_ EngineeringParts.test_groups_match_counts_and_keep_four_wheel_regions (model='<BASELINE>/frontend/public/models/cars/mercedes/2026') _
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_groups_match_counts_and_keep_four_wheel_regions>
+
+    def test_groups_match_counts_and_keep_four_wheel_regions(self):
+     for path in ROOT.glob('*/*/engineering-parts.json'):
+      with self.subTest(model=str(path.parent)):
+>      mapping=json.loads(path.read_text());labels=(path.parent/'engineering-parts.bin').read_bytes();actual=Counter(PARTS[code]for code in labels)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = PosixPath('<BASELINE>/frontend/public/models/cars/mercedes/2026/engineering-parts.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '<BASELINE>/frontend/public/models/cars/mercedes/2026/engineering-parts.bin'
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1013: FileNotFoundError
+_ EngineeringParts.test_groups_match_counts_and_keep_four_wheel_regions (model='<BASELINE>/frontend/public/models/cars/ferrari/2023') _
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_groups_match_counts_and_keep_four_wheel_regions>
+
+    def test_groups_match_counts_and_keep_four_wheel_regions(self):
+     for path in ROOT.glob('*/*/engineering-parts.json'):
+      with self.subTest(model=str(path.parent)):
+>      mapping=json.loads(path.read_text());labels=(path.parent/'engineering-parts.bin').read_bytes();actual=Counter(PARTS[code]for code in labels)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = PosixPath('<BASELINE>/frontend/public/models/cars/ferrari/2023/engineering-parts.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '<BASELINE>/frontend/public/models/cars/ferrari/2023/engineering-parts.bin'
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1013: FileNotFoundError
+_ EngineeringParts.test_groups_match_counts_and_keep_four_wheel_regions (model='<BASELINE>/frontend/public/models/cars/ferrari/2026') _
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_groups_match_counts_and_keep_four_wheel_regions>
+
+    def test_groups_match_counts_and_keep_four_wheel_regions(self):
+     for path in ROOT.glob('*/*/engineering-parts.json'):
+      with self.subTest(model=str(path.parent)):
+>      mapping=json.loads(path.read_text());labels=(path.parent/'engineering-parts.bin').read_bytes();actual=Counter(PARTS[code]for code in labels)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = PosixPath('<BASELINE>/frontend/public/models/cars/ferrari/2026/engineering-parts.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '<BASELINE>/frontend/public/models/cars/ferrari/2026/engineering-parts.bin'
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1013: FileNotFoundError
+_ EngineeringParts.test_groups_match_counts_and_keep_four_wheel_regions (model='<BASELINE>/frontend/public/models/cars/audi/2026') _
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_groups_match_counts_and_keep_four_wheel_regions>
+
+    def test_groups_match_counts_and_keep_four_wheel_regions(self):
+     for path in ROOT.glob('*/*/engineering-parts.json'):
+      with self.subTest(model=str(path.parent)):
+>      mapping=json.loads(path.read_text());labels=(path.parent/'engineering-parts.bin').read_bytes();actual=Counter(PARTS[code]for code in labels)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = PosixPath('<BASELINE>/frontend/public/models/cars/audi/2026/engineering-parts.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '<BASELINE>/frontend/public/models/cars/audi/2026/engineering-parts.bin'
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1013: FileNotFoundError
+_ EngineeringParts.test_groups_match_counts_and_keep_four_wheel_regions (model='<BASELINE>/frontend/public/models/cars/haas/2026') _
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_groups_match_counts_and_keep_four_wheel_regions>
+
+    def test_groups_match_counts_and_keep_four_wheel_regions(self):
+     for path in ROOT.glob('*/*/engineering-parts.json'):
+      with self.subTest(model=str(path.parent)):
+>      mapping=json.loads(path.read_text());labels=(path.parent/'engineering-parts.bin').read_bytes();actual=Counter(PARTS[code]for code in labels)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = PosixPath('<BASELINE>/frontend/public/models/cars/haas/2026/engineering-parts.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '<BASELINE>/frontend/public/models/cars/haas/2026/engineering-parts.bin'
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1013: FileNotFoundError
+_ EngineeringParts.test_groups_match_counts_and_keep_four_wheel_regions (model='<BASELINE>/frontend/public/models/cars/red-bull/2026') _
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_groups_match_counts_and_keep_four_wheel_regions>
+
+    def test_groups_match_counts_and_keep_four_wheel_regions(self):
+     for path in ROOT.glob('*/*/engineering-parts.json'):
+      with self.subTest(model=str(path.parent)):
+>      mapping=json.loads(path.read_text());labels=(path.parent/'engineering-parts.bin').read_bytes();actual=Counter(PARTS[code]for code in labels)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = PosixPath('<BASELINE>/frontend/public/models/cars/red-bull/2026/engineering-parts.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '<BASELINE>/frontend/public/models/cars/red-bull/2026/engineering-parts.bin'
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1013: FileNotFoundError
+____ EngineeringParts.test_mapping_bounds_are_finite_and_source_nodes_exist ____
+
+self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_mapping_bounds_are_finite_and_source_nodes_exist>
+
+    def test_mapping_bounds_are_finite_and_source_nodes_exist(self):
+     import math
+     for path in ROOT.glob('*/*/engineering-parts.json'):
+>     mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]]);names={node.get('name')for node in glb['nodes']if 'mesh'in node}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_engineering_parts.py:30:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = PosixPath('<BASELINE>/frontend/public/models/cars/aston-martin/2026/car.glb')
+
+    def read_model_bytes(path):
+     path=Path(path)
+     if path.exists():return path.read_bytes()
+     logical='/'+str(path.resolve().relative_to(PUBLIC.resolve()))
+>    manifest=json.loads((PUBLIC/'models/packed-models.json').read_text())['models'][logical]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    KeyError: '/models/cars/aston-martin/2026/car.glb'
+
+backend/model_assets.py:9: KeyError
+________ Models.test_archive_models_have_embedded_textures_and_identity ________
+
+self = <backend.tests.test_model_assets.Models testMethod=test_archive_models_have_embedded_textures_and_identity>
+
+    def test_archive_models_have_embedded_textures_and_identity(self):
+        for team,year,file in [('ferrari',2023,'sf23.glb')]+[(team,2026,'car.glb') for team in ['ferrari','mercedes','mclaren','aston-martin','cadillac','audi','red-bull','haas']]:
+>           folder=ROOT/f'cars/{team}/{year}';data=read_glb(folder/file)
+                                                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_model_assets.py:22:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/test_model_assets.py:6: in read_glb
+    raw=read_model_bytes(path);assert raw[:4]==b'glTF';assert struct.unpack_from('<I',raw,8)[0]==len(raw)
+        ^^^^^^^^^^^^^^^^^^^^^^
+backend/model_assets.py:12: in read_model_bytes
+    raw=(PUBLIC/part['path'].lstrip('/')).read_bytes()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = PosixPath('<BASELINE>/frontend/public/models/cars/packed/sf23.glb.gz.part0.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '<BASELINE>/frontend/public/models/cars/packed/sf23.glb.gz.part0.bin'
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1013: FileNotFoundError
+_______________ Models.test_car_has_named_assemblies_and_licence _______________
+
+self = <backend.tests.test_model_assets.Models testMethod=test_car_has_named_assemblies_and_licence>
+
+    def test_car_has_named_assemblies_and_licence(self):
+>       data=read_glb(ROOT/'cars/f1-assembly.glb');names={node.get('name') for node in data['nodes']}
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_model_assets.py:10:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/test_model_assets.py:6: in read_glb
+    raw=read_model_bytes(path);assert raw[:4]==b'glTF';assert struct.unpack_from('<I',raw,8)[0]==len(raw)
+        ^^^^^^^^^^^^^^^^^^^^^^
+backend/model_assets.py:12: in read_model_bytes
+    raw=(PUBLIC/part['path'].lstrip('/')).read_bytes()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = PosixPath('<BASELINE>/frontend/public/models/cars/packed/f1-assembly.glb.gz.part0.bin')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '<BASELINE>/frontend/public/models/cars/packed/f1-assembly.glb.gz.part0.bin'
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1013: FileNotFoundError
+___________________ Models.test_driver_is_valid_embedded_glb ___________________
+
+self = <backend.tests.test_model_assets.Models testMethod=test_driver_is_valid_embedded_glb>
+
+    def test_driver_is_valid_embedded_glb(self):
+>       data=read_glb(ROOT/'drivers/racing-driver.glb');names={node.get('name')for node in data['nodes']}
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_model_assets.py:15:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/test_model_assets.py:6: in read_glb
+    raw=read_model_bytes(path);assert raw[:4]==b'glTF';assert struct.unpack_from('<I',raw,8)[0]==len(raw)
+        ^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = PosixPath('<BASELINE>/frontend/public/models/drivers/racing-driver.glb')
+
+    def read_model_bytes(path):
+     path=Path(path)
+     if path.exists():return path.read_bytes()
+     logical='/'+str(path.resolve().relative_to(PUBLIC.resolve()))
+>    manifest=json.loads((PUBLIC/'models/packed-models.json').read_text())['models'][logical]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    KeyError: '/models/drivers/racing-driver.glb'
+
+backend/model_assets.py:9: KeyError
+___________ Models.test_hamilton_portrait_is_separate_from_full_body ___________
+
+self = <backend.tests.test_model_assets.Models testMethod=test_hamilton_portrait_is_separate_from_full_body>
+
+    def test_hamilton_portrait_is_separate_from_full_body(self):
+>       self.assertTrue(read_glb(ROOT/'drivers/portraits/hamilton.glb')['meshes'])
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_model_assets.py:30:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/test_model_assets.py:6: in read_glb
+    raw=read_model_bytes(path);assert raw[:4]==b'glTF';assert struct.unpack_from('<I',raw,8)[0]==len(raw)
+        ^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = PosixPath('<BASELINE>/frontend/public/models/drivers/portraits/hamilton.glb')
+
+    def read_model_bytes(path):
+     path=Path(path)
+     if path.exists():return path.read_bytes()
+     logical='/'+str(path.resolve().relative_to(PUBLIC.resolve()))
+>    manifest=json.loads((PUBLIC/'models/packed-models.json').read_text())['models'][logical]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E    KeyError: '/models/drivers/portraits/hamilton.glb'
+
+backend/model_assets.py:9: KeyError
+=============================== warnings summary ===============================
+../fastone-stage3-venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  <QA_VENV>/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+SUBFAILED(model='<BASELINE>/frontend/public/models/cars/aston-martin/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_every_source_triangle_has_one_valid_inspection_group
+SUBFAILED(model='<BASELINE>/frontend/public/models/cars/cadillac/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_every_source_triangle_has_one_valid_inspection_group
+SUBFAILED(model='<BASELINE>/frontend/public/models/cars/mclaren/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_every_source_triangle_has_one_valid_inspection_group
+SUBFAILED(model='<BASELINE>/frontend/public/models/cars/mercedes/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_every_source_triangle_has_one_valid_inspection_group
+SUBFAILED(model='<BASELINE>/frontend/public/models/cars/ferrari/2023') backend/tests/test_engineering_parts.py::EngineeringParts::test_every_source_triangle_has_one_valid_inspection_group
+SUBFAILED(model='<BASELINE>/frontend/public/models/cars/ferrari/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_every_source_triangle_has_one_valid_inspection_group
+SUBFAILED(model='<BASELINE>/frontend/public/models/cars/audi/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_every_source_triangle_has_one_valid_inspection_group
+SUBFAILED(model='<BASELINE>/frontend/public/models/cars/haas/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_every_source_triangle_has_one_valid_inspection_group
+SUBFAILED(model='<BASELINE>/frontend/public/models/cars/red-bull/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_every_source_triangle_has_one_valid_inspection_group
+SUBFAILED(model='<BASELINE>/frontend/public/models/cars/aston-martin/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_groups_match_counts_and_keep_four_wheel_regions
+SUBFAILED(model='<BASELINE>/frontend/public/models/cars/cadillac/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_groups_match_counts_and_keep_four_wheel_regions
+SUBFAILED(model='<BASELINE>/frontend/public/models/cars/mclaren/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_groups_match_counts_and_keep_four_wheel_regions
+SUBFAILED(model='<BASELINE>/frontend/public/models/cars/mercedes/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_groups_match_counts_and_keep_four_wheel_regions
+SUBFAILED(model='<BASELINE>/frontend/public/models/cars/ferrari/2023') backend/tests/test_engineering_parts.py::EngineeringParts::test_groups_match_counts_and_keep_four_wheel_regions
+SUBFAILED(model='<BASELINE>/frontend/public/models/cars/ferrari/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_groups_match_counts_and_keep_four_wheel_regions
+SUBFAILED(model='<BASELINE>/frontend/public/models/cars/audi/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_groups_match_counts_and_keep_four_wheel_regions
+SUBFAILED(model='<BASELINE>/frontend/public/models/cars/haas/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_groups_match_counts_and_keep_four_wheel_regions
+SUBFAILED(model='<BASELINE>/frontend/public/models/cars/red-bull/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_groups_match_counts_and_keep_four_wheel_regions
+FAILED backend/tests/test_engineering_parts.py::EngineeringParts::test_mapping_bounds_are_finite_and_source_nodes_exist
+FAILED backend/tests/test_model_assets.py::Models::test_archive_models_have_embedded_textures_and_identity
+FAILED backend/tests/test_model_assets.py::Models::test_car_has_named_assemblies_and_licence
+FAILED backend/tests/test_model_assets.py::Models::test_driver_is_valid_embedded_glb
+FAILED backend/tests/test_model_assets.py::Models::test_hamilton_portrait_is_separate_from_full_body
+23 failed, 108 passed, 1 warning in 2.45s
