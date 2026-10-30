@@ -29,10 +29,12 @@ git -C "$FASTONE_ACTIVE" fetch --no-tags origin \
 FASTONE_QA_SHA="$(git -C "$FASTONE_ACTIVE" rev-parse refs/remotes/origin/work/heritage-integration-qa)"
 export FASTONE_QA_SHA
 printf '%s\n' "$FASTONE_QA_SHA"
+git -C "$FASTONE_ACTIVE" merge-base --is-ancestor 433f33c27fcadb561dea1cdd5d041d82a076fc95 "$FASTONE_QA_SHA"
+printf 'Stage 3 ancestry exit (expected 0): %s\n' "$?"
 git -C "$FASTONE_ACTIVE" show -s --format='%H%n%P%n%s' "$FASTONE_QA_SHA"
 ```
 
-Expected: compare displayed full SHA with the **separate draft QA PR** head before continuing. Its first parent is Stage 3 `433f33c27fcadb561dea1cdd5d041d82a076fc95` for the initial QA commit. If the remote head differs, review that change first. Fetch changes only shared objects/remote tracking; it does not alter active files/index/branch or server configuration.
+Expected: compare displayed full SHA with the **separate draft QA PR** head before continuing. The QA history must descend from Stage 3 `433f33c27fcadb561dea1cdd5d041d82a076fc95`; the initial QA commit has that parent, and later QA-only commits may follow it. If the remote head differs, review that change first. Fetch changes only shared objects/remote tracking; it does not alter active files/index/branch or server configuration.
 
 ```sh
 printf '%s\n' "$FASTONE_QA_SHA" > "$FASTONE_EVIDENCE/qa-commit.txt"

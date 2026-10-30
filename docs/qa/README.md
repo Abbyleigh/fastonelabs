@@ -51,7 +51,7 @@ The two screenshot-producing runners accept `FASTONE_REVIEW_SCREENSHOTS`, so rev
 
 Runtime: Node 24.22.1, Python 3.12.14, pytest 9.2.0, FastAPI 0.162.0 / Starlette 1.10.0 / httpx 0.28.1. Python dev requirements pin pytest 8.4.2 for fresh Mac installations; report formatting can differ, so use identity comparison. No tests intentionally skipped to pass; nested archived sprint copies are excluded by existing pytest configuration. Build does not validate asset existence/permissions. Asset-generating scripts were not run because they would overwrite metadata or require unavailable original bytes; these are not independent read-only tests.
 
-[Raw logs and audit/profile JSON](evidence/) retain exact exceptions/results (checkout path normalised). JUnit collapses subcases, so the console failure list and [identity comparison](evidence/baseline-comparison.json) are supplied. Commands to reproduce are in each report and the Mac guide. Local browser tools are external and not added to the app manifest. QA uses no real provider key or paid AI call.
+[Raw logs and audit/profile JSON](evidence/) retain exact exceptions/results (checkout paths and trailing whitespace normalised). JUnit collapses subcases, so the console failure list and [identity comparison](evidence/baseline-comparison.json) are supplied. Commands to reproduce are in each report and the Mac guide. Local browser tools are external and not added to the app manifest. QA uses no real provider key or paid AI call.
 
 ## Prioritised gates before merging
 

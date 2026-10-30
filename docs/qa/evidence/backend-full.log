@@ -13,8 +13,8 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_ev
 >      mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:12: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 path = PosixPath('<CHECKOUT>/frontend/public/models/cars/aston-martin/2026/car.glb')
 
@@ -38,8 +38,8 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_ev
 >      mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:12: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 path = PosixPath('<CHECKOUT>/frontend/public/models/cars/cadillac/2026/car.glb')
 
@@ -63,8 +63,8 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_ev
 >      mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:12: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 path = PosixPath('<CHECKOUT>/frontend/public/models/cars/mclaren/2026/car.glb')
 
@@ -88,8 +88,8 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_ev
 >      mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:12: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 path = PosixPath('<CHECKOUT>/frontend/public/models/cars/mercedes/2026/car.glb')
 
@@ -113,15 +113,15 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_ev
 >      mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:12: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 backend/model_assets.py:12: in read_model_bytes
     raw=(PUBLIC/part['path'].lstrip('/')).read_bytes()
         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
     with self.open(mode='rb') as f:
          ^^^^^^^^^^^^^^^^^^^^
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = PosixPath('<CHECKOUT>/frontend/public/models/cars/packed/sf23.glb.gz.part0.bin')
 mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
@@ -150,8 +150,8 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_ev
 >      mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:12: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 path = PosixPath('<CHECKOUT>/frontend/public/models/cars/ferrari/2026/car.glb')
 
@@ -175,8 +175,8 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_ev
 >      mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:12: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 path = PosixPath('<CHECKOUT>/frontend/public/models/cars/audi/2026/car.glb')
 
@@ -200,8 +200,8 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_ev
 >      mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:12: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 path = PosixPath('<CHECKOUT>/frontend/public/models/cars/haas/2026/car.glb')
 
@@ -225,8 +225,8 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_ev
 >      mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:12: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:12:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 path = PosixPath('<CHECKOUT>/frontend/public/models/cars/red-bull/2026/car.glb')
 
@@ -249,12 +249,12 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_gr
 >      mapping=json.loads(path.read_text());labels=(path.parent/'engineering-parts.bin').read_bytes();actual=Counter(PARTS[code]for code in labels)
                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:23: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
     with self.open(mode='rb') as f:
          ^^^^^^^^^^^^^^^^^^^^
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = PosixPath('<CHECKOUT>/frontend/public/models/cars/aston-martin/2026/engineering-parts.bin')
 mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
@@ -282,12 +282,12 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_gr
 >      mapping=json.loads(path.read_text());labels=(path.parent/'engineering-parts.bin').read_bytes();actual=Counter(PARTS[code]for code in labels)
                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:23: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
     with self.open(mode='rb') as f:
          ^^^^^^^^^^^^^^^^^^^^
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = PosixPath('<CHECKOUT>/frontend/public/models/cars/cadillac/2026/engineering-parts.bin')
 mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
@@ -315,12 +315,12 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_gr
 >      mapping=json.loads(path.read_text());labels=(path.parent/'engineering-parts.bin').read_bytes();actual=Counter(PARTS[code]for code in labels)
                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:23: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
     with self.open(mode='rb') as f:
          ^^^^^^^^^^^^^^^^^^^^
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = PosixPath('<CHECKOUT>/frontend/public/models/cars/mclaren/2026/engineering-parts.bin')
 mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
@@ -348,12 +348,12 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_gr
 >      mapping=json.loads(path.read_text());labels=(path.parent/'engineering-parts.bin').read_bytes();actual=Counter(PARTS[code]for code in labels)
                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:23: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
     with self.open(mode='rb') as f:
          ^^^^^^^^^^^^^^^^^^^^
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = PosixPath('<CHECKOUT>/frontend/public/models/cars/mercedes/2026/engineering-parts.bin')
 mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
@@ -381,12 +381,12 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_gr
 >      mapping=json.loads(path.read_text());labels=(path.parent/'engineering-parts.bin').read_bytes();actual=Counter(PARTS[code]for code in labels)
                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:23: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
     with self.open(mode='rb') as f:
          ^^^^^^^^^^^^^^^^^^^^
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = PosixPath('<CHECKOUT>/frontend/public/models/cars/ferrari/2023/engineering-parts.bin')
 mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
@@ -414,12 +414,12 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_gr
 >      mapping=json.loads(path.read_text());labels=(path.parent/'engineering-parts.bin').read_bytes();actual=Counter(PARTS[code]for code in labels)
                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:23: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
     with self.open(mode='rb') as f:
          ^^^^^^^^^^^^^^^^^^^^
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = PosixPath('<CHECKOUT>/frontend/public/models/cars/ferrari/2026/engineering-parts.bin')
 mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
@@ -447,12 +447,12 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_gr
 >      mapping=json.loads(path.read_text());labels=(path.parent/'engineering-parts.bin').read_bytes();actual=Counter(PARTS[code]for code in labels)
                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:23: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
     with self.open(mode='rb') as f:
          ^^^^^^^^^^^^^^^^^^^^
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = PosixPath('<CHECKOUT>/frontend/public/models/cars/audi/2026/engineering-parts.bin')
 mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
@@ -480,12 +480,12 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_gr
 >      mapping=json.loads(path.read_text());labels=(path.parent/'engineering-parts.bin').read_bytes();actual=Counter(PARTS[code]for code in labels)
                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:23: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
     with self.open(mode='rb') as f:
          ^^^^^^^^^^^^^^^^^^^^
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = PosixPath('<CHECKOUT>/frontend/public/models/cars/haas/2026/engineering-parts.bin')
 mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
@@ -513,12 +513,12 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_gr
 >      mapping=json.loads(path.read_text());labels=(path.parent/'engineering-parts.bin').read_bytes();actual=Counter(PARTS[code]for code in labels)
                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:23: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
     with self.open(mode='rb') as f:
          ^^^^^^^^^^^^^^^^^^^^
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = PosixPath('<CHECKOUT>/frontend/public/models/cars/red-bull/2026/engineering-parts.bin')
 mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
@@ -546,8 +546,8 @@ self = <backend.tests.test_engineering_parts.EngineeringParts testMethod=test_ma
 >     mapping=json.loads(path.read_text());raw=read_model_bytes(path.parent/mapping['source']);glb=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]]);names={node.get('name')for node in glb['nodes']if 'mesh'in node}
                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_engineering_parts.py:30: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_engineering_parts.py:30:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 path = PosixPath('<CHECKOUT>/frontend/public/models/cars/aston-martin/2026/car.glb')
 
@@ -569,8 +569,8 @@ self = <backend.tests.test_model_assets.Models testMethod=test_archive_models_ha
 >           folder=ROOT/f'cars/{team}/{year}';data=read_glb(folder/file)
                                                    ^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_model_assets.py:22: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_model_assets.py:22:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 backend/tests/test_model_assets.py:6: in read_glb
     raw=read_model_bytes(path);assert raw[:4]==b'glTF';assert struct.unpack_from('<I',raw,8)[0]==len(raw)
         ^^^^^^^^^^^^^^^^^^^^^^
@@ -580,7 +580,7 @@ backend/model_assets.py:12: in read_model_bytes
 /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
     with self.open(mode='rb') as f:
          ^^^^^^^^^^^^^^^^^^^^
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = PosixPath('<CHECKOUT>/frontend/public/models/cars/packed/sf23.glb.gz.part0.bin')
 mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
@@ -606,8 +606,8 @@ self = <backend.tests.test_model_assets.Models testMethod=test_car_has_named_ass
 >       data=read_glb(ROOT/'cars/f1-assembly.glb');names={node.get('name') for node in data['nodes']}
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_model_assets.py:10: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_model_assets.py:10:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 backend/tests/test_model_assets.py:6: in read_glb
     raw=read_model_bytes(path);assert raw[:4]==b'glTF';assert struct.unpack_from('<I',raw,8)[0]==len(raw)
         ^^^^^^^^^^^^^^^^^^^^^^
@@ -617,7 +617,7 @@ backend/model_assets.py:12: in read_model_bytes
 /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1019: in read_bytes
     with self.open(mode='rb') as f:
          ^^^^^^^^^^^^^^^^^^^^
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = PosixPath('<CHECKOUT>/frontend/public/models/cars/packed/f1-assembly.glb.gz.part0.bin')
 mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
@@ -643,12 +643,12 @@ self = <backend.tests.test_model_assets.Models testMethod=test_driver_is_valid_e
 >       data=read_glb(ROOT/'drivers/racing-driver.glb');names={node.get('name')for node in data['nodes']}
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_model_assets.py:15: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_model_assets.py:15:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 backend/tests/test_model_assets.py:6: in read_glb
     raw=read_model_bytes(path);assert raw[:4]==b'glTF';assert struct.unpack_from('<I',raw,8)[0]==len(raw)
         ^^^^^^^^^^^^^^^^^^^^^^
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 path = PosixPath('<CHECKOUT>/frontend/public/models/drivers/racing-driver.glb')
 
@@ -669,12 +669,12 @@ self = <backend.tests.test_model_assets.Models testMethod=test_hamilton_portrait
 >       self.assertTrue(read_glb(ROOT/'drivers/portraits/hamilton.glb')['meshes'])
                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-backend/tests/test_model_assets.py:30: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_model_assets.py:30:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 backend/tests/test_model_assets.py:6: in read_glb
     raw=read_model_bytes(path);assert raw[:4]==b'glTF';assert struct.unpack_from('<I',raw,8)[0]==len(raw)
         ^^^^^^^^^^^^^^^^^^^^^^
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 path = PosixPath('<CHECKOUT>/frontend/public/models/drivers/portraits/hamilton.glb')
 
