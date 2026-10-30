@@ -1,3 +1,4 @@
+import {reviewEnvironment} from './review_environment.mjs';
 /** Local browser integration checks. Requires externally installed Playwright + Chromium.
  * No dependency manifests, deployed services or existing processes are changed.
  */
@@ -13,7 +14,7 @@ const modulePath=process.env.PLAYWRIGHT_MODULE || (process.env.CODEX_PRIMARY_RUN
 const {chromium}=createRequire(import.meta.url)(modulePath);
 const freePort=()=>new Promise(resolve=>{const s=netServer();s.listen(0,'127.0.0.1',()=>{const p=s.address().port;s.close(()=>resolve(p));});});
 const port=await freePort();
-const api=spawn(process.env.PYTHON||'python',['-m','uvicorn','main:app','--host','127.0.0.1','--port',String(port)],{cwd:path.join(root,'backend'),stdio:'ignore'});
+const api=spawn(process.env.PYTHON||'python',['-m','uvicorn','main:app','--host','127.0.0.1','--port',String(port)],{cwd:path.join(root,'backend'),env:reviewEnvironment(),stdio:'ignore'});
 let server,browser;
 const checks=[];
 

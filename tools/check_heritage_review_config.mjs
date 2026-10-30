@@ -1,3 +1,4 @@
+import {reviewEnvironment} from './review_environment.mjs';
 /** Smoke-test isolated Mac review configuration without touching the shared config. */
 import assert from 'node:assert/strict';
 import {spawn} from 'node:child_process';
@@ -5,8 +6,7 @@ import {fileURLToPath} from 'node:url';
 import {createServer} from '../frontend/node_modules/vite/dist/node/index.js';
 import config from './heritage-review.vite.config.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
-const environment={...process.env,MUSEUM_AI_ENABLED:'0',RACE_ENGINEER_AI_ENABLED:'0'};
-delete environment.GROQ_API_KEY;delete environment.OPENAI_API_KEY;
+const environment=reviewEnvironment();
 const apiPort=Number(new URL(config.server.proxy['/api']).port);
 const api=spawn(process.env.PYTHON||'python',['-m','uvicorn','main:app','--app-dir','backend','--host','127.0.0.1','--port',String(apiPort),'--no-proxy-headers'],{cwd:root,env:environment,stdio:'ignore'});
 let server,collision;

@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "checks": [
+    "review config serves frontend and proxies catalogue/curated historian to isolated backend",
+    "review AI remains disabled or rejected by existing local-origin guard; no provider key supplied",
+    "strict port collision rejects second frontend and leaves first service working"
+  ]
+}

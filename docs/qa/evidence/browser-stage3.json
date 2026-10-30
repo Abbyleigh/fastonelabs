@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "checks": [
+    "original 1950 catalogue remains default",
+    "Cooper chapter real API, runtime contracts and 19 records",
+    "interactive static balance responds to presets and keyboard; assumptions visible",
+    "1440/834/390/320px no document or catalogue overflow",
+    "vehicle-to-engine relationship, evidence and pending model contract",
+    "Aintree selected race rows retain fractional points and venue",
+    "same-venue 1950/1960 switching; event evidence only, no invented geometry",
+    "engine filter, empty result and clear state",
+    "Cooper API error and retry preserve typed rendering",
+    "return to original chapter resets filters; no page errors"
+  ],
+  "screenshots": "/tmp/heritage-qa-captures"
+}

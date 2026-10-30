@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "checks": [
+    "canvas creation failure stays inside library preview; catalogue and provenance survive",
+    "search and favourites remain functional after preview failure",
+    "retry under continued graphics failure preserves page",
+    "retry recovers the real procedural viewer when WebGL becomes available",
+    "failed comparison preview does not remove the working primary viewer or comparison text",
+    "390px failure state has no document overflow",
+    "personal garage shares contained failure behaviour"
+  ]
+}

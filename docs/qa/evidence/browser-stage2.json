@@ -1,0 +1,23 @@
+{
+  "status": "passed",
+  "checks": [
+    "desktop real API catalogue",
+    "pagination",
+    "vehicle claims, citations, missing data",
+    "empty state",
+    "partial race and qualifying coverage",
+    "390px responsive gallery",
+    "HTTP failure and retry",
+    "loading state and stale-search cancellation",
+    "keyboard filter navigation",
+    "desktop/tablet/mobile catalogue and expandable circuit evidence; no invented geometry",
+    "research record to existing Alfetta exhibit navigation",
+    "reduced-motion disables hover transitions",
+    "no JavaScript page errors"
+  ],
+  "screenshots": [
+    "heritage-desktop.png",
+    "heritage-vehicle.png",
+    "heritage-mobile.png"
+  ]
+}

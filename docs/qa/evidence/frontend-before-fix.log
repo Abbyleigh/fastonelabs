@@ -1,0 +1,131 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> f1-strategy-lab-frontend@0.1.0 test
+> node --test tests/*.test.mjs
+
+✔ next session is chronological across weekends, never a date-only guess (1.762579ms)
+✔ challenge results evaluate every choice and teach a model trade-off (9.29388ms)
+✔ challenge storage rejects unknown scenarios, choices, and corrupt dates (2.252471ms)
+✔ replay bookmarks use only this recorded excerpt and selected radio (0.466678ms)
+✔ camera fit accounts for narrow screens and expanded model bounds (1.222372ms)
+✔ fan replay stops at the excerpt boundary without silently rewinding (0.651341ms)
+✔ fitted camera contains every bounding-box corner in every preset and aspect (7.103694ms)
+✖ catalogue thumbnails retain source, licence and exact original bytes (2.742504ms)
+✔ car identity requires matching team, season and driver (4.185441ms)
+✔ all eight installed 2026 teams match both correct drivers (1.163085ms)
+✔ export photo uses the same centered cover framing as the viewer (3.561642ms)
+✔ museum records are chronological, unique and linked to valid exhibits (2.566715ms)
+✔ every historical record and shown specification has a retrievable primary reference (2.651089ms)
+✔ historic displays cannot silently substitute unreviewed modern model identities (8.506322ms)
+✔ wing lesson converts km/h to m/s and obeys dynamic pressure scaling (0.772068ms)
+✔ curated research returns only known entries and abstains outside collection (3.608ms)
+✔ catalogue contracts preserve missing measurements and separate source rights (1.963375ms)
+✔ malformed upstream shapes are rejected before rendering (0.775623ms)
+✔ fetch uses same-origin, carries cancellation, and reports failures (1.187982ms)
+✔ static balance conserves reactions and responds to engine placement (1.489827ms)
+✔ new collection engine and dated-layout contract preserves the evidence gap (1.378312ms)
+✔ pending exhibit cannot smuggle a model or assembly labels (6.769772ms)
+✔ model bridge requires permission, dimensional evidence, assembly mapping and exact library identity (0.882762ms)
+✔ rotational power uses angular speed in rad/s and rejects invalid input (1.376119ms)
+✔ beam deflection follows span cubed and section depth cubed (0.293172ms)
+✔ spring model preserves units and energy relationship (0.221616ms)
+✔ simple tyre limit distinguishes mass and applied aero load (0.270368ms)
+✔ recovery never exceeds kinetic loss, efficiency, battery room or power*time (0.321373ms)
+✔ crash-energy calculator scales speed squared without claiming peak force (0.224501ms)
+✔ ideal tunnel conserves volume flow and pressure-drop direction (0.245241ms)
+✔ comparison never invents missing quantities and qualifies source conditions (0.243119ms)
+✔ pinned embed candidates are source-linked, permissive and never commercially approved automatically (52.048075ms)
+✔ bookmarked app screens preserve event, driver and strategy context (3.683691ms)
+✔ invalid URLs never request arbitrary driver paths or invalid races (1.80384ms)
+✔ carousel wraps and handles empty rosters safely (0.278491ms)
+✔ automatic advance stops for each accessibility and interaction pause condition (0.255497ms)
+✔ race selectors change the active tool and preserve the correct event context (0.704999ms)
+✔ museum links validate gallery and exhibit identifiers (0.215818ms)
+✖ packed delivery retains byte-identical original GLBs within per-file hosting limits (1.008588ms)
+✔ HTML fallbacks remain invalid model responses (0.370787ms)
+✔ packed loader rejects missing parts before attempting GLTF parsing (4.109649ms)
+✔ scrubbing uses only past rows for the exact driver, regardless of input order (1.16643ms)
+✔ stale telemetry clears instead of inventing or holding speed indefinitely (0.169881ms)
+✔ unknown DRS is distinct from closed and open (0.163101ms)
+✔ browser state matches backend golden contract, including ordering, units and nulls (7.369321ms)
+✔ repeated seeks are identical and neither inputs nor nested outputs can mutate (1.458621ms)
+✔ long gaps stay hidden; speed never inferred from uncalibrated XY coordinates (0.563761ms)
+✔ seeking before a telemetry update or after freshness window clears its gauges (1.496327ms)
+✔ simulated checkpoint uses the same consumer contract with estimated labels (1.088865ms)
+✔ sources refuse out-of-window replay times and invented simulation futures (0.473858ms)
+✔ invalid prototype quantities are rejected before entering the consumer contract (0.231382ms)
+✔ prototype adapter produces the same versioned checkpoint accepted by Python (0.430625ms)
+✔ first-frame clock skew cannot produce a negative recorded seek (0.213966ms)
+✔ original state immutable and replayable (4.277868ms)
+✔ render adapter has stable shape and no side effects (0.343737ms)
+✔ speed, lateral displacement and headway remain bounded (24.463011ms)
+✔ classification order responds to race distance (0.276828ms)
+✔ one-lap race completes; further steps are idempotent (0.426549ms)
+✔ faster car eventually overtakes and classifications change (5.022156ms)
+✔ one lap per race lap; determinism and no mutation (3.127742ms)
+✔ stop charged at end of selected lap; next lap has fresh compound and age (0.811016ms)
+✔ pit time is exactly additional loss with identical tyres and no degradation (0.293132ms)
+✔ safety-car reduction applies only when pit lap falls inside window (0.304779ms)
+✔ rain onset affects only laps from the selected lap; wet tyres help in heavy rain (0.236939ms)
+✔ reject invalid and hostile imported data; reject impossible pit schedules (0.819649ms)
+✔ degradation changes results; exported JSON round trips with same results (15.411995ms)
+✔ race reference seeds editable conditions and rescales stops (0.59657ms)
+✔ missing and out-of-range race references retain declared example defaults (0.405899ms)
+✔ lap-time parser rejects gaps, malformed values and invalid seconds (0.428201ms)
+✔ dry baseline keeps plans intact and isolates condition changes (0.748173ms)
+✔ race metadata round trips; briefing includes context; old scenarios still validate (11.86857ms)
+✔ optimiser agrees with exhaustive two-stop search in rain and safety car (2.138403ms)
+✔ no-stop, infeasible stints and invalid optimiser bounds (0.400851ms)
+✔ timeline covers all laps without gaps; sensitivity and recommendation exported (10.700949ms)
+✔ 100-lap three-stop searches finish within practical runtime (25.507692ms)
+✔ uncertainty samples are paired, deterministic and preserve scenario (13.091564ms)
+✔ all installed models have provenance, attribution and matching geometry evidence (1.166741ms)
+✔ commercial and race eligibility fail closed independently of appearance (0.194117ms)
+✔ garage restoration tolerates corrupt, outdated and unknown model choices (0.779139ms)
+✔ embed IDs accept only canonical Sketchfab model addresses (0.324108ms)
+ℹ tests 80
+ℹ suites 0
+ℹ pass 78
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1251.763889
+
+✖ failing tests:
+
+test at tests/fanExperience.test.mjs:20:1
+✖ catalogue thumbnails retain source, licence and exact original bytes (2.742504ms)
+  Error: ENOENT: no such file or directory, open '<CHECKOUT>/frontend/public/images/vehicles/ferrari-2023.jpg'
+      at Object.openSync (node:fs:621:18)
+      at Object.readFileSync (node:fs:487:35)
+      at TestContext.<anonymous> (file://<CHECKOUT>/frontend/tests/fanExperience.test.mjs:20:293)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '<CHECKOUT>/frontend/public/images/vehicles/ferrari-2023.jpg'
+  }
+
+test at tests/packedModels.test.mjs:5:1
+✖ packed delivery retains byte-identical original GLBs within per-file hosting limits (1.008588ms)
+  Error: ENOENT: no such file or directory, open '<CHECKOUT>/frontend/public/models/cars/packed/f1-assembly.glb.gz.part0.bin'
+      at Object.openSync (node:fs:621:18)
+      at readFileSync (node:fs:487:35)
+      at file://<CHECKOUT>/frontend/tests/packedModels.test.mjs:5:236
+      at Array.map (<anonymous>)
+      at TestContext.<anonymous> (file://<CHECKOUT>/frontend/tests/packedModels.test.mjs:5:220)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '<CHECKOUT>/frontend/public/models/cars/packed/f1-assembly.glb.gz.part0.bin'
+  }

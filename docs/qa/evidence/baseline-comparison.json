@@ -1,0 +1,31 @@
+{
+  "current": "433f33c",
+  "baseline": "da2f414",
+  "reportedFailureCount": 23,
+  "sameOrderedFailureIdentities": true,
+  "identities": [
+    "SUBFAILED(model='<PUBLIC>/models/cars/aston-martin/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_every_source_triangle_has_one_valid_inspection_group",
+    "SUBFAILED(model='<PUBLIC>/models/cars/cadillac/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_every_source_triangle_has_one_valid_inspection_group",
+    "SUBFAILED(model='<PUBLIC>/models/cars/mclaren/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_every_source_triangle_has_one_valid_inspection_group",
+    "SUBFAILED(model='<PUBLIC>/models/cars/mercedes/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_every_source_triangle_has_one_valid_inspection_group",
+    "SUBFAILED(model='<PUBLIC>/models/cars/ferrari/2023') backend/tests/test_engineering_parts.py::EngineeringParts::test_every_source_triangle_has_one_valid_inspection_group",
+    "SUBFAILED(model='<PUBLIC>/models/cars/ferrari/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_every_source_triangle_has_one_valid_inspection_group",
+    "SUBFAILED(model='<PUBLIC>/models/cars/audi/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_every_source_triangle_has_one_valid_inspection_group",
+    "SUBFAILED(model='<PUBLIC>/models/cars/haas/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_every_source_triangle_has_one_valid_inspection_group",
+    "SUBFAILED(model='<PUBLIC>/models/cars/red-bull/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_every_source_triangle_has_one_valid_inspection_group",
+    "SUBFAILED(model='<PUBLIC>/models/cars/aston-martin/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_groups_match_counts_and_keep_four_wheel_regions",
+    "SUBFAILED(model='<PUBLIC>/models/cars/cadillac/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_groups_match_counts_and_keep_four_wheel_regions",
+    "SUBFAILED(model='<PUBLIC>/models/cars/mclaren/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_groups_match_counts_and_keep_four_wheel_regions",
+    "SUBFAILED(model='<PUBLIC>/models/cars/mercedes/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_groups_match_counts_and_keep_four_wheel_regions",
+    "SUBFAILED(model='<PUBLIC>/models/cars/ferrari/2023') backend/tests/test_engineering_parts.py::EngineeringParts::test_groups_match_counts_and_keep_four_wheel_regions",
+    "SUBFAILED(model='<PUBLIC>/models/cars/ferrari/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_groups_match_counts_and_keep_four_wheel_regions",
+    "SUBFAILED(model='<PUBLIC>/models/cars/audi/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_groups_match_counts_and_keep_four_wheel_regions",
+    "SUBFAILED(model='<PUBLIC>/models/cars/haas/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_groups_match_counts_and_keep_four_wheel_regions",
+    "SUBFAILED(model='<PUBLIC>/models/cars/red-bull/2026') backend/tests/test_engineering_parts.py::EngineeringParts::test_groups_match_counts_and_keep_four_wheel_regions",
+    "FAILED backend/tests/test_engineering_parts.py::EngineeringParts::test_mapping_bounds_are_finite_and_source_nodes_exist",
+    "FAILED backend/tests/test_model_assets.py::Models::test_archive_models_have_embedded_textures_and_identity",
+    "FAILED backend/tests/test_model_assets.py::Models::test_car_has_named_assemblies_and_licence",
+    "FAILED backend/tests/test_model_assets.py::Models::test_driver_is_valid_embedded_glb",
+    "FAILED backend/tests/test_model_assets.py::Models::test_hamilton_portrait_is_separate_from_full_body"
+  ]
+}

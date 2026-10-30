@@ -1,0 +1,105 @@
+{
+  "environment": "production build; Chromium software GL; blocked external resources; cold browser contexts; 2s idle window; JS heap is not GPU/process memory",
+  "samples": [
+    {
+      "screen": "museum",
+      "run": 0,
+      "readyMs": 951,
+      "canvases": 0,
+      "heapMiB": 3.99,
+      "idleWallMs": 2005,
+      "idleTaskMs": 0.6,
+      "localTransferBytes": 478267,
+      "failedRequests": [
+        "/css2"
+      ],
+      "pageErrors": []
+    },
+    {
+      "screen": "museum",
+      "run": 1,
+      "readyMs": 946,
+      "canvases": 0,
+      "heapMiB": 3.99,
+      "idleWallMs": 2003,
+      "idleTaskMs": 0.36,
+      "localTransferBytes": 478267,
+      "failedRequests": [
+        "/css2"
+      ],
+      "pageErrors": []
+    },
+    {
+      "screen": "museum",
+      "run": 2,
+      "readyMs": 918,
+      "canvases": 0,
+      "heapMiB": 3.99,
+      "idleWallMs": 2003,
+      "idleTaskMs": 0.44,
+      "localTransferBytes": 478267,
+      "failedRequests": [
+        "/css2"
+      ],
+      "pageErrors": []
+    },
+    {
+      "screen": "library",
+      "run": 0,
+      "readyMs": 232,
+      "canvases": 1,
+      "heapMiB": 7.88,
+      "idleWallMs": 2001,
+      "idleTaskMs": 1426.78,
+      "localTransferBytes": 456608,
+      "failedRequests": [
+        "/css2"
+      ],
+      "pageErrors": []
+    },
+    {
+      "screen": "library",
+      "run": 1,
+      "readyMs": 171,
+      "canvases": 1,
+      "heapMiB": 7.48,
+      "idleWallMs": 2042,
+      "idleTaskMs": 1778.66,
+      "localTransferBytes": 456608,
+      "failedRequests": [
+        "/css2"
+      ],
+      "pageErrors": []
+    },
+    {
+      "screen": "library",
+      "run": 2,
+      "readyMs": 202,
+      "canvases": 1,
+      "heapMiB": 7.4,
+      "idleWallMs": 2003,
+      "idleTaskMs": 1508.81,
+      "localTransferBytes": 456608,
+      "failedRequests": [
+        "/css2"
+      ],
+      "pageErrors": []
+    }
+  ],
+  "apiSamples": [
+    {
+      "collection": "silverstone-1950",
+      "responseBytes": 7490,
+      "warmMedianMs": 1.82,
+      "warmP95Ms": 6.66,
+      "conditionalStatus": 304
+    },
+    {
+      "collection": "cooper-1959-1960",
+      "responseBytes": 14895,
+      "warmMedianMs": 1.79,
+      "warmP95Ms": 8.38,
+      "conditionalStatus": 304
+    }
+  ]
+}
